@@ -18,7 +18,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "tailwind-config-viewer": "tailwind-config-viewer -p 3001"
   },
   "eslintConfig": {
     "rules": {
@@ -57,6 +58,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.28.0",
     "prettier": "^2.5.1",
-    "prettier-plugin-tailwindcss": "^0.1.5"
+    "prettier-plugin-tailwindcss": "^0.1.5",
+    "tailwind-config-viewer": "^1.6.3"
   }
 }
