@@ -19,12 +19,12 @@ class ChevronIcon extends React.Component {
     switch (this.state.direction) {
       case direction.up:
         return <ChevronUpIcon className="w-5 text-blue-400" />;
-      case direction.right:
-        return <ChevronRightIcon className="w-5 text-blue-400" />;
+      case direction.left:
+        return <ChevronLeftIcon className="w-5 text-blue-400" />;
       case direction.down:
         return <ChevronDownIcon className="w-5 text-blue-400" />;
       default:
-        return <ChevronLeftIcon className="w-5 text-blue-400" />;
+        return <ChevronRightIcon className="w-5 text-blue-400" />;
     }
   }
 }
