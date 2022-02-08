@@ -1,6 +1,5 @@
 import React from 'react';
-import EmailField from '../../components/fields/emailField';
-import PasswordField from '../../components/fields/passwordField';
+import InputField from '../../components/fields/inputField';
 
 class Login extends React.Component {
   constructor(props) {
@@ -29,10 +28,25 @@ class Login extends React.Component {
           <div className="mt-8">
             <form action="#">
               <div className="mb-2 flex flex-col">
-                <EmailField />
+                <InputField
+                  name="txtEmail"
+                  value={this.state.txtEmail}
+                  label="E-mail"
+                  type="email"
+                  erroLabel="E-mail invalido"
+                  required={true}
+                  onChange={this.onUpdate}
+                />
               </div>
               <div className="mb-6 flex flex-col">
-                <PasswordField />
+                <InputField
+                  name="txtPassword"
+                  value={this.state.txtPassword}
+                  label="Senha"
+                  type="password"
+                  required={true}
+                  onChange={this.onUpdate}
+                />
               </div>
               <div className="mb-6 -mt-4 flex items-center">
                 <div className="ml-auto flex">
