@@ -10,6 +10,7 @@ export default class InputField extends React.Component {
       type,
       value,
       required,
+      placeholder,
       onChange,
     } = this.props;
 
@@ -30,6 +31,7 @@ export default class InputField extends React.Component {
           value={value || ''}
           disabled={disabled}
           onChange={onChange}
+          placeholder={placeholder}
         />
         <p className="invisible mt-2 text-sm text-pink-600 peer-invalid:visible">
           {errorLabel}
