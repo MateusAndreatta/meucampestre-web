@@ -1,5 +1,6 @@
 import React from 'react';
 import InputField from '../../components/fields/inputField';
+import PopAlert from '../../components/alerts/popAlert';
 
 class Login extends React.Component {
   constructor(props) {
@@ -33,7 +34,7 @@ class Login extends React.Component {
                   value={this.state.txtEmail}
                   label="E-mail"
                   type="email"
-                  erroLabel="E-mail invalido"
+                  errorLabel="E-mail invalido"
                   required={true}
                   onChange={this.onUpdate}
                 />
@@ -73,6 +74,7 @@ class Login extends React.Component {
               <span className="ml-2">Ainda não possui uma conta?</span>
             </a>
           </div>
+          <PopAlert title="Alertzão" content="Deu boa jovem!" delay={4000} />
         </div>
       </div>
     );
