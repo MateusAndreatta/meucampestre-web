@@ -74,7 +74,12 @@ class Login extends React.Component {
               <span className="ml-2">Ainda não possui uma conta?</span>
             </a>
           </div>
-          <PopAlert title="Alertzão" content="Deu boa jovem!" delay={4000} />
+          <PopAlert
+            title="Alertzão"
+            content="Deu boa jovem!"
+            delay={4000}
+            type={PopAlert.type.info}
+          />
         </div>
       </div>
     );

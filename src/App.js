@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import CheveronIcon from './components/icons/chevron';
+import ChevronIcon from './components/icons/chevron';
 import ConfigIcon from './components/icons/config';
 
 function App() {
@@ -18,8 +18,8 @@ function App() {
           rel="noopener noreferrer">
           Learn React
         </a>
-        <CheveronIcon
-          direction={CheveronIcon.direction.down}
+        <ChevronIcon
+          direction={ChevronIcon.direction.down}
           className="text-white"
         />
         <ConfigIcon />

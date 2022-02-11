@@ -6,6 +6,7 @@ import { ChevronRightIcon } from '@heroicons/react/outline';
 import { ChevronDownIcon } from '@heroicons/react/outline';
 import { ChevronLeftIcon } from '@heroicons/react/outline';
 
+// TODO: Procurar uma forma de sobreescrever/mesclar o estilo dos componentes de icone com base nos
 class ChevronIcon extends React.Component {
   constructor(props) {
     super(props);
