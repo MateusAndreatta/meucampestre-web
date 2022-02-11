@@ -10,7 +10,7 @@ import { LightningBoltIcon } from '@heroicons/react/solid';
 
 let styles = {
   popUp:
-    'absolute top-10 right-10 mx-auto flex w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-md',
+    'absolute inset-x-0 bottom-0 mx-auto flex w-full overflow-hidden bg-white md:shadow-md md:inset-x-auto md:top-5 md:right-5 md:bottom-auto md:max-w-sm md:rounded-lg',
   iconContainer: 'flex w-12 items-center justify-center',
   icon: 'h-6 w-6 text-white',
   container: '-mx-3 px-4 py-2',
