@@ -6,31 +6,34 @@ import { ChevronRightIcon } from '@heroicons/react/outline';
 import { ChevronDownIcon } from '@heroicons/react/outline';
 import { ChevronLeftIcon } from '@heroicons/react/outline';
 
-// TODO: Procurar uma forma de sobreescrever/mesclar o estilo dos componentes de icone com base nos
 class ChevronIcon extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       direction: props.direction,
+      color: props.color || 'text-blue-400',
+      width: props.width || 'w-5',
     };
   }
 
   render() {
-    switch (this.state.direction) {
-      case direction.up:
-        return <ChevronUpIcon className="w-5 text-blue-400" />;
-      case direction.left:
-        return <ChevronLeftIcon className="w-5 text-blue-400" />;
-      case direction.down:
-        return <ChevronDownIcon className="w-5 text-blue-400" />;
+    const { direction, color, width } = this.state;
+
+    switch (direction) {
+      case directions.up:
+        return <ChevronUpIcon className={`${width} ${color}`} />;
+      case directions.left:
+        return <ChevronLeftIcon className={`${width} ${color}`} />;
+      case directions.down:
+        return <ChevronDownIcon className={`${width} ${color}`} />;
       default:
-        return <ChevronRightIcon className="w-5 text-blue-400" />;
+        return <ChevronRightIcon className={`${width} ${color}`} />;
     }
   }
 }
 
-const direction = {
+const directions = {
   up: 'up',
   right: 'right',
   down: 'down',
@@ -38,9 +41,9 @@ const direction = {
 };
 
 ChevronIcon.propTypes = {
-  direction: PropTypes.oneOf(Object.keys(direction)),
+  direction: PropTypes.oneOf(Object.keys(directions)),
 };
 
-ChevronIcon.direction = direction;
+ChevronIcon.direction = directions;
 
 export default ChevronIcon;

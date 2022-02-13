@@ -18,10 +18,7 @@ function App() {
           rel="noopener noreferrer">
           Learn React
         </a>
-        <ChevronIcon
-          direction={ChevronIcon.direction.down}
-          className="text-white"
-        />
+        <ChevronIcon direction={ChevronIcon.direction.down} />
         <ConfigIcon />
       </header>
     </div>

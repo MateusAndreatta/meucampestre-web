@@ -1,5 +1,7 @@
 import { CogIcon } from '@heroicons/react/outline';
 
-export default function ConfigIcon() {
-  return <CogIcon className="w-5 text-blue-400" />;
+export default function ConfigIcon(props) {
+  let width = props.width || 'w-5';
+  let color = props.color || 'text-blue-400';
+  return <CogIcon className={`${width} ${color}`} />;
 }
