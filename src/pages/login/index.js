@@ -78,7 +78,7 @@ class Login extends React.Component {
             title="Alertzão"
             content="Deu boa jovem!"
             delay={4000}
-            type={PopAlert.type.info}
+            type={PopAlert.type.success}
           />
         </div>
       </div>

@@ -1,18 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { CheckCircleIcon } from '@heroicons/react/solid';
-import { ExclamationCircleIcon } from '@heroicons/react/solid';
-import { LightningBoltIcon } from '@heroicons/react/solid';
+import LightningBoltIcon from '../icons/lightningBoltIcon';
+import ExclamationIcon from '../icons/exclamationIcon';
+import CheckIcon from '../icons/checkIcon';
 
-// TODO: O ideal seria esse icone vir de um componente proprio dele, e passando os parametros
 // TODO: - Animar com um fade quando o elemento estiver saindo/entrando da tela
 
 let styles = {
   popUp:
     'absolute inset-x-0 bottom-0 mx-auto flex w-full overflow-hidden bg-white md:shadow-md md:inset-x-auto md:top-5 md:right-5 md:bottom-auto md:max-w-sm md:rounded-lg',
   iconContainer: 'flex w-12 items-center justify-center',
-  icon: 'h-6 w-6 text-white',
+  icon: {
+    width: 'w-6',
+    height: 'h-6',
+    color: 'text-white',
+    type: 'solid',
+  },
   container: '-mx-3 px-4 py-2',
   contentContainer: 'mx-3',
   title: 'font-semibold',
@@ -92,7 +96,12 @@ function successPop(title, content) {
   return (
     <div className={styles.popUp}>
       <div className={`${styles.iconContainer} bg-emerald-500`}>
-        <CheckCircleIcon className={styles.icon} />
+        <CheckIcon
+          color={styles.icon.color}
+          type={styles.icon.type}
+          width={styles.icon.width}
+          height={styles.icon.height}
+        />
       </div>
 
       <div className={styles.container}>
@@ -109,7 +118,12 @@ function infoPop(title, content) {
   return (
     <div className={styles.popUp}>
       <div className={`${styles.iconContainer} bg-blue-500`}>
-        <ExclamationCircleIcon className={styles.icon} />
+        <ExclamationIcon
+          color={styles.icon.color}
+          type={styles.icon.type}
+          width={styles.icon.width}
+          height={styles.icon.height}
+        />
       </div>
 
       <div className={styles.container}>
@@ -126,7 +140,12 @@ function warningPop(title, content) {
   return (
     <div className={styles.popUp}>
       <div className={`${styles.iconContainer} bg-yellow-400`}>
-        <ExclamationCircleIcon className={styles.icon} />
+        <ExclamationIcon
+          color={styles.icon.color}
+          type={styles.icon.type}
+          width={styles.icon.width}
+          height={styles.icon.height}
+        />
       </div>
 
       <div className={styles.container}>
@@ -143,7 +162,12 @@ function errorPop(title, content) {
   return (
     <div className={styles.popUp}>
       <div className={`${styles.iconContainer} bg-red-500`}>
-        <LightningBoltIcon className={styles.icon} />
+        <LightningBoltIcon
+          color={styles.icon.color}
+          type={styles.icon.type}
+          width={styles.icon.width}
+          height={styles.icon.height}
+        />
       </div>
 
       <div className={styles.container}>

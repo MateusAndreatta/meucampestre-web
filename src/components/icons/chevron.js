@@ -13,22 +13,23 @@ class ChevronIcon extends React.Component {
     this.state = {
       direction: props.direction,
       color: props.color || 'text-blue-400',
+      height: props.height || 'h-5',
       width: props.width || 'w-5',
     };
   }
 
   render() {
-    const { direction, color, width } = this.state;
-
+    const { direction, color, width, height } = this.state;
+    let style = `${width} ${height} ${color}`;
     switch (direction) {
       case directions.up:
-        return <ChevronUpIcon className={`${width} ${color}`} />;
+        return <ChevronUpIcon className={style} />;
       case directions.left:
-        return <ChevronLeftIcon className={`${width} ${color}`} />;
+        return <ChevronLeftIcon className={style} />;
       case directions.down:
-        return <ChevronDownIcon className={`${width} ${color}`} />;
+        return <ChevronDownIcon className={style} />;
       default:
-        return <ChevronRightIcon className={`${width} ${color}`} />;
+        return <ChevronRightIcon className={style} />;
     }
   }
 }
