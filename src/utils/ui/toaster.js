@@ -14,6 +14,14 @@ class Toaster {
   static showError(message) {
     toast.error(message);
   }
+
+  static showForPromise(promise, pending, success, error) {
+    toast.promise(promise, {
+      pending: pending || 'Promise is pending',
+      success: success || 'Promise resolved 👌',
+      error: error || 'Promise rejected 🤯',
+    });
+  }
 }
 
 export default Toaster;
