@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-function Erro404() {
+function Error404() {
   return (
     <div className="flex h-screen">
       <div className="m-auto text-center text-blue-400">
@@ -17,4 +17,4 @@ function Erro404() {
   );
 }
 
-export default Erro404;
+export default Error404;

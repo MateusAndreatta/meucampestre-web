@@ -5,8 +5,6 @@ import LightningBoltIcon from '../icons/lightningBoltIcon';
 import ExclamationIcon from '../icons/exclamationIcon';
 import CheckIcon from '../icons/checkIcon';
 
-// TODO: - Animar com um fade quando o elemento estiver saindo/entrando da tela
-
 let styles = {
   popUp:
     'absolute inset-x-0 bottom-0 mx-auto flex w-full overflow-hidden bg-white md:shadow-md md:inset-x-auto md:top-5 md:right-5 md:bottom-auto md:max-w-sm md:rounded-lg',
