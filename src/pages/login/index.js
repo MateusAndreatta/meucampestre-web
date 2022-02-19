@@ -1,6 +1,5 @@
 import React from 'react';
 import InputField from '../../components/fields/inputField';
-import PopAlert from '../../components/alerts/popAlert';
 import Toaster from '../../utils/ui/toaster';
 
 class Login extends React.Component {
@@ -76,12 +75,6 @@ class Login extends React.Component {
               <span className="ml-2">Ainda não possui uma conta?</span>
             </a>
           </div>
-          <PopAlert
-            title="Alertzão"
-            content="Deu boa jovem!"
-            delay={4000}
-            type={PopAlert.type.success}
-          />
         </div>
       </div>
     );
