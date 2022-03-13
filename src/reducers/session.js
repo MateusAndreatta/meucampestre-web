@@ -11,6 +11,7 @@ const INITIAL_STATE = {
   user: { pending: false, data: null, error: null },
 };
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default function (state = INITIAL_STATE, action) {
   let error, token;
 
@@ -34,7 +35,7 @@ export default function (state = INITIAL_STATE, action) {
         ...state,
         auth: {
           pending: false,
-          authenticated: token ? true : false,
+          authenticated: !!token,
           token: token,
           error: null,
         },
@@ -72,7 +73,7 @@ export default function (state = INITIAL_STATE, action) {
         ...state,
         auth: {
           pending: false,
-          authenticated: token ? true : false,
+          authenticated: !!token,
           token: token,
           error: null,
         },
@@ -109,7 +110,7 @@ export default function (state = INITIAL_STATE, action) {
         ...state,
         auth: {
           pending: false,
-          authenticated: token ? true : false,
+          authenticated: !!token,
           token: token,
           error: null,
         },
