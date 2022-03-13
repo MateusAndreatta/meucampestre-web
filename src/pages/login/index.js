@@ -4,8 +4,10 @@ import InputField from '../../components/fields/inputField';
 import Toaster from '../../utils/ui/toaster';
 import { login } from '../../actions/session';
 
-export default function Login(props) {
+export default function Login() {
   const session = useSelector((state) => state);
+  const auth = useSelector((state) => state.session.auth);
+
   console.log(session);
 
   const [txtEmail, setTxtEmail] = useState('');
@@ -31,7 +33,10 @@ export default function Login(props) {
     dispatch(login({ email: txtEmail, password: txtPassword }));
   }
 
-  const notify = () => Toaster.showSuccess('Toast from my Toaster!');
+  if (auth.authenticated) {
+    Toaster.showSuccess('Usuário autenticado!');
+  }
+  const notify = () => Toaster.showInfo('Enviado request para o backend!');
 
   return (
     <div className="grid h-screen place-items-center">
@@ -47,7 +52,7 @@ export default function Login(props) {
                 value={txtEmail}
                 label="E-mail"
                 type="email"
-                errorLabel="E-mail invalido"
+                errorLabel="O e-mail informado não é válido"
                 required={true}
                 onChange={handleEmailChange}
               />
