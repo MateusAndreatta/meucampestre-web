@@ -13,8 +13,7 @@ const INITIAL_STATE = {
 
 export default function (state = INITIAL_STATE, action) {
   let error, token;
-  console.log('caiu msm');
-  console.log(action.type);
+
   switch (action.type) {
     case SESSION_RENEW_TOKEN:
       return {
