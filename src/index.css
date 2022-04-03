@@ -1,8 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+
+  html {
+    font-family: 'Outfit', system-ui, sans-serif;
+  }
+
   body {
     @apply bg-gray-100;
   }
@@ -20,5 +27,12 @@
 
   .required {
     @apply after:content-['*'] after:ml-0.5 after:text-red-500;
+  }
+
+  .banner {
+    @apply p-3 pb-0;
+  }
+  .banner div {
+    @apply h-44 lg:h-96 bg-cover bg-center rounded-md;
   }
 }
