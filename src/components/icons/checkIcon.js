@@ -6,8 +6,9 @@ export default function CheckIcon(props) {
   let height = props.height || 'h-5';
   let color = props.color || 'text-blue-400';
   let type = props.type || 'outline';
+  let classes = props.className;
 
-  let style = `${width} ${height} ${color}`;
+  let style = `${width} ${height} ${color} ${classes}`;
 
   switch (type) {
     case 'outline':
