@@ -1,5 +1,5 @@
-import { ExclamationCircleIcon as ExclamationCircleIconSolid } from '@heroicons/react/solid';
-import { ExclamationCircleIcon as ExclamationCircleIconOutline } from '@heroicons/react/outline';
+import { ExclamationCircleIcon as IconSolid } from '@heroicons/react/solid';
+import { ExclamationCircleIcon as IconOutline } from '@heroicons/react/outline';
 
 export default function ExclamationIcon(props) {
   let width = props.width || 'w-5';
@@ -12,8 +12,8 @@ export default function ExclamationIcon(props) {
 
   switch (type) {
     case 'outline':
-      return <ExclamationCircleIconOutline className={style} />;
+      return <IconOutline className={style} />;
     default:
-      return <ExclamationCircleIconSolid className={style} />;
+      return <IconSolid className={style} />;
   }
 }

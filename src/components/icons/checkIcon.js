@@ -1,5 +1,5 @@
-import { CheckCircleIcon as CheckCircleIconSolid } from '@heroicons/react/solid';
-import { CheckCircleIcon as CheckCircleIconOutline } from '@heroicons/react/outline';
+import { CheckCircleIcon as IconSolid } from '@heroicons/react/solid';
+import { CheckCircleIcon as IconOutline } from '@heroicons/react/outline';
 
 export default function CheckIcon(props) {
   let width = props.width || 'w-5';
@@ -12,8 +12,8 @@ export default function CheckIcon(props) {
 
   switch (type) {
     case 'outline':
-      return <CheckCircleIconOutline className={style} />;
+      return <IconOutline className={style} />;
     default:
-      return <CheckCircleIconSolid className={style} />;
+      return <IconSolid className={style} />;
   }
 }
