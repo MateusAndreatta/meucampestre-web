@@ -1,7 +1,7 @@
-import { LightningBoltIcon as IconSolid } from '@heroicons/react/solid';
-import { LightningBoltIcon as IconOutline } from '@heroicons/react/outline';
+import { BellIcon as IconSolid } from '@heroicons/react/solid';
+import { BellIcon as IconOutline } from '@heroicons/react/outline';
 
-export default function LightningBoltIcon(props) {
+export default function NotificationIcon(props) {
   let width = props.width || 'w-5';
   let height = props.height || 'h-5';
   let color = props.color || 'default-icon-color';

@@ -12,15 +12,16 @@ class ChevronIcon extends React.Component {
 
     this.state = {
       direction: props.direction,
-      color: props.color || 'text-blue-400',
+      color: props.color || 'default-icon-color',
       height: props.height || 'h-5',
       width: props.width || 'w-5',
+      classes: props.className,
     };
   }
 
   render() {
-    const { direction, color, width, height } = this.state;
-    let style = `${width} ${height} ${color}`;
+    const { direction, color, width, height, classes } = this.state;
+    let style = `${width} ${height} ${color} ${classes}`;
     switch (direction) {
       case directions.up:
         return <ChevronUpIcon className={style} />;

@@ -1,53 +1,70 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import InputField from '../../components/fields/inputField';
 import Toaster from '../../utils/ui/toaster';
+import { login } from '../../actions/session';
 
-class Login extends React.Component {
-  constructor(props) {
-    super(props);
+export default function Login() {
+  const session = useSelector((state) => state);
+  const auth = useSelector((state) => state.session.auth);
 
-    this.state = {
-      txtEmail: '',
-      txtPassword: '',
-    };
-    this.onUpdate = this.onUpdate.bind(this);
+  console.log(session);
+
+  const [txtEmail, setTxtEmail] = useState('');
+  const [txtPassword, setTxtPassword] = useState('');
+
+  const dispatch = useDispatch();
+
+  function handleEmailChange(event) {
+    const value = event.target.value;
+
+    setTxtEmail(value);
   }
 
-  onUpdate(e) {
-    let obj = {};
-    obj[e.target.name] = e.target.value;
-    this.setState(obj);
+  function handlePasswordChange(event) {
+    const value = event.target.value;
+
+    setTxtPassword(value);
   }
 
-  render() {
-    const notify = () => Toaster.showSuccess('Toast from my Toaster!');
+  function handleSubmit(event) {
+    event.preventDefault();
 
-    return (
-      <div className="grid h-screen place-items-center">
-        <div className="card flex h-full w-full max-w-md flex-col px-4 py-8 sm:px-6 md:h-auto md:px-8 lg:px-10">
-          <div className="mb-6 self-center text-xl font-light text-gray-600 sm:text-2xl">
-            Entrar na sua conta
-          </div>
-          <div className="mt-8">
+    dispatch(login({ email: txtEmail, password: txtPassword }));
+  }
+
+  if (auth.authenticated) {
+    Toaster.showSuccess('Usuário autenticado!');
+  }
+  const notify = () => Toaster.showInfo('Enviado request para o backend!');
+
+  return (
+    <div className="grid h-screen place-items-center">
+      <div className="card flex h-full w-full max-w-md flex-col px-4 py-8 sm:px-6 md:h-auto md:px-8 lg:px-10">
+        <div className="mb-6 self-center text-xl font-light text-gray-600 sm:text-2xl">
+          Entrar na sua conta
+        </div>
+        <div className="mt-8">
+          <form onSubmit={handleSubmit}>
             <div className="mb-2 flex flex-col">
               <InputField
                 name="txtEmail"
-                value={this.state.txtEmail}
+                value={txtEmail}
                 label="E-mail"
                 type="email"
-                errorLabel="E-mail invalido"
+                errorLabel="O e-mail informado não é válido"
                 required={true}
-                onChange={this.onUpdate}
+                onChange={handleEmailChange}
               />
             </div>
             <div className="mb-6 flex flex-col">
               <InputField
                 name="txtPassword"
-                value={this.state.txtPassword}
+                value={txtPassword}
                 label="Senha"
                 type="password"
                 required={true}
-                onChange={this.onUpdate}
+                onChange={handlePasswordChange}
               />
             </div>
             <div className="mb-6 -mt-4 flex items-center">
@@ -67,18 +84,16 @@ class Login extends React.Component {
                 Entrar
               </button>
             </div>
-          </div>
-          <div className="mt-6 flex items-center justify-center">
-            <a
-              href="/"
-              className="inline-flex items-center text-center text-xs font-thin text-gray-500 hover:text-gray-700">
-              <span className="ml-2">Ainda não possui uma conta?</span>
-            </a>
-          </div>
+          </form>
+        </div>
+        <div className="mt-6 flex items-center justify-center">
+          <a
+            href="/"
+            className="inline-flex items-center text-center text-xs font-thin text-gray-500 hover:text-gray-700">
+            <span className="ml-2">Ainda não possui uma conta?</span>
+          </a>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
-
-export default Login;
