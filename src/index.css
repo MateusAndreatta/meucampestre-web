@@ -36,3 +36,10 @@
     @apply h-44 lg:h-96 bg-cover bg-center rounded-md;
   }
 }
+
+@layer utilities {
+
+  .default-icon-color {
+    @apply text-gray-400;
+  }
+}

@@ -12,7 +12,7 @@ class ChevronIcon extends React.Component {
 
     this.state = {
       direction: props.direction,
-      color: props.color || 'text-blue-400',
+      color: props.color || 'default-icon-color',
       height: props.height || 'h-5',
       width: props.width || 'w-5',
       classes: props.className,

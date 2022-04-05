@@ -4,7 +4,7 @@ import { LogoutIcon as IconOutline } from '@heroicons/react/outline';
 export default function LogoutIcon(props) {
   let width = props.width || 'w-5';
   let height = props.height || 'h-5';
-  let color = props.color || 'text-gray-400';
+  let color = props.color || 'default-icon-color';
   let type = props.type || 'outline';
   let classes = props.className;
 
