@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import InputField from '../../components/fields/inputField';
 import Toaster from '../../utils/ui/toaster';
 import { login } from '../../actions/session';
+import Button from '../../components/buttons/button';
 
 export default function Login() {
   const session = useSelector((state) => state);
@@ -83,6 +84,7 @@ export default function Login() {
                 onClick={notify}>
                 Entrar
               </button>
+              <Button>Teste</Button>
             </div>
           </form>
         </div>
