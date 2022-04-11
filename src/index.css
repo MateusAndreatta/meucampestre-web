@@ -17,7 +17,7 @@
 
 @layer components {
   .card {
-    @apply bg-white rounded-lg shadow;
+    @apply bg-white rounded-lg shadow border-t aspect-square;
   }
 
   /* Form componentes */
