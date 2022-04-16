@@ -285,8 +285,11 @@ export default function Users() {
     <div>
       <Navbar />
       <div className="container mx-auto">
-        {/*<div className="h-56 w-full bg-red-700" />*/}
-        <h1 className="my-8 text-2xl">Gerenciar acessos</h1>
+        <div className="my-8 flex justify-between">
+          <h1 className="text-2xl">Gerenciar acessos</h1>
+          <button className="btn-outline">Novo acesso</button>
+        </div>
+
         <DataTable
           columns={columns}
           data={data}

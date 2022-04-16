@@ -35,6 +35,12 @@
   .banner div {
     @apply h-44 lg:h-96 bg-cover bg-center rounded-md;
   }
+
+  /* Buttons */
+
+  .btn-outline {
+    @apply border border-gray-300 py-2 px-5 rounded text-zinc-500 bg-transparent hover:bg-gray-300 hover:text-zinc-600;
+  }
 }
 
 @layer utilities {
