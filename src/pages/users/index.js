@@ -256,18 +256,11 @@ export default function Users() {
         borderColor: 'rgba(0,0,0,.12)',
         borderStyle: 'solid',
         borderRadius: '5px',
-        firstChild: {
-          color: 'red',
-        },
         marginBottom: '10px',
       },
     },
     rows: {
-      style: {
-        firstChild: {
-          color: 'red',
-        },
-      },
+      style: {},
     },
     cells: {
       style: {},
@@ -299,9 +292,6 @@ export default function Users() {
           pagination
           paginationComponentOptions={paginationComponentOptions}
         />
-        <br />
-        <br />
-        <br />
       </div>
     </div>
   );

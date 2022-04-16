@@ -4,7 +4,7 @@ import { Route, BrowserRouter, Routes } from 'react-router-dom';
 import Login from './pages/login';
 import Error404 from './pages/erros/error404';
 import Home from './pages/home';
-import Users from './pages/Users';
+import Users from './pages/users';
 
 const ApplicationRoutes = () => {
   return (
