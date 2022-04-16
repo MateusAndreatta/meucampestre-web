@@ -10,6 +10,9 @@ import LockClosedIcon from '../../components/icons/lockClosedIcon';
 //https://react-data-table-component.netlify.app/?path=/docs/getting-started-patterns--page
 
 //TODO: no ActionItem corrigir o dropdown no mobile
+//TODO: Adicionar paginação customizada
+//TODO: Adicionar search bar
+//TODO: Adicionar filtros por roles
 
 function ActionItem(props) {
   return (
@@ -139,6 +142,111 @@ export default function Users() {
       urlFoto: 'https://i.pravatar.cc/300?7',
       roles: 'Condômino & Conselho',
     },
+    {
+      nome: 'Darrell Steward',
+      urlFoto: 'https://i.pravatar.cc/300?1',
+      roles: 'Condômino & Conselho',
+    },
+    {
+      nome: 'Jacob Jones',
+      urlFoto: 'https://i.pravatar.cc/300?2',
+      roles: 'Condômino',
+    },
+    {
+      nome: 'Kristin Watson',
+      urlFoto: 'https://i.pravatar.cc/300?3',
+      roles: 'Condômino & Conselho',
+    },
+    {
+      nome: 'Arlene McCoy',
+      urlFoto: 'https://i.pravatar.cc/300?4',
+      roles: 'Porteiro',
+    },
+    {
+      nome: 'Dianne Russell',
+      urlFoto: 'https://i.pravatar.cc/300?5',
+      roles: 'Condômino',
+    },
+    {
+      nome: 'Cameron Williamson',
+      urlFoto: 'https://i.pravatar.cc/300?6',
+      roles: 'Condômino',
+    },
+    {
+      nome: 'Guy Hawkins',
+      urlFoto: 'https://i.pravatar.cc/300?7',
+      roles: 'Condômino & Conselho',
+    },
+    {
+      nome: 'Darrell Steward',
+      urlFoto: 'https://i.pravatar.cc/300?1',
+      roles: 'Condômino & Conselho',
+    },
+    {
+      nome: 'Jacob Jones',
+      urlFoto: 'https://i.pravatar.cc/300?2',
+      roles: 'Condômino',
+    },
+    {
+      nome: 'Kristin Watson',
+      urlFoto: 'https://i.pravatar.cc/300?3',
+      roles: 'Condômino & Conselho',
+    },
+    {
+      nome: 'Arlene McCoy',
+      urlFoto: 'https://i.pravatar.cc/300?4',
+      roles: 'Porteiro',
+    },
+    {
+      nome: 'Dianne Russell',
+      urlFoto: 'https://i.pravatar.cc/300?5',
+      roles: 'Condômino',
+    },
+    {
+      nome: 'Cameron Williamson',
+      urlFoto: 'https://i.pravatar.cc/300?6',
+      roles: 'Condômino',
+    },
+    {
+      nome: 'Guy Hawkins',
+      urlFoto: 'https://i.pravatar.cc/300?7',
+      roles: 'Condômino & Conselho',
+    },
+    {
+      nome: 'Darrell Steward',
+      urlFoto: 'https://i.pravatar.cc/300?1',
+      roles: 'Condômino & Conselho',
+    },
+    {
+      nome: 'Jacob Jones',
+      urlFoto: 'https://i.pravatar.cc/300?2',
+      roles: 'Condômino',
+    },
+    {
+      nome: 'Kristin Watson',
+      urlFoto: 'https://i.pravatar.cc/300?3',
+      roles: 'Condômino & Conselho',
+    },
+    {
+      nome: 'Arlene McCoy',
+      urlFoto: 'https://i.pravatar.cc/300?4',
+      roles: 'Porteiro',
+    },
+    {
+      nome: 'Dianne Russell',
+      urlFoto: 'https://i.pravatar.cc/300?5',
+      roles: 'Condômino',
+    },
+    {
+      nome: 'Cameron Williamson',
+      urlFoto: 'https://i.pravatar.cc/300?6',
+      roles: 'Condômino',
+    },
+    {
+      nome: 'Guy Hawkins',
+      urlFoto: 'https://i.pravatar.cc/300?7',
+      roles: 'Condômino & Conselho',
+    },
   ];
 
   const customStyles = {
@@ -151,6 +259,7 @@ export default function Users() {
         firstChild: {
           color: 'red',
         },
+        marginBottom: '10px',
       },
     },
     rows: {
@@ -165,6 +274,13 @@ export default function Users() {
     },
   };
 
+  const paginationComponentOptions = {
+    rangeSeparatorText: 'de',
+    selectAllRowsItem: true,
+    selectAllRowsItemText: 'Todos',
+    noRowsPerPage: true,
+  };
+
   return (
     <div>
       <Navbar />
@@ -177,6 +293,8 @@ export default function Users() {
           noTableHead={true}
           responsive={false}
           customStyles={customStyles}
+          pagination
+          paginationComponentOptions={paginationComponentOptions}
         />
         <br />
         <br />
