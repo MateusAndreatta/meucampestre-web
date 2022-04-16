@@ -5,6 +5,7 @@ import Login from './pages/login';
 import Error404 from './pages/erros/error404';
 import Home from './pages/home';
 import Users from './pages/users';
+import NewUser from './pages/new-user';
 
 const ApplicationRoutes = () => {
   return (
@@ -13,6 +14,7 @@ const ApplicationRoutes = () => {
         <Route path="/" element={<Login />} />
         <Route path="/home" element={<Home />} />
         <Route path="/acessos" element={<Users />} />
+        <Route path="/novo-acesso" element={<NewUser />} />
         <Route path="*" element={<Error404 />} />
       </Routes>
     </BrowserRouter>

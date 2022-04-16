@@ -33,7 +33,7 @@ export default class InputField extends React.Component {
           onChange={onChange}
           placeholder={placeholder}
         />
-        <p className="invisible mt-2 text-sm text-pink-600 peer-invalid:visible">
+        <p className="mt-2 hidden text-sm text-pink-600 peer-invalid:block">
           {errorLabel}
         </p>
       </span>
