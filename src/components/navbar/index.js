@@ -2,14 +2,21 @@ import Logo from '../../resources/MeuCampestreLogo.svg';
 import NotificationIcon from '../icons/notificationIcon';
 import ProfileIcon from '../icons/profileIcon';
 import LogoutIcon from '../icons/logoutIcon';
+import { useNavigate } from 'react-router-dom';
 
 export default function Navbar() {
+  const navigate = useNavigate();
+  function NavigateToHome() {
+    navigate('/home');
+  }
+
   return (
     <nav className="flex h-16 w-full flex-row flex-nowrap items-center justify-between bg-white shadow-md">
       <img
         src={Logo}
         alt="Logo"
-        className="max-h-full w-14 max-w-fit grow object-cover"
+        className="max-h-full w-14 max-w-fit grow cursor-pointer object-cover"
+        onClick={NavigateToHome}
       />
       <div className="h-16 flex-none">
         <div className="flex h-full w-full flex-row flex-nowrap items-center gap-8 px-8">

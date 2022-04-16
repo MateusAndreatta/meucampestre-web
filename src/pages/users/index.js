@@ -5,6 +5,7 @@ import DotsIcon from '../../components/icons/dotsIcon';
 import ProfileIcon from '../../components/icons/profileIcon';
 import TrashIcon from '../../components/icons/trashIcon';
 import LockClosedIcon from '../../components/icons/lockClosedIcon';
+import { Link } from 'react-router-dom';
 
 //TODO: O DataTable deve virar um Componente externo para ser reaproveitado
 //https://react-data-table-component.netlify.app/?path=/docs/getting-started-patterns--page
@@ -280,7 +281,9 @@ export default function Users() {
       <div className="container mx-auto">
         <div className="my-8 flex justify-between">
           <h1 className="text-2xl">Gerenciar acessos</h1>
-          <button className="btn-outline">Novo acesso</button>
+          <Link to="/novo-acesso">
+            <button className="btn-outline">Novo acesso</button>
+          </Link>
         </div>
 
         <DataTable
