@@ -10,7 +10,11 @@ module.exports = {
         '2xl': '6rem',
       },
     },
-    extend: {},
+    extend: {
+      backgroundImage: (theme) => ({
+        check: "url('/src/resources/check.svg')",
+      }),
+    },
   },
   plugins: [],
 };
