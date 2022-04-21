@@ -10,15 +10,15 @@ export default function Login() {
 
   console.log(session);
 
-  const [txtEmail, setTxtEmail] = useState('');
+  const [txtDocumento, setTxtDocumento] = useState('');
   const [txtPassword, setTxtPassword] = useState('');
 
   const dispatch = useDispatch();
 
-  function handleEmailChange(event) {
+  function handleDocumentoChange(event) {
     const value = event.target.value;
 
-    setTxtEmail(value);
+    setTxtDocumento(value);
   }
 
   function handlePasswordChange(event) {
@@ -30,7 +30,7 @@ export default function Login() {
   function handleSubmit(event) {
     event.preventDefault();
 
-    dispatch(login({ email: txtEmail, password: txtPassword }));
+    dispatch(login({ documento: txtDocumento, senha: txtPassword }));
   }
 
   if (auth.authenticated) {
@@ -48,13 +48,12 @@ export default function Login() {
           <form onSubmit={handleSubmit}>
             <div className="mb-2 flex flex-col">
               <InputField
-                name="txtEmail"
-                value={txtEmail}
-                label="E-mail"
-                type="email"
-                errorLabel="O e-mail informado não é válido"
+                name="txtDocumento"
+                value={txtDocumento}
+                label="Documento"
+                type="text"
                 required={true}
-                onChange={handleEmailChange}
+                onChange={handleDocumentoChange}
               />
             </div>
             <div className="mb-6 flex flex-col">

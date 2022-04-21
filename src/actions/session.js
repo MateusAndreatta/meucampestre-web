@@ -34,7 +34,10 @@ export function fetchToken(data) {
   const request = axios({
     method: 'post',
     data: data,
-    url: `${API_ENDPOINT}/sessions`,
+    url: `${API_ENDPOINT}/autenticacao`,
+    headers: {
+      'Access-Control-Allow-Origin': `*`,
+    },
   });
 
   return {
