@@ -18,6 +18,7 @@ const ApplicationRoutes = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/acessos" element={<Users />} />
         <Route path="/novo-acesso" element={<NewUser />} />
+        <Route path="/editar-acesso/:documento" element={<NewUser />} />
         <Route path="/perfil" element={<Profile />} />
         <Route path="*" element={<Error404 />} />
       </Routes>

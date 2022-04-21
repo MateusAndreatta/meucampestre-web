@@ -1,9 +1,9 @@
 import axios from 'axios';
-import store from '/store';
+import store from './store';
 
-import { API_ENDPOINT } from '@/globals';
+import { API_ENDPOINT } from './globals';
 
-console.log(store.get('token'));
+// console.log(store.get('token'));
 
 export default {
   get: function (url, params = {}) {

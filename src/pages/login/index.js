@@ -3,13 +3,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import InputField from '../../components/fields/inputField';
 import Toaster from '../../utils/ui/toaster';
 import { login } from '../../actions/session';
+import { Navigate } from 'react-router-dom';
 
 export default function Login() {
   const session = useSelector((state) => state);
   const auth = useSelector((state) => state.session.auth);
-
+  const user = useSelector((state) => state.session.user);
   console.log(session);
-
   const [txtDocumento, setTxtDocumento] = useState('');
   const [txtPassword, setTxtPassword] = useState('');
 
@@ -34,7 +34,17 @@ export default function Login() {
   }
 
   if (auth.authenticated) {
-    Toaster.showSuccess('Usuário autenticado!');
+    console.log(user.data);
+
+    if (user.data) {
+      if (user.data.condominios.length === 1) {
+        return <Navigate to="/home" replace={true} />;
+      } else if (user.data.condominios.length > 1) {
+        return <Navigate to="/selecionar-condominio" replace={true} />;
+      } else {
+        Toaster.showError('Ops! Não foi possível encontrar seu condomínio.');
+      }
+    }
   }
   const notify = () => Toaster.showInfo('Enviado request para o backend!');
 

@@ -5,7 +5,11 @@ import DotsIcon from '../../components/icons/dotsIcon';
 import ProfileIcon from '../../components/icons/profileIcon';
 import TrashIcon from '../../components/icons/trashIcon';
 import LockClosedIcon from '../../components/icons/lockClosedIcon';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { API_ENDPOINT } from '../../globals';
+import { useSelector } from 'react-redux';
+import Toaster from '../../utils/ui/toaster';
 
 //TODO: O DataTable deve virar um Componente externo para ser reaproveitado
 //https://react-data-table-component.netlify.app/?path=/docs/getting-started-patterns--page
@@ -13,12 +17,13 @@ import { Link } from 'react-router-dom';
 //TODO: no ActionItem corrigir o dropdown no mobile
 //TODO: Adicionar paginação customizada
 //TODO: Adicionar search bar
+//TODO: Adicionar comportamento quando a lista estiver vazia
+//TODO: Remover usuario logado da listagem
 
 function ActionItem(props) {
   return (
-    <div
-      onClick={props.onClick}
-      className="group flex h-full w-full grow cursor-pointer items-center justify-center hover:bg-gray-500">
+    // TODO não tem necessidade de usar a tag <a>
+    <div className="group flex h-full w-full grow cursor-pointer items-center justify-center hover:bg-gray-500">
       <DotsIcon />
       <div className="absolute right-0 z-10 hidden origin-top-right rounded-md bg-white shadow-lg group-hover:block">
         <div
@@ -29,7 +34,8 @@ function ActionItem(props) {
           <a
             href="#"
             className="text-md block px-4 py-2 text-gray-700 md:hover:bg-gray-100 md:hover:text-gray-900"
-            role="menuitem">
+            role="menuitem"
+            onClick={props.onClickEditar}>
             <span className="flex flex-col">
               <span>
                 <ProfileIcon className="float-left mr-3" />
@@ -40,7 +46,8 @@ function ActionItem(props) {
           <a
             href="#"
             className="text-md block block px-4 py-2 text-gray-700 md:hover:bg-gray-100 md:hover:text-gray-900"
-            role="menuitem">
+            role="menuitem"
+            onClick={props.onClickDeletar}>
             <span className="flex flex-col">
               <span>
                 <TrashIcon className="float-left mr-3" />
@@ -65,168 +72,71 @@ function ActionItem(props) {
   );
 }
 
-function handleClick(title) {
-  console.log(title);
+//TODO: Colocar parametro dinamico
+function getDataFromApi(token) {
+  return axios({
+    method: 'GET',
+    url: `${API_ENDPOINT}/usuarios/1/usuario`,
+    params: {},
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+// TODO mover todos as chamadas do axios para uma classe global de requests
+function deleteUser(token, document) {
+  return axios({
+    method: 'DELETE',
+    url: `${API_ENDPOINT}/usuarios/1/usuario/${document}`,
+    params: {},
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 }
 
 export default function Users() {
   const [filterCondomino, setFilterCondomino] = useState(false);
   const [filterConselheiro, setFilterConselheiro] = useState(false);
   const [filterPorteiro, setFilterPorteiro] = useState(false);
+  const auth = useSelector((state) => state.session.auth);
+  let dataFromDataBase = [];
+  const navigate = useNavigate();
+
+  function handleClickEditar(row) {
+    console.log(row);
+    navigate(`/editar-acesso/${row.documento}`);
+  }
+  function handleClickDeletar(row) {
+    console.log(row);
+    deleteUser(auth.token, row.documento).then((response) => {
+      getDataFromApi(auth.token).then((response) => {
+        console.log(response.data);
+        Toaster.showInfo('Acesso deletado!');
+        dataFromDataBase = response.data.moradores;
+        setData(dataFromDataBase);
+      });
+    });
+  }
+
+  useEffect(() => {
+    getDataFromApi(auth.token).then((response) => {
+      console.log(response.data);
+      dataFromDataBase = response.data.moradores;
+      setData(dataFromDataBase);
+    });
+  }, []);
 
   useEffect(() => {
     updateData();
   }, [filterCondomino, filterConselheiro, filterPorteiro]);
-
-  const dataFromDataBase = [
-    {
-      nome: 'Darrell Steward',
-      urlFoto: 'https://i.pravatar.cc/300?1',
-      roles: 'Condômino & Conselho',
-    },
-    {
-      nome: 'Jacob Jones',
-      urlFoto: 'https://i.pravatar.cc/300?2',
-      roles: 'Condômino',
-    },
-    {
-      nome: 'Kristin Watson',
-      urlFoto: 'https://i.pravatar.cc/300?3',
-      roles: 'Condômino & Conselho',
-    },
-    {
-      nome: 'Arlene McCoy',
-      urlFoto: 'https://i.pravatar.cc/300?4',
-      roles: 'Porteiro',
-    },
-    {
-      nome: 'Dianne Russell',
-      urlFoto: 'https://i.pravatar.cc/300?5',
-      roles: 'Condômino',
-    },
-    {
-      nome: 'Cameron Williamson',
-      urlFoto: 'https://i.pravatar.cc/300?6',
-      roles: 'Condômino',
-    },
-    {
-      nome: 'Guy Hawkins',
-      urlFoto: 'https://i.pravatar.cc/300?7',
-      roles: 'Condômino & Conselho',
-    },
-    {
-      nome: 'Darrell Steward',
-      urlFoto: 'https://i.pravatar.cc/300?1',
-      roles: 'Condômino & Conselho',
-    },
-    {
-      nome: 'Jacob Jones',
-      urlFoto: 'https://i.pravatar.cc/300?2',
-      roles: 'Condômino',
-    },
-    {
-      nome: 'Kristin Watson',
-      urlFoto: 'https://i.pravatar.cc/300?3',
-      roles: 'Condômino & Conselho',
-    },
-    {
-      nome: 'Arlene McCoy',
-      urlFoto: 'https://i.pravatar.cc/300?4',
-      roles: 'Porteiro',
-    },
-    {
-      nome: 'Dianne Russell',
-      urlFoto: 'https://i.pravatar.cc/300?5',
-      roles: 'Condômino',
-    },
-    {
-      nome: 'Cameron Williamson',
-      urlFoto: 'https://i.pravatar.cc/300?6',
-      roles: 'Condômino',
-    },
-    {
-      nome: 'Guy Hawkins',
-      urlFoto: 'https://i.pravatar.cc/300?7',
-      roles: 'Condômino & Conselho',
-    },
-    {
-      nome: 'Darrell Steward',
-      urlFoto: 'https://i.pravatar.cc/300?1',
-      roles: 'Condômino & Conselho',
-    },
-    {
-      nome: 'Jacob Jones',
-      urlFoto: 'https://i.pravatar.cc/300?2',
-      roles: 'Condômino',
-    },
-    {
-      nome: 'Kristin Watson',
-      urlFoto: 'https://i.pravatar.cc/300?3',
-      roles: 'Condômino & Conselho',
-    },
-    {
-      nome: 'Arlene McCoy',
-      urlFoto: 'https://i.pravatar.cc/300?4',
-      roles: 'Porteiro',
-    },
-    {
-      nome: 'Dianne Russell',
-      urlFoto: 'https://i.pravatar.cc/300?5',
-      roles: 'Condômino',
-    },
-    {
-      nome: 'Cameron Williamson',
-      urlFoto: 'https://i.pravatar.cc/300?6',
-      roles: 'Condômino',
-    },
-    {
-      nome: 'Guy Hawkins',
-      urlFoto: 'https://i.pravatar.cc/300?7',
-      roles: 'Condômino & Conselho',
-    },
-    {
-      nome: 'Darrell Steward',
-      urlFoto: 'https://i.pravatar.cc/300?1',
-      roles: 'Condômino & Conselho',
-    },
-    {
-      nome: 'Jacob Jones',
-      urlFoto: 'https://i.pravatar.cc/300?2',
-      roles: 'Condômino',
-    },
-    {
-      nome: 'Kristin Watson',
-      urlFoto: 'https://i.pravatar.cc/300?3',
-      roles: 'Condômino & Conselho',
-    },
-    {
-      nome: 'Arlene McCoy',
-      urlFoto: 'https://i.pravatar.cc/300?4',
-      roles: 'Porteiro',
-    },
-    {
-      nome: 'Dianne Russell',
-      urlFoto: 'https://i.pravatar.cc/300?5',
-      roles: 'Condômino',
-    },
-    {
-      nome: 'Cameron Williamson',
-      urlFoto: 'https://i.pravatar.cc/300?6',
-      roles: 'Condômino',
-    },
-    {
-      nome: 'Guy Hawkins',
-      urlFoto: 'https://i.pravatar.cc/300?7',
-      roles: 'Condômino & Conselho',
-    },
-  ];
 
   const [data, setData] = useState(dataFromDataBase);
 
   const filterByRole = (roles) => {
     if (roles && roles.length > 0) {
       const filteredData = dataFromDataBase.filter((user) => {
-        let userRoles = user.roles.split(' & ');
+        let userRoles = user.tipoDePerfil.split(' & ');
 
         let filterReturn = false;
         roles.forEach((role) => {
@@ -270,6 +180,41 @@ export default function Users() {
   const handleChangePorteiro = () => {
     setFilterPorteiro(!filterPorteiro);
   };
+  //TODO: Essa função pode ser de uma classe utils
+  const getRolesString = (roles) => {
+    let rolesString = '';
+    roles.forEach((role) => {
+      switch (role) {
+        case 'ROLE_SINDICO':
+          if (rolesString !== '') {
+            rolesString += ' & ';
+          }
+          rolesString += 'Síndico';
+          break;
+        case 'ROLE_MORADOR':
+          if (rolesString !== '') {
+            rolesString += ' & ';
+          }
+          rolesString += 'Condômino';
+          break;
+        case 'ROLE_PORTEIRO':
+          if (rolesString !== '') {
+            rolesString += ' & ';
+          }
+          rolesString += 'Porteiro';
+          break;
+        case 'ROLE_CONSELHEIRO':
+          if (rolesString !== '') {
+            rolesString += ' & ';
+          }
+          rolesString += 'Conselho';
+          break;
+        default:
+          break;
+      }
+    });
+    return rolesString;
+  };
 
   const columns = [
     {
@@ -279,12 +224,14 @@ export default function Users() {
         <div className="flex">
           <img
             alt="Perfil"
-            src={row.urlFoto}
+            src={
+              row.fotoDePerfil || `https://ui-avatars.com/api/?name=${row.nome}`
+            }
             className="mr-2 h-8 w-8 cursor-pointer rounded-full bg-gray-500 object-cover"
           />
           <div>
             <p>{row.nome}</p>
-            <small>{row.roles}</small>
+            <small>{getRolesString(row.tipoDePerfil)}</small>
           </div>
         </div>
       ),
@@ -299,8 +246,11 @@ export default function Users() {
       cell: (row) => {
         return (
           <ActionItem
-            onClick={() => {
-              handleClick(row.nome);
+            onClickDeletar={() => {
+              handleClickDeletar(row);
+            }}
+            onClickEditar={() => {
+              handleClickEditar(row);
             }}
           />
         );

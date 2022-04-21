@@ -3,13 +3,15 @@ import NotificationIcon from '../icons/notificationIcon';
 import ProfileIcon from '../icons/profileIcon';
 import LogoutIcon from '../icons/logoutIcon';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 export default function Navbar() {
+  const user = useSelector((state) => state.session.user.data);
+
   const navigate = useNavigate();
   function NavigateToHome() {
     navigate('/home');
   }
-
   return (
     <nav className="flex h-16 w-full flex-row flex-nowrap items-center justify-between bg-white shadow-md">
       <img
@@ -28,7 +30,10 @@ export default function Navbar() {
           <div className="group">
             <img
               alt="Perfil"
-              src="https://i.pravatar.cc/300"
+              src={
+                user.fotoDePerfil ||
+                `https://ui-avatars.com/api/?name=${user.nome}`
+              }
               className="h-8 w-8 cursor-pointer rounded-full bg-gray-500 object-cover"
             />
             <div className="absolute right-0 z-10 hidden origin-top-right rounded-md bg-white shadow-lg group-hover:block">
