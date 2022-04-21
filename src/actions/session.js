@@ -24,9 +24,9 @@ function _renewToken(dispatch, token) {
   });
 }
 
-function _fetchUser(dispatch, token, params) {
+function _fetchUser(dispatch, token) {
   return new Promise((resolve, reject) => {
-    dispatch(fetchUser(token, params)).then(resolve).catch(reject);
+    dispatch(fetchUser(token)).then(resolve).catch(reject);
   });
 }
 
@@ -34,7 +34,10 @@ export function fetchToken(data) {
   const request = axios({
     method: 'post',
     data: data,
-    url: `${API_ENDPOINT}/sessions`,
+    url: `${API_ENDPOINT}/autenticacao`,
+    headers: {
+      'Access-Control-Allow-Origin': `*`,
+    },
   });
 
   return {
@@ -75,10 +78,10 @@ export function apiRenewToken(token) {
   };
 }
 
-export function fetchUser(token, params) {
+export function fetchUser(token) {
   const request = axios({
     method: 'get',
-    url: `${API_ENDPOINT}/usuarios/${params.id}`,
+    url: `${API_ENDPOINT}/minhaConta/`,
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -97,19 +100,22 @@ export function login(data) {
     const fetchTokenResponse = await _fetchToken(dispatch, data).catch(
       console.error
     );
-
+    console.log('a');
+    console.log(fetchTokenResponse);
     if (fetchTokenResponse.value) {
-      const token = fetchTokenResponse.value.data.token;
+      const token = fetchTokenResponse.value.data.access_token;
+      console.log(token);
       if (token) {
         store.set('token', token);
+        // Extrarir o sub do token (documento)
+        // bater em minhaCOnta
 
         // const tokenData = jwtDecode(token);
         // const userId = tokenData.user.id;
-        // const fetchUserResponse = await _fetchUser(dispatch, token, {
-        //   id: userId,
-        // }).catch(console.error);
-        // const userData = fetchUserResponse.value.data;
-        const userData = fetchTokenResponse.value.data.user;
+        const fetchUserResponse = await _fetchUser(dispatch, token).catch(
+          console.error
+        );
+        const userData = fetchUserResponse.value.data;
         console.log(userData);
         store.set('user', userData);
       }

@@ -29,7 +29,9 @@ export default function (state = INITIAL_STATE, action) {
       };
 
     case `${SESSION_RENEW_TOKEN}_FULFILLED`:
-      token = action.payload.data.token ? action.payload.data.token : null;
+      token = action.payload.data.access_token
+        ? action.payload.data.access_token
+        : null;
 
       return {
         ...state,
@@ -67,7 +69,9 @@ export default function (state = INITIAL_STATE, action) {
       };
 
     case `${SESSION_VALIDATE_TOKEN}_FULFILLED`:
-      token = action.payload.data.token ? action.payload.data.token : null;
+      token = action.payload.data.access_token
+        ? action.payload.data.access_token
+        : null;
 
       return {
         ...state,
@@ -105,7 +109,9 @@ export default function (state = INITIAL_STATE, action) {
       };
 
     case `${SESSION_FETCH_TOKEN}_FULFILLED`:
-      token = action.payload.data.token ? action.payload.data.token : null;
+      token = action.payload.data.access_token
+        ? action.payload.data.access_token
+        : null;
       return {
         ...state,
         auth: {

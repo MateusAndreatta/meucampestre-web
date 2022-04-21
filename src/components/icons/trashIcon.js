@@ -1,7 +1,7 @@
-import { UserIcon as IconSolid } from '@heroicons/react/solid';
-import { UserIcon as IconOutline } from '@heroicons/react/outline';
+import { TrashIcon as IconSolid } from '@heroicons/react/solid';
+import { TrashIcon as IconOutline } from '@heroicons/react/outline';
 
-export default function ProfileIcon(props) {
+export default function TrashIcon(props) {
   let width = props.width || 'w-5';
   let height = props.height || 'h-5';
   let color = props.color || 'default-icon-color';

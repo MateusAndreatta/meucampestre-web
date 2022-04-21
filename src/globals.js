@@ -1,7 +1,7 @@
 export const PRODUCTION = false;
 
 export const SERVER_ADDRESS = PRODUCTION
-  ? 'https://localhost:3333'
-  : 'http://localhost:3333';
+  ? 'https://localhost:8080'
+  : 'http://localhost:8080';
 
-export const API_ENDPOINT = `${SERVER_ADDRESS}`;
+export const API_ENDPOINT = `${SERVER_ADDRESS}/api/v1`;

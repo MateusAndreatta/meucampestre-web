@@ -3,22 +3,22 @@ import { useSelector, useDispatch } from 'react-redux';
 import InputField from '../../components/fields/inputField';
 import Toaster from '../../utils/ui/toaster';
 import { login } from '../../actions/session';
+import { Navigate } from 'react-router-dom';
 
 export default function Login() {
   const session = useSelector((state) => state);
   const auth = useSelector((state) => state.session.auth);
-
+  const user = useSelector((state) => state.session.user);
   console.log(session);
-
-  const [txtEmail, setTxtEmail] = useState('');
+  const [txtDocumento, setTxtDocumento] = useState('');
   const [txtPassword, setTxtPassword] = useState('');
 
   const dispatch = useDispatch();
 
-  function handleEmailChange(event) {
+  function handleDocumentoChange(event) {
     const value = event.target.value;
 
-    setTxtEmail(value);
+    setTxtDocumento(value);
   }
 
   function handlePasswordChange(event) {
@@ -30,11 +30,21 @@ export default function Login() {
   function handleSubmit(event) {
     event.preventDefault();
 
-    dispatch(login({ email: txtEmail, password: txtPassword }));
+    dispatch(login({ documento: txtDocumento, senha: txtPassword }));
   }
 
   if (auth.authenticated) {
-    Toaster.showSuccess('Usuário autenticado!');
+    console.log(user.data);
+
+    if (user.data) {
+      if (user.data.condominios.length === 1) {
+        return <Navigate to="/home" replace={true} />;
+      } else if (user.data.condominios.length > 1) {
+        return <Navigate to="/selecionar-condominio" replace={true} />;
+      } else {
+        Toaster.showError('Ops! Não foi possível encontrar seu condomínio.');
+      }
+    }
   }
   const notify = () => Toaster.showInfo('Enviado request para o backend!');
 
@@ -48,13 +58,12 @@ export default function Login() {
           <form onSubmit={handleSubmit}>
             <div className="mb-2 flex flex-col">
               <InputField
-                name="txtEmail"
-                value={txtEmail}
-                label="E-mail"
-                type="email"
-                errorLabel="O e-mail informado não é válido"
+                name="txtDocumento"
+                value={txtDocumento}
+                label="Documento"
+                type="text"
                 required={true}
-                onChange={handleEmailChange}
+                onChange={handleDocumentoChange}
               />
             </div>
             <div className="mb-6 flex flex-col">
