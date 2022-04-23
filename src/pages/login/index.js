@@ -4,6 +4,7 @@ import InputField from '../../components/fields/inputField';
 import Toaster from '../../utils/ui/toaster';
 import { login } from '../../actions/session';
 import { Navigate } from 'react-router-dom';
+import { maskCpfCnpj } from '../../mask';
 
 export default function Login() {
   const session = useSelector((state) => state);
@@ -18,7 +19,7 @@ export default function Login() {
   function handleDocumentoChange(event) {
     const value = event.target.value;
 
-    setTxtDocumento(value);
+    setTxtDocumento(maskCpfCnpj(value));
   }
 
   function handlePasswordChange(event) {
@@ -29,8 +30,8 @@ export default function Login() {
 
   function handleSubmit(event) {
     event.preventDefault();
-
-    dispatch(login({ documento: txtDocumento, senha: txtPassword }));
+    const documento = txtDocumento.replace(/[^\d]+/g, '');
+    dispatch(login({ documento: documento, senha: txtPassword }));
   }
 
   if (auth.authenticated) {
@@ -63,6 +64,7 @@ export default function Login() {
                 label="Documento"
                 type="text"
                 required={true}
+                maxLength="18"
                 onChange={handleDocumentoChange}
               />
             </div>
