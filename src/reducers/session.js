@@ -123,7 +123,8 @@ export default function (state = INITIAL_STATE, action) {
       };
 
     case `${SESSION_FETCH_TOKEN}_REJECTED`:
-      error = action.payload.response.data.error;
+      // TODO: O ideal é o backend trazer essa resposta como um objeto
+      error = 'E-mail ou senha incorretos';
       return {
         ...state,
         auth: {

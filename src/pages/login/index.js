@@ -30,6 +30,12 @@ export default function Login() {
 
   function handleSubmit(event) {
     event.preventDefault();
+
+    if (txtDocumento.length < 1 || txtPassword < 1) {
+      Toaster.showInfo('Preencha todos os campos');
+      return;
+    }
+
     const documento = txtDocumento.replace(/[^\d]+/g, '');
     dispatch(login({ documento: documento, senha: txtPassword }));
   }
@@ -47,6 +53,11 @@ export default function Login() {
         user.data = null;
       }
     }
+  }
+
+  if (auth.error) {
+    Toaster.showError(auth.error);
+    auth.error = null;
   }
 
   return (
