@@ -191,7 +191,7 @@ function UserForm() {
             onChange={handleNameChange}
           />
         </div>
-        <div className="mb-2">
+        <div className="mb-2 hidden">
           <InputField
             name="txtEmail"
             value={txtEmail}
@@ -219,6 +219,7 @@ function UserForm() {
             label="CPF"
             type="text"
             required={true}
+            disabled={editMode}
             onChange={handleDocumentChange}
           />
         </div>
