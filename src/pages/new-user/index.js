@@ -65,9 +65,25 @@ function UserForm() {
     if (editMode) {
       getDataFromApi(auth.token, documento).then((response) => {
         setTxtName(response.data.nome);
-        setTxtEmail('maria.joaquina@gmail.com');
+        setTxtEmail('');
         // setTxtPhone(response.data.telefono);
         setTxtDocument(maskCpfCnpj(response.data.documento));
+
+        let condominio = response.data.condominios.find((x) => x.id === 1);
+        condominio.tipoDePerfil.forEach((x) => {
+          if (x === 'ROLE_MORADOR') {
+            setCheckRoleCondomino(true);
+          }
+          if (x === 'ROLE_PORTEIRO') {
+            setCheckRolePorteiro(true);
+          }
+          if (x === 'ROLE_CONSELHEIRO') {
+            setCheckRoleConselheiro(true);
+          }
+          if (x === 'ROLE_SINDICO') {
+            setCheckRoleSindico(true);
+          }
+        });
       });
     }
   }, [editMode]);
@@ -148,7 +164,7 @@ function UserForm() {
       updateUserApi(auth.token, {
         nome: txtName,
         documento: documento,
-        papeis: getRoles(), //TODO: ALTERAR PARA NÃO SER HARDCODED E ACEITAR LISTA (PENDENTE BACK)
+        papeis: getRoles(),
       })
         .then((response) => {
           console.log(response);
