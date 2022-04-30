@@ -6,6 +6,7 @@ import { API_ENDPOINT } from '../../globals';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Toaster from '../../utils/ui/toaster';
+import { maskCpfCnpj } from '../../mask';
 
 function sendDataToApi(token, data) {
   return axios({
@@ -66,7 +67,7 @@ function UserForm() {
         setTxtName(response.data.nome);
         setTxtEmail('maria.joaquina@gmail.com');
         // setTxtPhone(response.data.telefono);
-        setTxtDocument(response.data.documento);
+        setTxtDocument(maskCpfCnpj(response.data.documento));
       });
     }
   }, [editMode]);
@@ -90,7 +91,7 @@ function UserForm() {
 
   function handleDocumentChange(event) {
     const value = event.target.value;
-    setTxtDocument(value);
+    setTxtDocument(maskCpfCnpj(value));
   }
 
   const handleChangeCondomino = () => {
@@ -130,28 +131,49 @@ function UserForm() {
   }
 
   function handleSubmit() {
+    if (
+      txtDocument.length < 1 ||
+      txtName.length < 1 ||
+      (!checkRolePorteiro &&
+        !checkRoleSindico &&
+        !checkRoleConselheiro &&
+        !checkRoleCondomino)
+    ) {
+      Toaster.showInfo('Preencha todos os campos');
+      return;
+    }
+
+    const documento = txtDocument.replace(/[^\d]+/g, '');
     if (editMode) {
       updateUserApi(auth.token, {
         nome: txtName,
-        documento: txtDocument,
+        documento: documento,
         papeis: getRoles(), //TODO: ALTERAR PARA NÃO SER HARDCODED E ACEITAR LISTA (PENDENTE BACK)
-      }).then((response) => {
-        console.log(response);
-        Toaster.showSuccess('Usuario editado com sucesso!');
-        navigate('/acessos');
-      });
+      })
+        .then((response) => {
+          console.log(response);
+          Toaster.showSuccess('Usuario editado com sucesso!');
+          navigate('/acessos');
+        })
+        .catch((error) => {
+          Toaster.showError(error.response.data.mensagem);
+        });
     } else {
       sendDataToApi(auth.token, {
         nome: txtName,
-        senha: txtDocument,
+        senha: documento,
         email: txtEmail,
-        documento: txtDocument,
+        documento: documento,
         papel: 'ROLE_MORADOR', //TODO: ALTERAR PARA NÃO SER HARDCODED E ACEITAR LISTA (PENDENTE BACK)
-      }).then((response) => {
-        console.log(response);
-        Toaster.showSuccess('Novo acesso criado!');
-        navigate('/acessos');
-      });
+      })
+        .then((response) => {
+          console.log(response);
+          Toaster.showSuccess('Novo acesso criado!');
+          navigate('/acessos');
+        })
+        .catch((error) => {
+          Toaster.showError(error.response.data.mensagem);
+        });
     }
   }
 
