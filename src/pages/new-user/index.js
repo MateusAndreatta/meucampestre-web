@@ -56,10 +56,6 @@ function UserForm() {
 
   let { documento } = useParams();
   const [editMode, setEditMode] = useState(!!documento);
-  console.log('----------------------');
-  console.log(documento);
-  console.log(editMode);
-  console.log('----------------------');
 
   useEffect(() => {
     if (editMode) {
@@ -175,17 +171,44 @@ function UserForm() {
           Toaster.showError(error.response.data.mensagem);
         });
     } else {
+      let roles = getRoles();
+      let mainRole = '';
+      let otherRoles = [];
+      mainRole = roles[0];
+      if (roles.length > 1) {
+        otherRoles = roles.slice(1);
+      }
+
+      console.log('mainRole', mainRole);
+      console.log('otherRoles', otherRoles);
+
       sendDataToApi(auth.token, {
         nome: txtName,
         senha: documento,
         email: txtEmail,
         documento: documento,
-        papel: 'ROLE_MORADOR', //TODO: ALTERAR PARA NÃO SER HARDCODED E ACEITAR LISTA (PENDENTE BACK)
+        papel: mainRole, //TODO: ALTERAR PARA NÃO SER HARDCODED E ACEITAR LISTA (PENDENTE BACK)
       })
         .then((response) => {
-          console.log(response);
-          Toaster.showSuccess('Novo acesso criado!');
-          navigate('/acessos');
+          if (otherRoles.length > 0) {
+            updateUserApi(auth.token, {
+              nome: txtName,
+              documento: documento,
+              papeis: getRoles(),
+            })
+              .then((response) => {
+                console.log(response);
+                Toaster.showSuccess('Novo acesso criado!');
+                navigate('/acessos');
+              })
+              .catch((error) => {
+                Toaster.showError(error.response.data.mensagem);
+              });
+          } else {
+            console.log(response);
+            Toaster.showSuccess('Novo acesso criado!');
+            navigate('/acessos');
+          }
         })
         .catch((error) => {
           Toaster.showError(error.response.data.mensagem);
