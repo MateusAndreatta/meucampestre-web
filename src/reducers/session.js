@@ -124,7 +124,7 @@ export default function (state = INITIAL_STATE, action) {
 
     case `${SESSION_FETCH_TOKEN}_REJECTED`:
       // TODO: O ideal é o backend trazer essa resposta como um objeto
-      error = 'E-mail ou senha incorretos';
+      error = 'Documento ou senha incorretos';
       return {
         ...state,
         auth: {

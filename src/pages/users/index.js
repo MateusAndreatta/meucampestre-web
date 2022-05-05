@@ -111,7 +111,7 @@ export default function Users() {
   function handleClickDeletar(row) {
     deleteUser(auth.token, row.documento).then((response) => {
       getDataFromApi(auth.token).then((response) => {
-        Toaster.showInfo('Acesso deletado!');
+        Toaster.showInfo('Acesso do usuário removido do condomínio.');
         setDataFromDatabase(response.data.moradores);
         setData(response.data.moradores);
       });
