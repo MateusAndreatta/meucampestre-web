@@ -255,10 +255,11 @@ function UserForm() {
           <InputField
             name="txtDocument"
             value={txtDocument}
-            label="CPF"
+            label="Documento"
             type="text"
             required={true}
             disabled={editMode}
+            maxLength="18"
             onChange={handleDocumentChange}
           />
         </div>
