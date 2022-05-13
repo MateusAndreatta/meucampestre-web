@@ -8,7 +8,6 @@ import LockClosedIcon from '../../components/icons/lockClosedIcon';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_ENDPOINT } from '../../globals';
-import { useSelector } from 'react-redux';
 import Toaster from '../../utils/ui/toaster';
 import SessionData from '../../utils/sessionData';
 
@@ -340,6 +339,14 @@ export default function Users() {
           customStyles={customStyles}
           pagination
           paginationComponentOptions={paginationComponentOptions}
+          noDataComponent={
+            <div>
+              <br />
+              <p>Nenhum acesso encontrado</p>
+              <br />
+            </div>
+          }
+          // TODO: Quando refatorar a tabela, já criar um componente de listagem vazia generico
         />
       </div>
     </div>

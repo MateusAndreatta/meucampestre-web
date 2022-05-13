@@ -3,7 +3,6 @@ import Navbar from '../../components/navbar';
 import InputField from '../../components/fields/inputField';
 import axios from 'axios';
 import { API_ENDPOINT } from '../../globals';
-import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Toaster from '../../utils/ui/toaster';
 import { maskCpfCnpj } from '../../mask';
