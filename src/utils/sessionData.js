@@ -25,6 +25,7 @@ export default class SessionData {
 
   static logout() {
     sessionStorage.clear();
+    window.location.reload(); // TODO: remove this when stop using redux on login page
   }
 
   static hasFullData() {

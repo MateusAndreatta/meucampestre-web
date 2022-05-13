@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Toaster from '../../utils/ui/toaster';
 import { maskCpfCnpj } from '../../mask';
+import SessionData from '../../utils/sessionData';
 
 function sendDataToApi(token, data) {
   return axios({
@@ -59,7 +60,7 @@ function UserForm() {
 
   useEffect(() => {
     if (editMode) {
-      getDataFromApi(auth.token, documento).then((response) => {
+      getDataFromApi(token, documento).then((response) => {
         setTxtName(response.data.nome);
         setTxtEmail('');
         // setTxtPhone(response.data.telefono);
@@ -84,7 +85,7 @@ function UserForm() {
     }
   }, [editMode]);
 
-  const auth = useSelector((state) => state.session.auth);
+  const token = SessionData.getToken();
 
   function handleNameChange(event) {
     const value = event.target.value;
@@ -157,7 +158,7 @@ function UserForm() {
 
     const documento = txtDocument.replace(/[^\d]+/g, '');
     if (editMode) {
-      updateUserApi(auth.token, {
+      updateUserApi(token, {
         nome: txtName,
         documento: documento,
         papeis: getRoles(),
@@ -182,7 +183,7 @@ function UserForm() {
       console.log('mainRole', mainRole);
       console.log('otherRoles', otherRoles);
 
-      sendDataToApi(auth.token, {
+      sendDataToApi(token, {
         nome: txtName,
         senha: documento,
         email: txtEmail,
@@ -191,7 +192,7 @@ function UserForm() {
       })
         .then((response) => {
           if (otherRoles.length > 0) {
-            updateUserApi(auth.token, {
+            updateUserApi(token, {
               nome: txtName,
               documento: documento,
               papeis: getRoles(),

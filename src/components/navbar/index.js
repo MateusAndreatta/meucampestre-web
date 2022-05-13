@@ -11,6 +11,11 @@ export default function Navbar() {
   function NavigateToHome() {
     navigate('/home');
   }
+
+  function logout() {
+    SessionData.logout();
+  }
+
   return (
     <nav className="flex h-16 w-full flex-row flex-nowrap items-center justify-between bg-white shadow-md">
       <img
@@ -57,7 +62,7 @@ export default function Navbar() {
                   className="text-md block block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                   role="menuitem">
                   <span className="flex flex-col">
-                    <span>
+                    <span onClick={logout}>
                       <LogoutIcon className="float-left mr-3" />
                       Sair
                     </span>
