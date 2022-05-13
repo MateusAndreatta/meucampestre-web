@@ -12,6 +12,7 @@ export default class InputField extends React.Component {
       required,
       placeholder,
       onChange,
+      maxLength,
     } = this.props;
 
     return (
@@ -32,6 +33,7 @@ export default class InputField extends React.Component {
           disabled={disabled}
           onChange={onChange}
           placeholder={placeholder}
+          maxLength={maxLength}
         />
         <p className="mt-2 hidden text-sm text-pink-600 peer-invalid:block">
           {errorLabel}

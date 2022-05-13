@@ -3,22 +3,30 @@ import NotificationIcon from '../icons/notificationIcon';
 import ProfileIcon from '../icons/profileIcon';
 import LogoutIcon from '../icons/logoutIcon';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import SessionData from '../../utils/sessionData';
 
 export default function Navbar() {
-  const user = useSelector((state) => state.session.user.data);
-
+  const user = SessionData.getUser();
   const navigate = useNavigate();
-  function NavigateToHome() {
+  function navigateToHome() {
     navigate('/home');
   }
+
+  function logout() {
+    SessionData.logout();
+  }
+
+  function navigateToProfile() {
+    navigate('/perfil');
+  }
+
   return (
     <nav className="flex h-16 w-full flex-row flex-nowrap items-center justify-between bg-white shadow-md">
       <img
         src={Logo}
         alt="Logo"
         className="max-h-full w-14 max-w-fit grow cursor-pointer object-cover"
-        onClick={NavigateToHome}
+        onClick={navigateToHome}
       />
       <div className="h-16 flex-none">
         <div className="flex h-full w-full flex-row flex-nowrap items-center gap-8 px-8">
@@ -47,7 +55,7 @@ export default function Navbar() {
                   className="text-md block block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                   role="menuitem">
                   <span className="flex flex-col">
-                    <span>
+                    <span onClick={navigateToProfile}>
                       <ProfileIcon className="float-left mr-3" />
                       Meu perfil
                     </span>
@@ -58,7 +66,7 @@ export default function Navbar() {
                   className="text-md block block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                   role="menuitem">
                   <span className="flex flex-col">
-                    <span>
+                    <span onClick={logout}>
                       <LogoutIcon className="float-left mr-3" />
                       Sair
                     </span>

@@ -5,6 +5,7 @@ import jwtDecode from 'jwt-decode';
 
 import * as types from '../actionTypes';
 import { API_ENDPOINT } from '../globals';
+import SessionData from '../utils/sessionData';
 
 function _fetchToken(dispatch, data) {
   return new Promise((resolve, reject) => {
@@ -107,6 +108,7 @@ export function login(data) {
       console.log(token);
       if (token) {
         store.set('token', token);
+        SessionData.setToken(token);
         // Extrarir o sub do token (documento)
         // bater em minhaCOnta
 
@@ -118,6 +120,7 @@ export function login(data) {
         const userData = fetchUserResponse.value.data;
         console.log(userData);
         store.set('user', userData);
+        SessionData.setUser(userData);
       }
     }
 

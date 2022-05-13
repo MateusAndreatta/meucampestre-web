@@ -4,6 +4,8 @@ import InputField from '../../components/fields/inputField';
 import Toaster from '../../utils/ui/toaster';
 import { login } from '../../actions/session';
 import { Navigate } from 'react-router-dom';
+import { maskCpfCnpj } from '../../mask';
+import SessionData from '../../utils/sessionData';
 
 export default function Login() {
   const session = useSelector((state) => state);
@@ -18,7 +20,7 @@ export default function Login() {
   function handleDocumentoChange(event) {
     const value = event.target.value;
 
-    setTxtDocumento(value);
+    setTxtDocumento(maskCpfCnpj(value));
   }
 
   function handlePasswordChange(event) {
@@ -30,7 +32,13 @@ export default function Login() {
   function handleSubmit(event) {
     event.preventDefault();
 
-    dispatch(login({ documento: txtDocumento, senha: txtPassword }));
+    if (txtDocumento.length < 1 || txtPassword < 1) {
+      Toaster.showInfo('Preencha todos os campos');
+      return;
+    }
+
+    const documento = txtDocumento.replace(/[^\d]+/g, '');
+    dispatch(login({ documento: documento, senha: txtPassword }));
   }
 
   if (auth.authenticated) {
@@ -38,19 +46,25 @@ export default function Login() {
 
     if (user.data) {
       if (user.data.condominios.length === 1) {
+        SessionData.setCondo(user.data.condominios[0]);
         return <Navigate to="/home" replace={true} />;
       } else if (user.data.condominios.length > 1) {
         return <Navigate to="/selecionar-condominio" replace={true} />;
       } else {
         Toaster.showError('Ops! Não foi possível encontrar seu condomínio.');
+        user.data = null;
       }
     }
   }
-  const notify = () => Toaster.showInfo('Enviado request para o backend!');
+
+  if (auth.error) {
+    Toaster.showError(auth.error);
+    auth.error = null;
+  }
 
   return (
     <div className="grid h-screen place-items-center">
-      <div className="card flex h-full w-full max-w-md flex-col px-4 py-8 sm:px-6 md:h-auto md:px-8 lg:px-10">
+      <div className="card flex aspect-auto h-full w-full max-w-md flex-col px-4 py-8 sm:px-6 md:h-auto md:px-8 lg:px-10">
         <div className="mb-6 self-center text-xl font-light text-gray-600 sm:text-2xl">
           Entrar na sua conta
         </div>
@@ -63,6 +77,7 @@ export default function Login() {
                 label="Documento"
                 type="text"
                 required={true}
+                maxLength="18"
                 onChange={handleDocumentoChange}
               />
             </div>
@@ -88,19 +103,11 @@ export default function Login() {
             <div className="flex w-full">
               <button
                 type="submit"
-                className="w-full rounded-lg  bg-purple-600 py-2 px-4 text-center text-base font-semibold text-white shadow-md transition duration-200 ease-in hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2  focus:ring-offset-purple-200"
-                onClick={notify}>
+                className="w-full rounded-lg bg-purple-600 py-2 px-4 text-center text-base font-semibold text-white shadow-md transition duration-200 ease-in hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2  focus:ring-offset-purple-200">
                 Entrar
               </button>
             </div>
           </form>
-        </div>
-        <div className="mt-6 flex items-center justify-center">
-          <a
-            href="/"
-            className="inline-flex items-center text-center text-xs font-thin text-gray-500 hover:text-gray-700">
-            <span className="ml-2">Ainda não possui uma conta?</span>
-          </a>
         </div>
       </div>
     </div>

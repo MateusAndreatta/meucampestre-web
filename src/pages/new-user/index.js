@@ -3,9 +3,10 @@ import Navbar from '../../components/navbar';
 import InputField from '../../components/fields/inputField';
 import axios from 'axios';
 import { API_ENDPOINT } from '../../globals';
-import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Toaster from '../../utils/ui/toaster';
+import { maskCpfCnpj } from '../../mask';
+import SessionData from '../../utils/sessionData';
 
 function sendDataToApi(token, data) {
   return axios({
@@ -55,23 +56,35 @@ function UserForm() {
 
   let { documento } = useParams();
   const [editMode, setEditMode] = useState(!!documento);
-  console.log('----------------------');
-  console.log(documento);
-  console.log(editMode);
-  console.log('----------------------');
 
   useEffect(() => {
     if (editMode) {
-      getDataFromApi(auth.token, documento).then((response) => {
+      getDataFromApi(token, documento).then((response) => {
         setTxtName(response.data.nome);
-        setTxtEmail('maria.joaquina@gmail.com');
+        setTxtEmail('');
         // setTxtPhone(response.data.telefono);
-        setTxtDocument(response.data.documento);
+        setTxtDocument(maskCpfCnpj(response.data.documento));
+
+        let condominio = response.data.condominios.find((x) => x.id === 1);
+        condominio.tipoDePerfil.forEach((x) => {
+          if (x === 'ROLE_MORADOR') {
+            setCheckRoleCondomino(true);
+          }
+          if (x === 'ROLE_PORTEIRO') {
+            setCheckRolePorteiro(true);
+          }
+          if (x === 'ROLE_CONSELHEIRO') {
+            setCheckRoleConselheiro(true);
+          }
+          if (x === 'ROLE_SINDICO') {
+            setCheckRoleSindico(true);
+          }
+        });
       });
     }
   }, [editMode]);
 
-  const auth = useSelector((state) => state.session.auth);
+  const token = SessionData.getToken();
 
   function handleNameChange(event) {
     const value = event.target.value;
@@ -90,7 +103,7 @@ function UserForm() {
 
   function handleDocumentChange(event) {
     const value = event.target.value;
-    setTxtDocument(value);
+    setTxtDocument(maskCpfCnpj(value));
   }
 
   const handleChangeCondomino = () => {
@@ -130,28 +143,76 @@ function UserForm() {
   }
 
   function handleSubmit() {
+    if (
+      txtDocument.length < 1 ||
+      txtName.length < 1 ||
+      (!checkRolePorteiro &&
+        !checkRoleSindico &&
+        !checkRoleConselheiro &&
+        !checkRoleCondomino)
+    ) {
+      Toaster.showInfo('Preencha todos os campos');
+      return;
+    }
+
+    const documento = txtDocument.replace(/[^\d]+/g, '');
     if (editMode) {
-      updateUserApi(auth.token, {
+      updateUserApi(token, {
         nome: txtName,
-        documento: txtDocument,
-        papeis: getRoles(), //TODO: ALTERAR PARA NÃO SER HARDCODED E ACEITAR LISTA (PENDENTE BACK)
-      }).then((response) => {
-        console.log(response);
-        Toaster.showSuccess('Usuario editado com sucesso!');
-        navigate('/acessos');
-      });
+        documento: documento,
+        papeis: getRoles(),
+      })
+        .then((response) => {
+          console.log(response);
+          Toaster.showSuccess('Usuario editado com sucesso!');
+          navigate('/acessos');
+        })
+        .catch((error) => {
+          Toaster.showError(error.response.data.mensagem);
+        });
     } else {
-      sendDataToApi(auth.token, {
+      let roles = getRoles();
+      let mainRole = '';
+      let otherRoles = [];
+      mainRole = roles[0];
+      if (roles.length > 1) {
+        otherRoles = roles.slice(1);
+      }
+
+      console.log('mainRole', mainRole);
+      console.log('otherRoles', otherRoles);
+
+      sendDataToApi(token, {
         nome: txtName,
-        senha: txtDocument,
+        senha: documento,
         email: txtEmail,
-        documento: txtDocument,
-        papel: 'ROLE_MORADOR', //TODO: ALTERAR PARA NÃO SER HARDCODED E ACEITAR LISTA (PENDENTE BACK)
-      }).then((response) => {
-        console.log(response);
-        Toaster.showSuccess('Novo acesso criado!');
-        navigate('/acessos');
-      });
+        documento: documento,
+        papel: mainRole, //TODO: ALTERAR PARA NÃO SER HARDCODED E ACEITAR LISTA (PENDENTE BACK)
+      })
+        .then((response) => {
+          if (otherRoles.length > 0) {
+            updateUserApi(token, {
+              nome: txtName,
+              documento: documento,
+              papeis: getRoles(),
+            })
+              .then((response) => {
+                console.log(response);
+                Toaster.showSuccess('Novo acesso criado!');
+                navigate('/acessos');
+              })
+              .catch((error) => {
+                Toaster.showError(error.response.data.mensagem);
+              });
+          } else {
+            console.log(response);
+            Toaster.showSuccess('Novo acesso criado!');
+            navigate('/acessos');
+          }
+        })
+        .catch((error) => {
+          Toaster.showError(error.response.data.mensagem);
+        });
     }
   }
 
@@ -169,7 +230,7 @@ function UserForm() {
             onChange={handleNameChange}
           />
         </div>
-        <div className="mb-2">
+        <div className="mb-2 hidden">
           <InputField
             name="txtEmail"
             value={txtEmail}
@@ -194,9 +255,11 @@ function UserForm() {
           <InputField
             name="txtDocument"
             value={txtDocument}
-            label="CPF"
+            label="Documento"
             type="text"
             required={true}
+            disabled={editMode}
+            maxLength="18"
             onChange={handleDocumentChange}
           />
         </div>

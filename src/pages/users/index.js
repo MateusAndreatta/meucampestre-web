@@ -8,8 +8,8 @@ import LockClosedIcon from '../../components/icons/lockClosedIcon';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_ENDPOINT } from '../../globals';
-import { useSelector } from 'react-redux';
 import Toaster from '../../utils/ui/toaster';
+import SessionData from '../../utils/sessionData';
 
 //TODO: O DataTable deve virar um Componente externo para ser reaproveitado
 //https://react-data-table-component.netlify.app/?path=/docs/getting-started-patterns--page
@@ -99,31 +99,29 @@ export default function Users() {
   const [filterCondomino, setFilterCondomino] = useState(false);
   const [filterConselheiro, setFilterConselheiro] = useState(false);
   const [filterPorteiro, setFilterPorteiro] = useState(false);
-  const auth = useSelector((state) => state.session.auth);
-  let dataFromDataBase = [];
+  const token = SessionData.getToken();
   const navigate = useNavigate();
 
+  const [data, setData] = useState([]);
+  const [dataFromDatabase, setDataFromDatabase] = useState([]);
+
   function handleClickEditar(row) {
-    console.log(row);
     navigate(`/editar-acesso/${row.documento}`);
   }
   function handleClickDeletar(row) {
-    console.log(row);
-    deleteUser(auth.token, row.documento).then((response) => {
-      getDataFromApi(auth.token).then((response) => {
-        console.log(response.data);
-        Toaster.showInfo('Acesso deletado!');
-        dataFromDataBase = response.data.moradores;
-        setData(dataFromDataBase);
+    deleteUser(token, row.documento).then((response) => {
+      getDataFromApi(token).then((response) => {
+        Toaster.showInfo('Acesso do usuário removido do condomínio.');
+        setDataFromDatabase(response.data.moradores);
+        setData(response.data.moradores);
       });
     });
   }
 
   useEffect(() => {
-    getDataFromApi(auth.token).then((response) => {
-      console.log(response.data);
-      dataFromDataBase = response.data.moradores;
-      setData(dataFromDataBase);
+    getDataFromApi(token).then((response) => {
+      setDataFromDatabase(response.data.moradores);
+      setData(response.data.moradores);
     });
   }, []);
 
@@ -131,13 +129,10 @@ export default function Users() {
     updateData();
   }, [filterCondomino, filterConselheiro, filterPorteiro]);
 
-  const [data, setData] = useState(dataFromDataBase);
-
   const filterByRole = (roles) => {
     if (roles && roles.length > 0) {
-      const filteredData = dataFromDataBase.filter((user) => {
-        let userRoles = user.tipoDePerfil.split(' & ');
-
+      const filteredData = dataFromDatabase.filter((user) => {
+        let userRoles = user.tipoDePerfil;
         let filterReturn = false;
         roles.forEach((role) => {
           userRoles.forEach((userRole) => {
@@ -151,20 +146,20 @@ export default function Users() {
 
       setData(filteredData);
     } else {
-      setData(dataFromDataBase);
+      setData(dataFromDatabase);
     }
   };
 
   const updateData = () => {
     let roles = [];
     if (filterCondomino) {
-      roles.push('Condômino');
+      roles.push('ROLE_MORADOR');
     }
     if (filterConselheiro) {
-      roles.push('Conselho');
+      roles.push('ROLE_CONSELHEIRO');
     }
     if (filterPorteiro) {
-      roles.push('Porteiro');
+      roles.push('ROLE_PORTEIRO');
     }
     filterByRole(roles);
   };
@@ -344,6 +339,14 @@ export default function Users() {
           customStyles={customStyles}
           pagination
           paginationComponentOptions={paginationComponentOptions}
+          noDataComponent={
+            <div>
+              <br />
+              <p>Nenhum acesso encontrado</p>
+              <br />
+            </div>
+          }
+          // TODO: Quando refatorar a tabela, já criar um componente de listagem vazia generico
         />
       </div>
     </div>
