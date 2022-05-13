@@ -14,10 +14,10 @@ import Users from './pages/users';
 import NewUser from './pages/new-user';
 import Profile from './pages/profile';
 import SelectCondo from './pages/select-condo';
-import store from 'store';
+import SessionData from './utils/sessionData';
 
 function loggedIn() {
-  return store.get('token');
+  return SessionData.hasFullData();
 }
 function PrivateOutlet() {
   return loggedIn() ? <Outlet /> : <Navigate to="/" />;

@@ -5,6 +5,7 @@ import Toaster from '../../utils/ui/toaster';
 import { login } from '../../actions/session';
 import { Navigate } from 'react-router-dom';
 import { maskCpfCnpj } from '../../mask';
+import SessionData from '../../utils/sessionData';
 
 export default function Login() {
   const session = useSelector((state) => state);
@@ -45,6 +46,7 @@ export default function Login() {
 
     if (user.data) {
       if (user.data.condominios.length === 1) {
+        SessionData.setCondo(user.data.condominios[0]);
         return <Navigate to="/home" replace={true} />;
       } else if (user.data.condominios.length > 1) {
         return <Navigate to="/selecionar-condominio" replace={true} />;

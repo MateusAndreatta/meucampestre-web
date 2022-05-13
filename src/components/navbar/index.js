@@ -3,11 +3,10 @@ import NotificationIcon from '../icons/notificationIcon';
 import ProfileIcon from '../icons/profileIcon';
 import LogoutIcon from '../icons/logoutIcon';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import SessionData from '../../utils/sessionData';
 
 export default function Navbar() {
-  const user = useSelector((state) => state.session.user.data);
-
+  const user = SessionData.getUser();
   const navigate = useNavigate();
   function NavigateToHome() {
     navigate('/home');
