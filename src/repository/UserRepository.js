@@ -4,7 +4,7 @@ export default {
   findAll() {
     return new Promise((resolve, reject) => {
       api
-        .get(`/usuarios/${api.condo}/usuario`)
+        .get(`/usuarios/${api.condo().id}/usuario`)
         .then((response) => {
           const data = response.data;
           if (data) resolve(data);
@@ -30,7 +30,7 @@ export default {
   create(data) {
     return new Promise((resolve, reject) => {
       api
-        .post(`//usuarios/${api.condo}/usuario`, {}, data)
+        .post(`/usuarios/${api.condo().id}/usuario`, {}, data)
         .then((response) => {
           resolve(response);
         })
@@ -41,7 +41,7 @@ export default {
   update(data) {
     return new Promise((resolve, reject) => {
       api
-        .put(`/usuarios/${api.condo}/usuario`, {}, data)
+        .put(`/usuarios/${api.condo().id}/usuario`, {}, data)
         .then((response) => {
           resolve(response);
         })
@@ -52,7 +52,7 @@ export default {
   remove(documento) {
     return new Promise((resolve, reject) => {
       api
-        .remove(`/usuarios/${api.condo}/usuario/${documento}`)
+        .remove(`/usuarios/${api.condo().id}/usuario/${documento}`)
         .then((response) => {
           resolve(response);
         })
