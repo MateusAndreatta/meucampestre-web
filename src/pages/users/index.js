@@ -113,16 +113,20 @@ export default function Users() {
     deleteUser(token, row.documento).then((response) => {
       getDataFromApi(token).then((response) => {
         Toaster.showInfo('Acesso do usuário removido do condomínio.');
-        setDataFromDatabase(response.data.moradores);
-        setData(response.data.moradores);
+        setDataToStates(response.data.moradores);
       });
     });
   }
 
+  function setDataToStates(data) {
+    let filteredData = data.filter((e) => e.id !== SessionData.getUser().id);
+    setDataFromDatabase(filteredData);
+    setData(filteredData);
+  }
+
   useEffect(() => {
     getDataFromApi(token).then((response) => {
-      setDataFromDatabase(response.data.moradores);
-      setData(response.data.moradores);
+      setDataToStates(response.data.moradores);
     });
   }, []);
 
