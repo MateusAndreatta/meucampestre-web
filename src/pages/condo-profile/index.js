@@ -6,6 +6,8 @@ import { storage } from '../../firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import MeuCampestreLogo from '../../resources/MeuCampestreLogo.svg';
 import SessionData from '../../utils/sessionData';
+import CondoRepository from '../../repository/CondoRepository';
+import Toaster from '../../utils/ui/toaster';
 
 export default function CondoProfile() {
   const [txtName, setTxtName] = useState('');
@@ -45,7 +47,17 @@ export default function CondoProfile() {
   }
 
   const onButtonClick = () => {
-    sendFileFirebase(img);
+    if (img) {
+      sendFileFirebase(img);
+    } else {
+      sendDataToDatabase({
+        nome: txtName,
+        descricao: txtDescription,
+        email: txtEmail,
+        endereco: txtAddress,
+        image_url: condo.image_url,
+      });
+    }
   };
 
   function onPicEditClick() {
@@ -109,9 +121,33 @@ export default function CondoProfile() {
         // Upload completed successfully, now we can get the download URL
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           console.log('File available at', downloadURL);
+          sendDataToDatabase({
+            nome: txtName,
+            descricao: txtDescription,
+            email: txtEmail,
+            endereco: txtAddress,
+            image_url: downloadURL,
+          });
         });
       }
     );
+  }
+
+  function sendDataToDatabase(data) {
+    CondoRepository.update(data)
+      .then((response) => {
+        Toaster.showInfo('Informações foram salvas!');
+        // atualizar os dados da variavel condo e depois fazer o set dele lá no SessionData
+      })
+      .catch((error) => {
+        console.log(error);
+
+        if (error.response.data.mensagem) {
+          Toaster.showError(error.response.data.mensagem);
+        } else {
+          Toaster.showError('Ops, ocorreu um erro, tente novamente mais tarde');
+        }
+      });
   }
 
   return (

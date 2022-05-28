@@ -77,7 +77,7 @@ function ActionItem(props) {
 function getDataFromApi(token) {
   return axios({
     method: 'GET',
-    url: `${API_ENDPOINT}/usuarios/1/usuario`,
+    url: `${API_ENDPOINT}/usuarios/${SessionData.getCondo().id}/usuario`,
     params: {},
     headers: {
       Authorization: `Bearer ${token}`,
@@ -88,7 +88,9 @@ function getDataFromApi(token) {
 function deleteUser(token, document) {
   return axios({
     method: 'DELETE',
-    url: `${API_ENDPOINT}/usuarios/1/usuario/${document}`,
+    url: `${API_ENDPOINT}/usuarios/${
+      SessionData.getCondo().id
+    }/usuario/${document}`,
     params: {},
     headers: {
       Authorization: `Bearer ${token}`,

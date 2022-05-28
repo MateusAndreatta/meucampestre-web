@@ -31,9 +31,7 @@ const ApplicationRoutes = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/selecionar-condominio" element={<PrivateOutlet />}>
-          <Route path="" element={<SelectCondo />} />
-        </Route>
+        <Route path="/selecionar-condominio" element={<SelectCondo />} />
         <Route path="/home" element={<PrivateOutlet />}>
           <Route path="" element={<Home />} />
         </Route>

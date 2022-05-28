@@ -1,34 +1,52 @@
 import React from 'react';
-import Navbar from '../../components/navbar';
 import Card from '../../components/card';
 
 import MeuCampestreLogo from '../../resources/MeuCampestreLogo.svg';
+import SessionData from '../../utils/sessionData';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export default function SelectCondo() {
-  const Img = () => {
-    return (
-      <img
-        src={MeuCampestreLogo}
-        alt="Meu Campestre"
-        style={{ width: '100%', height: '100%' }}
-      />
-    );
-  };
+  let condominiums = SessionData.getUser().condominios;
+  console.log(condominiums);
+  const navigate = useNavigate();
+
+  if (!condominiums) {
+    navigate('/');
+  }
+
+  function onCondoSelected(condo) {
+    console.log(condo);
+    SessionData.setCondo(condo);
+    navigate('/home');
+  }
 
   return (
     <div>
-      <Navbar />
       <div className="container mx-auto">
         <h1 className="my-3 text-center text-2xl">
           Olá, qual condomínio deseja visualizar?
         </h1>
         <div className="my-4 flex flex-wrap justify-around gap-8 px-2 ">
-          <div className="h-60 w-60 max-w-full">
-            <Card icon={Img} title="Meu Campestre" />
-          </div>
-          <div className="h-60 w-60 max-w-full">
-            <Card icon={Img} title="Meu Campestre 2 " />
-          </div>
+          {condominiums.map((condo) => {
+            const Img = (link) => {
+              return (
+                <img
+                  src={condo.image_url || MeuCampestreLogo}
+                  alt={condo.nome}
+                  style={{ width: '100%', height: '100%' }}
+                />
+              );
+            };
+
+            return (
+              <div
+                className="h-60 w-60 max-w-full cursor-pointer"
+                key={condo.id}
+                onClick={(event) => onCondoSelected(condo)}>
+                <Card icon={Img} title={condo.nome} />
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
