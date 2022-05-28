@@ -17,6 +17,7 @@ import SelectCondo from './pages/select-condo';
 import SessionData from './utils/sessionData';
 import CondoProfile from './pages/condo-profile';
 import Units from './pages/units';
+import NewUnit from './pages/new-unit';
 
 function loggedIn() {
   return SessionData.hasFullData();
@@ -53,6 +54,9 @@ const ApplicationRoutes = () => {
         </Route>
         <Route path="/unidades" element={<PrivateOutlet />}>
           <Route path="" element={<Units />} />
+        </Route>
+        <Route path="/nova-unidade" element={<PrivateOutlet />}>
+          <Route path="" element={<NewUnit />} />
         </Route>
         <Route path="*" element={<Error404 />} />
       </Routes>

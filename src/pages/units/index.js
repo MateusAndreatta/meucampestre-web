@@ -210,7 +210,7 @@ export default function Units() {
       <div className="container mx-auto">
         <div className="my-8 flex justify-between">
           <h1 className="text-2xl">Gerenciar unidades</h1>
-          <Link to="/novo-acesso">
+          <Link to="/nova-unidade">
             <button className="btn-outline">Nova unidade</button>
           </Link>
         </div>
