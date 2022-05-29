@@ -11,6 +11,7 @@ import { API_ENDPOINT } from '../../globals';
 import { useSelector } from 'react-redux';
 import Toaster from '../../utils/ui/toaster';
 import SessionData from '../../utils/sessionData';
+import { ROLES } from '../../utils/Constants';
 
 //TODO: O DataTable deve virar um Componente externo para ser reaproveitado
 //https://react-data-table-component.netlify.app/?path=/docs/getting-started-patterns--page
@@ -160,13 +161,13 @@ export default function Users() {
   const updateData = () => {
     let roles = [];
     if (filterCondomino) {
-      roles.push('ROLE_MORADOR');
+      roles.push(ROLES.MORADOR);
     }
     if (filterConselheiro) {
-      roles.push('ROLE_CONSELHEIRO');
+      roles.push(ROLES.CONSELHEIRO);
     }
     if (filterPorteiro) {
-      roles.push('ROLE_PORTEIRO');
+      roles.push(ROLES.PORTEIRO);
     }
     filterByRole(roles);
   };
@@ -187,25 +188,25 @@ export default function Users() {
     let rolesString = '';
     roles.forEach((role) => {
       switch (role) {
-        case 'ROLE_SINDICO':
+        case ROLES.SINDICO:
           if (rolesString !== '') {
             rolesString += ' & ';
           }
           rolesString += 'Síndico';
           break;
-        case 'ROLE_MORADOR':
+        case ROLES.MORADOR:
           if (rolesString !== '') {
             rolesString += ' & ';
           }
           rolesString += 'Condômino';
           break;
-        case 'ROLE_PORTEIRO':
+        case ROLES.PORTEIRO:
           if (rolesString !== '') {
             rolesString += ' & ';
           }
           rolesString += 'Porteiro';
           break;
-        case 'ROLE_CONSELHEIRO':
+        case ROLES.CONSELHEIRO:
           if (rolesString !== '') {
             rolesString += ' & ';
           }
