@@ -18,7 +18,7 @@ export default function Home() {
             <Card icon={UsersIcon} title="Acessos" />
           </Link>
           <Link to="/perfil-condominio">
-            <Card icon={HomeIcon} title="Condominio" />
+            <Card icon={HomeIcon} title="Condomínio" />
           </Link>
           <Link to="/unidades">
             <Card icon={CollectionIcon} title="Unidades" />
