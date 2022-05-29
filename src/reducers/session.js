@@ -142,7 +142,6 @@ export default function (state = INITIAL_STATE, action) {
       return { ...state, user: { pending: true, data: null, error: null } };
 
     case `${SESSION_FETCH_USER}_FULFILLED`:
-      console.log('aaa');
       return {
         ...state,
         user: { pending: false, data: action.payload.data, error: null },

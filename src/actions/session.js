@@ -101,7 +101,6 @@ export function login(data) {
     const fetchTokenResponse = await _fetchToken(dispatch, data).catch(
       console.error
     );
-    console.log('a');
     console.log(fetchTokenResponse);
     if (fetchTokenResponse.value) {
       const token = fetchTokenResponse.value.data.access_token;
