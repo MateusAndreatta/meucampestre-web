@@ -82,7 +82,7 @@ export function apiRenewToken(token) {
 export function fetchUser(token) {
   const request = axios({
     method: 'get',
-    url: `${API_ENDPOINT}/minhaConta/`,
+    url: `${API_ENDPOINT}/minhaConta`,
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -108,16 +108,10 @@ export function login(data) {
       if (token) {
         store.set('token', token);
         SessionData.setToken(token);
-        // Extrarir o sub do token (documento)
-        // bater em minhaCOnta
-
-        // const tokenData = jwtDecode(token);
-        // const userId = tokenData.user.id;
         const fetchUserResponse = await _fetchUser(dispatch, token).catch(
           console.error
         );
         const userData = fetchUserResponse.value.data;
-        console.log(userData);
         store.set('user', userData);
         SessionData.setUser(userData);
       }
