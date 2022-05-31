@@ -26,12 +26,12 @@ export default function SelectCondo() {
         <h1 className="my-3 text-center text-2xl">
           Olá, qual condomínio deseja visualizar?
         </h1>
-        <div className="my-4 flex flex-wrap justify-around gap-8 px-2 ">
+        <div className="my-4 flex h-60 flex-wrap justify-around gap-8 px-2 ">
           {condominiums.map((condo) => {
             const Img = (link) => {
               return (
                 <img
-                  src={condo.image_url || MeuCampestreLogo}
+                  src={condo.imagemUrl || MeuCampestreLogo}
                   alt={condo.nome}
                   style={{ width: '100%', height: '100%' }}
                 />
