@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Navbar from '../../components/navbar';
 import InputField from '../../components/fields/inputField';
 import EditIcon from '../../components/icons/editIcon';
@@ -8,6 +8,7 @@ import MeuCampestreLogo from '../../resources/MeuCampestreLogo.svg';
 import SessionData from '../../utils/sessionData';
 import CondoRepository from '../../repository/CondoRepository';
 import Toaster from '../../utils/ui/toaster';
+import { maskCpfCnpj } from '../../mask';
 
 export default function CondoProfile() {
   const [txtName, setTxtName] = useState('');
@@ -20,6 +21,20 @@ export default function CondoProfile() {
 
   const inputFile = useRef(null);
   const [img, setImg] = useState();
+  const [imgLink, setImgLink] = useState();
+
+  // TODO: Não tem necessidade de fazer esse request, em tese todos os dados do condo já estão no navegador
+  useEffect(() => {
+    CondoRepository.findById(condo.id).then((response) => {
+      console.log(response);
+      setTxtName(response.nome);
+      setTxtEmail(response.email);
+      setTxtDocument(maskCpfCnpj(response.documento));
+      setTxtDescription(response.descricao);
+      setTxtAddress(response.endereco);
+      setImgLink(response.imagemUrl);
+    });
+  }, []);
 
   function handleNameChange(event) {
     const value = event.target.value;
@@ -50,12 +65,14 @@ export default function CondoProfile() {
     if (img) {
       sendFileFirebase(img);
     } else {
+      const documento = txtDocument.replace(/[^\d]+/g, '');
       sendDataToDatabase({
         nome: txtName,
         descricao: txtDescription,
         email: txtEmail,
         endereco: txtAddress,
-        image_url: condo.image_url,
+        documento: documento,
+        imagemUrl: imgLink,
       });
     }
   };
@@ -121,12 +138,15 @@ export default function CondoProfile() {
         // Upload completed successfully, now we can get the download URL
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           console.log('File available at', downloadURL);
+          setImgLink(downloadURL);
+          const documento = txtDocument.replace(/[^\d]+/g, '');
           sendDataToDatabase({
             nome: txtName,
             descricao: txtDescription,
             email: txtEmail,
             endereco: txtAddress,
-            image_url: downloadURL,
+            documento: documento,
+            imagemUrl: downloadURL,
           });
         });
       }
@@ -160,7 +180,13 @@ export default function CondoProfile() {
           <div className="relative">
             <img
               alt="Perfil"
-              src={img ? URL.createObjectURL(img) : MeuCampestreLogo}
+              src={
+                img
+                  ? URL.createObjectURL(img)
+                  : imgLink
+                  ? imgLink
+                  : MeuCampestreLogo
+              }
               className="h-32 w-auto max-w-full cursor-pointer bg-transparent object-contain md:h-48 lg:h-64"
             />
             <div
