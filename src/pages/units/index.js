@@ -4,22 +4,10 @@ import DataTable from 'react-data-table-component';
 import DotsIcon from '../../components/icons/dotsIcon';
 import ProfileIcon from '../../components/icons/profileIcon';
 import TrashIcon from '../../components/icons/trashIcon';
-import LockClosedIcon from '../../components/icons/lockClosedIcon';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { API_ENDPOINT } from '../../globals';
-import { useSelector } from 'react-redux';
 import Toaster from '../../utils/ui/toaster';
 import SessionData from '../../utils/sessionData';
-
-//TODO: O DataTable deve virar um Componente externo para ser reaproveitado
-//https://react-data-table-component.netlify.app/?path=/docs/getting-started-patterns--page
-
-//TODO: no ActionItem corrigir o dropdown no mobile
-//TODO: Adicionar paginação customizada
-//TODO: Adicionar search bar
-//TODO: Adicionar comportamento quando a lista estiver vazia
-//TODO: Remover usuario logado da listagem
+import UnityRepository from '../../repository/UnityRepository';
 
 function ActionItem(props) {
   return (
@@ -62,76 +50,30 @@ function ActionItem(props) {
   );
 }
 
-//TODO: Colocar parametro dinamico
-function getDataFromApi(token) {
-  return axios({
-    method: 'GET',
-    url: `${API_ENDPOINT}/usuarios/1/usuario`,
-    params: {},
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-}
-// TODO mover todos as chamadas do axios para uma classe global de requests
-function deleteUser(token, document) {
-  return axios({
-    method: 'DELETE',
-    url: `${API_ENDPOINT}/usuarios/1/usuario/${document}`,
-    params: {},
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-}
-
 export default function Units() {
-  const token = SessionData.getToken();
   const navigate = useNavigate();
 
-  const [data, setData] = useState([
-    {
-      id: 1,
-      descricao: '',
-      endereco: 'Rua pastor alemão',
-      titulo: 'Chácara 1',
-    },
-    {
-      id: 2,
-      descricao: '',
-      endereco: 'Rua Capixaba',
-      titulo: 'Chácara 12',
-    },
-    {
-      id: 3,
-      descricao: '',
-      endereco: 'Rua castor ernesto',
-      titulo: 'Chácara 176',
-    },
-    {
-      id: 4,
-      descricao: '',
-      endereco: 'Rua lemoeiro da paz',
-      titulo: 'Chácara 143',
-    },
-  ]);
-  const [dataFromDatabase, setDataFromDatabase] = useState([]);
+  const [data, setData] = useState([]);
 
   function handleClickEditar(row) {
-    navigate(`/editar-acesso/${row.documento}`);
+    navigate(`/editar-unidade/${row.id}`);
   }
   function handleClickDeletar(row) {
-    deleteUser(token, row.documento).then((response) => {
-      getDataFromApi(token).then((response) => {
-        Toaster.showInfo('Acesso do usuário removido do condomínio.');
-        // setDataToStates(response.data.moradores);
+    UnityRepository.remove(row.id)
+      .then((response) => {
+        UnityRepository.findAll().then((response) => {
+          setData(response);
+          Toaster.showInfo('Unidade removida!');
+        });
+      })
+      .catch((error) => {
+        Toaster.showError('Ocorreu um erro, tente novamente mais tarde!');
       });
-    });
   }
 
   useEffect(() => {
-    getDataFromApi(token).then((response) => {
-      // setDataToStates(response.data.moradores);
+    UnityRepository.findAll().then((response) => {
+      setData(response);
     });
   }, []);
 

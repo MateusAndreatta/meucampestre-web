@@ -56,6 +56,9 @@ const ApplicationRoutes = () => {
         <Route path="/nova-unidade" element={<PrivateOutlet />}>
           <Route path="" element={<NewUnit />} />
         </Route>
+        <Route path="/editar-unidade/:id" element={<PrivateOutlet />}>
+          <Route path="" element={<NewUnit />} />
+        </Route>
         <Route path="*" element={<Error404 />} />
       </Routes>
     </BrowserRouter>
