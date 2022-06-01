@@ -116,7 +116,7 @@ export default function Users() {
     deleteUser(token, row.documento).then((response) => {
       getDataFromApi(token).then((response) => {
         Toaster.showInfo('Acesso do usuário removido do condomínio.');
-        setDataToStates(response.data.moradores);
+        setDataToStates(response.data);
       });
     });
   }
@@ -129,7 +129,7 @@ export default function Users() {
 
   useEffect(() => {
     getDataFromApi(token).then((response) => {
-      setDataToStates(response.data.moradores);
+      setDataToStates(response.data);
     });
   }, []);
 
