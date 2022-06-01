@@ -4,6 +4,8 @@ import Card from '../../components/card';
 import MeuCampestreLogo from '../../resources/MeuCampestreLogo.svg';
 import SessionData from '../../utils/sessionData';
 import { Navigate, useNavigate } from 'react-router-dom';
+import MyAccountRepository from '../../repository/MyAccountRepository';
+import Toaster from '../../utils/ui/toaster';
 
 export default function SelectCondo() {
   let condominiums = SessionData.getUser().condominios;
@@ -15,9 +17,21 @@ export default function SelectCondo() {
   }
 
   function onCondoSelected(condo) {
-    console.log(condo);
-    SessionData.setCondo(condo);
-    navigate('/home');
+    MyAccountRepository.findRolesByCondoId(condo.id)
+      .then((response) => {
+        let roles = [];
+        response.forEach(function (permission) {
+          roles.push(permission.nome);
+        });
+        SessionData.setRoles(roles);
+        SessionData.setCondo(condo);
+        navigate('/home');
+      })
+      .catch((error) => {
+        Toaster.showError(
+          'Não foi possivel concluir seu login, tente novamente mais tarde'
+        );
+      });
   }
 
   return (

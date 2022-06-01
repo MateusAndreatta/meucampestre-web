@@ -23,6 +23,14 @@ export default class SessionData {
     return JSON.parse(sessionStorage.getItem('scope'));
   }
 
+  static setRoles(roles) {
+    sessionStorage.setItem('scopePermissions', JSON.stringify(roles));
+  }
+
+  static getRoles() {
+    return JSON.parse(sessionStorage.getItem('scopePermissions'));
+  }
+
   static logout() {
     sessionStorage.clear();
     window.location.reload(); // TODO: remove this when stop using redux on login page

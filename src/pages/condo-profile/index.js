@@ -9,6 +9,7 @@ import SessionData from '../../utils/sessionData';
 import CondoRepository from '../../repository/CondoRepository';
 import Toaster from '../../utils/ui/toaster';
 import { maskCpfCnpj } from '../../mask';
+import { ROLES } from '../../utils/Constants';
 
 export default function CondoProfile() {
   const [txtName, setTxtName] = useState('');
@@ -18,10 +19,12 @@ export default function CondoProfile() {
   const [txtAddress, setTxtAddress] = useState('');
 
   const condo = SessionData.getCondo();
+  const roles = SessionData.getRoles();
 
   const inputFile = useRef(null);
   const [img, setImg] = useState();
   const [imgLink, setImgLink] = useState();
+  const [editEnabled, setEditEnabled] = useState(roles.includes(ROLES.SINDICO));
 
   // TODO: Não tem necessidade de fazer esse request, em tese todos os dados do condo já estão no navegador
   useEffect(() => {
@@ -62,18 +65,20 @@ export default function CondoProfile() {
   }
 
   const onButtonClick = () => {
-    if (img) {
-      sendFileFirebase(img);
-    } else {
-      const documento = txtDocument.replace(/[^\d]+/g, '');
-      sendDataToDatabase({
-        nome: txtName,
-        descricao: txtDescription,
-        email: txtEmail,
-        endereco: txtAddress,
-        documento: documento,
-        imagemUrl: imgLink,
-      });
+    if (editEnabled) {
+      if (img) {
+        sendFileFirebase(img);
+      } else {
+        const documento = txtDocument.replace(/[^\d]+/g, '');
+        sendDataToDatabase({
+          nome: txtName,
+          descricao: txtDescription,
+          email: txtEmail,
+          endereco: txtAddress,
+          documento: documento,
+          imagemUrl: imgLink,
+        });
+      }
     }
   };
 
@@ -190,7 +195,9 @@ export default function CondoProfile() {
               className="h-32 w-auto max-w-full cursor-pointer bg-transparent object-contain md:h-48 lg:h-64"
             />
             <div
-              className="absolute right-1 bottom-0 h-10 w-10 cursor-pointer rounded-full border-2 border-gray-100 bg-white shadow lg:h-14 lg:w-14"
+              className={` ${
+                !editEnabled ? 'hidden' : ''
+              } absolute right-1 bottom-0 h-10 w-10 cursor-pointer rounded-full border-2 border-gray-100 bg-white shadow lg:h-14 lg:w-14`}
               onClick={onPicEditClick}>
               <div className="flex h-full items-center justify-center">
                 <EditIcon color="" />
@@ -214,6 +221,7 @@ export default function CondoProfile() {
               label="Nome"
               type="text"
               required={true}
+              disabled={!editEnabled}
               onChange={handleNameChange}
             />
           </div>
@@ -224,6 +232,7 @@ export default function CondoProfile() {
               label="Descrição"
               type="text"
               required={true}
+              disabled={!editEnabled}
               onChange={handleDescriptionChange}
             />
           </div>
@@ -235,6 +244,7 @@ export default function CondoProfile() {
               type="email"
               errorLabel="O e-mail informado não é válido"
               required={true}
+              disabled={!editEnabled}
               onChange={handleEmailChange}
             />
           </div>
@@ -245,6 +255,7 @@ export default function CondoProfile() {
               label="Endereço"
               type="text"
               required={true}
+              disabled={!editEnabled}
               onChange={handleAddressChange}
             />
           </div>
