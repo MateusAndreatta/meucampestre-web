@@ -255,6 +255,7 @@ export default function CondoProfile() {
               label="Documento"
               type="text"
               required={true}
+              disabled={true}
               onChange={handleDocumentChange}
             />
           </div>

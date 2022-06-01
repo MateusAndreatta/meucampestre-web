@@ -39,7 +39,7 @@ export default function Navbar() {
             <img
               alt="Perfil"
               src={
-                user.fotoDePerfil ||
+                user.imagemUrl ||
                 `https://ui-avatars.com/api/?name=${user.nome}`
               }
               className="h-8 w-8 cursor-pointer rounded-full bg-gray-500 object-cover"
