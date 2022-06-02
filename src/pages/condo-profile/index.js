@@ -166,9 +166,8 @@ export default function CondoProfile() {
       })
       .catch((error) => {
         console.log(error);
-
-        if (error.response.data.mensagem) {
-          Toaster.showError(error.response.data.mensagem);
+        if (error.response.data.message) {
+          Toaster.showError(error.response.data.message);
         } else {
           Toaster.showError('Ops, ocorreu um erro, tente novamente mais tarde');
         }

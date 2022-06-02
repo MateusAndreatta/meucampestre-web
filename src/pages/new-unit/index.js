@@ -70,7 +70,13 @@ export default function NewUnit() {
           navigate('/unidades');
         })
         .catch((error) => {
-          Toaster.showError('Ocorreu um erro, tente novamente mais tarde');
+          if (error.response.data.message) {
+            Toaster.showError(error.response.data.message);
+          } else {
+            Toaster.showError(
+              'Ops, ocorreu um erro, tente novamente mais tarde'
+            );
+          }
         });
     } else {
       UnityRepository.create({

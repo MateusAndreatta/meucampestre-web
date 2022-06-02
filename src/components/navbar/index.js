@@ -7,6 +7,7 @@ import SessionData from '../../utils/sessionData';
 
 export default function Navbar() {
   const user = SessionData.getUser();
+  const condo = SessionData.getCondo();
   const navigate = useNavigate();
   function navigateToHome() {
     navigate('/home');
@@ -23,9 +24,9 @@ export default function Navbar() {
   return (
     <nav className="flex h-16 w-full flex-row flex-nowrap items-center justify-between bg-white shadow-md">
       <img
-        src={Logo}
+        src={condo.imagemUrl || Logo}
         alt="Logo"
-        className="max-h-full w-14 max-w-fit grow cursor-pointer object-cover"
+        className="max-h-full w-14 max-w-fit grow cursor-pointer object-cover md:mr-1"
         onClick={navigateToHome}
       />
       <div className="h-16 flex-none">

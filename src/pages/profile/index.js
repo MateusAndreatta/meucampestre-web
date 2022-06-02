@@ -4,12 +4,19 @@ import InputField from '../../components/fields/inputField';
 import EditIcon from '../../components/icons/editIcon';
 import { storage } from '../../firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import SessionData from '../../utils/sessionData';
+import { maskCpfCnpj } from '../../mask';
+import MyAccountRepository from '../../repository/MyAccountRepository';
+import Toaster from '../../utils/ui/toaster';
 
 export default function Profile() {
-  const [txtName, setTxtName] = useState('');
-  const [txtEmail, setTxtEmail] = useState('');
-  const [txtPhone, setTxtPhone] = useState('');
-  const [txtDocument, setTxtDocument] = useState('');
+  const user = SessionData.getUser();
+  console.log(user);
+
+  const [txtName, setTxtName] = useState(user.nome);
+  const [txtEmail, setTxtEmail] = useState(user.email);
+  const [txtPhone, setTxtPhone] = useState(user.telefone);
+  const [txtDocument, setTxtDocument] = useState(maskCpfCnpj(user.documento));
 
   const inputFile = useRef(null);
   const [img, setImg] = useState();
@@ -35,11 +42,42 @@ export default function Profile() {
   }
 
   const onButtonClick = () => {
-    sendFileFirebase(img);
+    if (img) {
+      sendFileFirebase(img);
+    } else {
+      sendDataToDatabase(user.imagemUrl);
+    }
   };
 
   function onPicEditClick() {
     inputFile.current.click();
+  }
+
+  function sendDataToDatabase(imageLink) {
+    MyAccountRepository.update({
+      nome: txtName,
+      email: txtEmail,
+      telefone: txtPhone,
+      imagemUrl: imageLink,
+    })
+      .then((response) => {
+        console.log(user);
+        let newUser = { ...user };
+        Toaster.showInfo('Conta atualizada');
+        newUser.nome = txtName;
+        newUser.email = txtEmail;
+        newUser.telefone = txtPhone;
+        newUser.imagemUrl = imageLink;
+        console.log(newUser);
+        SessionData.setUser(newUser);
+      })
+      .catch((error) => {
+        if (error.response.data.message) {
+          Toaster.showError(error.response.data.message);
+        } else {
+          Toaster.showError('Ops, ocorreu um erro, tente novamente mais tarde');
+        }
+      });
   }
 
   const onImageChange = (e) => {
@@ -99,6 +137,7 @@ export default function Profile() {
         // Upload completed successfully, now we can get the download URL
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           console.log('File available at', downloadURL);
+          sendDataToDatabase(downloadURL);
         });
       }
     );
@@ -117,7 +156,9 @@ export default function Profile() {
               src={
                 img
                   ? URL.createObjectURL(img)
-                  : 'https://via.placeholder.com/150'
+                  : user.imagemUrl
+                  ? user.imagemUrl
+                  : `https://ui-avatars.com/api/?name=${user.nome}`
               } //TODO ADD FALBACK INITIALS
               className="h-32 w-32 cursor-pointer rounded-full bg-gray-500 object-cover md:h-48 md:w-48 lg:h-64 lg:w-64"
             />
@@ -174,9 +215,10 @@ export default function Profile() {
             <InputField
               name="txtDocument"
               value={txtDocument}
-              label="CPF"
+              label="Documento"
               type="text"
               required={true}
+              disabled={true}
               onChange={handleDocumentChange}
             />
           </div>

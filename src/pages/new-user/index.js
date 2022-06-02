@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../../components/navbar';
 import InputField from '../../components/fields/inputField';
+import AutocompleteField from '../../components/fields/autocompleteField';
 import axios from 'axios';
 import { API_ENDPOINT } from '../../globals';
 import { useNavigate, useParams } from 'react-router-dom';
 import Toaster from '../../utils/ui/toaster';
 import { maskCpfCnpj } from '../../mask';
 import SessionData from '../../utils/sessionData';
+import { ROLES } from '../../utils/Constants';
 
+const condo = SessionData.getCondo();
+
+//TODO: Refatorar chamadas para a API usando o repository
 function sendDataToApi(token, data) {
   return axios({
     method: 'POST',
-    url: `${API_ENDPOINT}/usuarios/1/usuario`,
+    url: `${API_ENDPOINT}/usuarios/${condo.id}/usuario`,
     params: {},
     data: data,
     headers: {
@@ -20,10 +25,10 @@ function sendDataToApi(token, data) {
   });
 }
 
-function updateUserApi(token, data) {
+function updateUserApi(token, data, documento) {
   return axios({
     method: 'PUT',
-    url: `${API_ENDPOINT}/usuarios/1/usuario`,
+    url: `${API_ENDPOINT}/usuarios/${condo.id}/usuario/${documento}`,
     params: {},
     data: data,
     headers: {
@@ -32,11 +37,10 @@ function updateUserApi(token, data) {
   });
 }
 
-//TODO: Colocar parametro dinamico
 function getDataFromApi(token, documento) {
   return axios({
     method: 'GET',
-    url: `${API_ENDPOINT}/usuarios/1/usuario/${documento}`,
+    url: `${API_ENDPOINT}/usuarios/${condo.id}/usuario/${documento}`,
     params: {},
     headers: {
       Authorization: `Bearer ${token}`,
@@ -54,29 +58,44 @@ function UserForm() {
   const [checkRoleConselheiro, setCheckRoleConselheiro] = useState(false);
   const [checkRoleSindico, setCheckRoleSindico] = useState(false);
 
+  const [unidadesSelecionadas, setUnidadesSelecionadas] = useState([]);
+
+  //TODO: Popular com os dados do banco
+  const [unidades, setUnidades] = useState([
+    { id: 1, titulo: 'Chácara 1' },
+    { id: 2, titulo: 'Chácara 2' },
+    { id: 3, titulo: 'Chácara 3' },
+    { id: 4, titulo: 'Chácara 4' },
+    { id: 5, titulo: 'Chácara 5' },
+    { id: 6, titulo: 'Chácara 6' },
+  ]);
+
   let { documento } = useParams();
   const [editMode, setEditMode] = useState(!!documento);
 
   useEffect(() => {
     if (editMode) {
       getDataFromApi(token, documento).then((response) => {
-        setTxtName(response.data.nome);
-        setTxtEmail('');
-        // setTxtPhone(response.data.telefono);
-        setTxtDocument(maskCpfCnpj(response.data.documento));
+        let data = response.data;
 
-        let condominio = response.data.condominios.find((x) => x.id === 1);
-        condominio.tipoDePerfil.forEach((x) => {
-          if (x === 'ROLE_MORADOR') {
+        setTxtName(data.nome);
+        setTxtEmail(data.email);
+        setTxtPhone(data.telefone);
+        setTxtDocument(maskCpfCnpj(data.documento));
+
+        data.papeis.forEach((x) => {
+          let role = x.nome;
+
+          if (role === ROLES.MORADOR) {
             setCheckRoleCondomino(true);
           }
-          if (x === 'ROLE_PORTEIRO') {
+          if (role === ROLES.PORTEIRO) {
             setCheckRolePorteiro(true);
           }
-          if (x === 'ROLE_CONSELHEIRO') {
+          if (role === ROLES.CONSELHEIRO) {
             setCheckRoleConselheiro(true);
           }
-          if (x === 'ROLE_SINDICO') {
+          if (role === ROLES.SINDICO) {
             setCheckRoleSindico(true);
           }
         });
@@ -124,20 +143,19 @@ function UserForm() {
 
   const navigate = useNavigate();
 
-  // todo passar todas as roles para uma constante global
   function getRoles() {
     let roles = [];
     if (checkRoleCondomino) {
-      roles.push('ROLE_MORADOR');
+      roles.push(ROLES.MORADOR);
     }
     if (checkRoleConselheiro) {
-      roles.push('ROLE_CONSELHEIRO');
+      roles.push(ROLES.CONSELHEIRO);
     }
     if (checkRoleSindico) {
-      roles.push('ROLE_SINDICO');
+      roles.push(ROLES.SINDICO);
     }
     if (checkRolePorteiro) {
-      roles.push('ROLE_PORTEIRO');
+      roles.push(ROLES.PORTEIRO);
     }
     return roles;
   }
@@ -157,69 +175,78 @@ function UserForm() {
 
     const documento = txtDocument.replace(/[^\d]+/g, '');
     if (editMode) {
-      updateUserApi(token, {
-        nome: txtName,
-        documento: documento,
-        papeis: getRoles(),
-      })
+      updateUserApi(
+        token,
+        {
+          nome: txtName,
+          senha: documento,
+          email: txtEmail,
+          documento: documento,
+          telefone: txtPhone,
+          papeis: getRoles(),
+          unidades: null,
+        },
+        documento
+      )
         .then((response) => {
-          console.log(response);
           Toaster.showSuccess('Usuario editado com sucesso!');
           navigate('/acessos');
         })
         .catch((error) => {
-          Toaster.showError(error.response.data.mensagem);
+          if (error.response.data.message) {
+            Toaster.showError(error.response.data.message);
+          } else {
+            Toaster.showError(
+              'Ops, ocorreu um erro, tente novamente mais tarde'
+            );
+          }
         });
     } else {
       let roles = getRoles();
-      let mainRole = '';
-      let otherRoles = [];
-      mainRole = roles[0];
-      if (roles.length > 1) {
-        otherRoles = roles.slice(1);
-      }
-
-      console.log('mainRole', mainRole);
-      console.log('otherRoles', otherRoles);
-
       sendDataToApi(token, {
         nome: txtName,
         senha: documento,
         email: txtEmail,
         documento: documento,
-        papel: mainRole, //TODO: ALTERAR PARA NÃO SER HARDCODED E ACEITAR LISTA (PENDENTE BACK)
+        telefone: txtPhone,
+        papeis: roles,
+        unidades: null,
       })
         .then((response) => {
-          if (otherRoles.length > 0) {
-            updateUserApi(token, {
-              nome: txtName,
-              documento: documento,
-              papeis: getRoles(),
-            })
-              .then((response) => {
-                console.log(response);
-                Toaster.showSuccess('Novo acesso criado!');
-                navigate('/acessos');
-              })
-              .catch((error) => {
-                Toaster.showError(error.response.data.mensagem);
-              });
-          } else {
-            console.log(response);
-            Toaster.showSuccess('Novo acesso criado!');
-            navigate('/acessos');
-          }
+          Toaster.showSuccess('Novo acesso criado!');
+          navigate('/acessos');
         })
         .catch((error) => {
-          Toaster.showError(error.response.data.mensagem);
+          if (error.response.data.message) {
+            Toaster.showError(error.response.data.message);
+          } else {
+            Toaster.showError(
+              'Ops, ocorreu um erro, tente novamente mais tarde'
+            );
+          }
         });
     }
   }
 
+  function removerUnidade(unidadeRemover) {
+    setUnidadesSelecionadas(
+      unidadesSelecionadas.filter((unidade) => unidade !== unidadeRemover)
+    );
+  }
+
+  const onChangeAutocomplete = (selectedValue) => {
+    if (!unidadesSelecionadas.includes(selectedValue)) {
+      let newSelectedUnits = [...unidadesSelecionadas];
+      newSelectedUnits.push(selectedValue);
+
+      setUnidadesSelecionadas(newSelectedUnits);
+    }
+  };
+
   return (
     <div>
       {/* md:grid-cols-2 */}
-      <form className="grid grid-cols-1 gap-4 md:grid-cols-1">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-1">
         <div className="mb-2">
           <InputField
             name="txtName"
@@ -230,7 +257,7 @@ function UserForm() {
             onChange={handleNameChange}
           />
         </div>
-        <div className="mb-2 hidden">
+        <div className="mb-2">
           <InputField
             name="txtEmail"
             value={txtEmail}
@@ -241,16 +268,16 @@ function UserForm() {
             onChange={handleEmailChange}
           />
         </div>
-        {/*<div className="mb-2">*/}
-        {/*  <InputField*/}
-        {/*    name="txtPhone"*/}
-        {/*    value={txtPhone}*/}
-        {/*    label="Telefone"*/}
-        {/*    type="tel"*/}
-        {/*    required={true}*/}
-        {/*    onChange={handlePhoneChange}*/}
-        {/*  />*/}
-        {/*</div>*/}
+        <div className="mb-2">
+          <InputField
+            name="txtPhone"
+            value={txtPhone}
+            label="Telefone"
+            type="tel"
+            required={true}
+            onChange={handlePhoneChange}
+          />
+        </div>
         <div className="mb-2">
           <InputField
             name="txtDocument"
@@ -264,6 +291,7 @@ function UserForm() {
           />
         </div>
         <div className="mb-2">
+          {/*TODO: Transformar os Checkbox em um componente reutilizavel*/}
           <label className="mr-6 mb-3 flex items-center space-x-3">
             <input
               type="checkbox"
@@ -297,7 +325,7 @@ function UserForm() {
             <span className="font-normal text-gray-700">Conselho</span>
           </label>
 
-          <label className="mr-6 mb-3 flex items-center space-x-3">
+          <label className="mr-6 flex items-center space-x-3">
             <input
               type="checkbox"
               name="filterCondominio"
@@ -308,8 +336,39 @@ function UserForm() {
             <span className="font-normal text-gray-700">Síndico</span>
           </label>
         </div>
-      </form>
-      <div className=" flex flex-row-reverse">
+
+        {/*<AutocompleteField*/}
+        {/*  items={unidades}*/}
+        {/*  onChangeAutocomplete={onChangeAutocomplete}*/}
+        {/*  label="Chácara"*/}
+        {/*  optionName="titulo"*/}
+        {/*  optionKey="id"*/}
+        {/*/>*/}
+
+        {/*<div className="flex flex-wrap">*/}
+        {/*  {unidadesSelecionadas.map((unidade) => (*/}
+        {/*    <span*/}
+        {/*      className="ml-1 mb-1 w-auto rounded-full bg-gray-400 px-4 py-2 text-base text-white"*/}
+        {/*      key={unidade.id}>*/}
+        {/*      {unidade.titulo}*/}
+        {/*      <button*/}
+        {/*        className="hover bg-transparent"*/}
+        {/*        onClick={() => removerUnidade(unidade)}>*/}
+        {/*        <svg*/}
+        {/*          xmlns="http://www.w3.org/2000/svg"*/}
+        {/*          width="12"*/}
+        {/*          height="12"*/}
+        {/*          fill="currentColor"*/}
+        {/*          className="ml-4"*/}
+        {/*          viewBox="0 0 1792 1792">*/}
+        {/*          <path d="M1490 1322q0 40-28 68l-136 136q-28 28-68 28t-68-28l-294-294-294 294q-28 28-68 28t-68-28l-136-136q-28-28-28-68t28-68l294-294-294-294q-28-28-28-68t28-68l136-136q28-28 68-28t68 28l294 294 294-294q28-28 68-28t68 28l136 136q28 28 28 68t-28 68l-294 294 294 294q28 28 28 68z" />*/}
+        {/*        </svg>*/}
+        {/*      </button>*/}
+        {/*    </span>*/}
+        {/*  ))}*/}
+        {/*</div>*/}
+      </div>
+      <div className="flex flex-row-reverse">
         <button className="btn-outline" onClick={handleSubmit}>
           Salvar
         </button>
