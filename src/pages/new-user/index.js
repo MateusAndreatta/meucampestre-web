@@ -12,7 +12,7 @@ import { ROLES } from '../../utils/Constants';
 import UnityRepository from '../../repository/UnityRepository';
 
 const condo = SessionData.getCondo();
-
+console.log(condo);
 //TODO: Refatorar chamadas para a API usando o repository
 function sendDataToApi(token, data) {
   return axios({
@@ -39,6 +39,9 @@ function updateUserApi(token, data, documento) {
 }
 
 function getDataFromApi(token, documento) {
+  const condo = SessionData.getCondo();
+  console.log(condo);
+
   return axios({
     method: 'GET',
     url: `${API_ENDPOINT}/usuarios/${condo.id}/usuario/${documento}`,
@@ -198,7 +201,6 @@ function UserForm() {
           documento: documento,
           telefone: telefone,
           papeis: getRoles(),
-          unidades: getUnitsIds(),
         },
         documento
       )
@@ -224,7 +226,6 @@ function UserForm() {
         documento: documento,
         telefone: telefone,
         papeis: roles,
-        unidades: getUnitsIds(),
       })
         .then((response) => {
           Toaster.showSuccess('Novo acesso criado!');

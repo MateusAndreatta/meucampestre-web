@@ -271,7 +271,9 @@ export default function CondoProfile() {
           </div>
         </form>
         <div className=" flex flex-row-reverse">
-          <button className="btn-outline" onClick={onButtonClick}>
+          <button
+            className={`btn-outline  ${!editEnabled ? 'hidden' : ''}`}
+            onClick={onButtonClick}>
             Salvar
           </button>
         </div>
