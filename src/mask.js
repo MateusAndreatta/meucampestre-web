@@ -14,3 +14,10 @@ export const maskCpfCnpj = (v) => {
 
   return v;
 };
+
+export const maskPhone = (v) => {
+  return v
+    .replace(/\D/g, '')
+    .replace(/(\d{2})(\d)/, '($1) $2')
+    .replace(/(\d{5})(\d{4})(\d)/, '$1-$2');
+};

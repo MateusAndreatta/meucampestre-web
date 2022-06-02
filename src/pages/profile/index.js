@@ -5,7 +5,7 @@ import EditIcon from '../../components/icons/editIcon';
 import { storage } from '../../firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import SessionData from '../../utils/sessionData';
-import { maskCpfCnpj } from '../../mask';
+import { maskCpfCnpj, maskPhone } from '../../mask';
 import MyAccountRepository from '../../repository/MyAccountRepository';
 import Toaster from '../../utils/ui/toaster';
 
@@ -15,7 +15,7 @@ export default function Profile() {
 
   const [txtName, setTxtName] = useState(user.nome);
   const [txtEmail, setTxtEmail] = useState(user.email);
-  const [txtPhone, setTxtPhone] = useState(user.telefone);
+  const [txtPhone, setTxtPhone] = useState(maskPhone(user.telefone));
   const [txtDocument, setTxtDocument] = useState(maskCpfCnpj(user.documento));
 
   const inputFile = useRef(null);
@@ -33,7 +33,7 @@ export default function Profile() {
 
   function handlePhoneChange(event) {
     const value = event.target.value;
-    setTxtPhone(value);
+    setTxtPhone(maskPhone(value));
   }
 
   function handleDocumentChange(event) {
@@ -90,7 +90,7 @@ export default function Profile() {
   function sendFileFirebase(file) {
     const storageRef = ref(
       storage,
-      `images/profile/${new Date().getMilliseconds()}.jpg` //TODO: Concatenar o id do usuário
+      `images/profile/${btoa(`profile_${user.id}_MeuCampestre`)}.jpg` //TODO: Concatenar o id do usuário
     );
 
     const metadata = {
