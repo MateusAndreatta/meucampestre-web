@@ -6,9 +6,10 @@ import axios from 'axios';
 import { API_ENDPOINT } from '../../globals';
 import { useNavigate, useParams } from 'react-router-dom';
 import Toaster from '../../utils/ui/toaster';
-import { maskCpfCnpj } from '../../mask';
+import { maskCpfCnpj, maskPhone } from '../../mask';
 import SessionData from '../../utils/sessionData';
 import { ROLES } from '../../utils/Constants';
+import UnityRepository from '../../repository/UnityRepository';
 
 const condo = SessionData.getCondo();
 
@@ -61,14 +62,7 @@ function UserForm() {
   const [unidadesSelecionadas, setUnidadesSelecionadas] = useState([]);
 
   //TODO: Popular com os dados do banco
-  const [unidades, setUnidades] = useState([
-    { id: 1, titulo: 'Chácara 1' },
-    { id: 2, titulo: 'Chácara 2' },
-    { id: 3, titulo: 'Chácara 3' },
-    { id: 4, titulo: 'Chácara 4' },
-    { id: 5, titulo: 'Chácara 5' },
-    { id: 6, titulo: 'Chácara 6' },
-  ]);
+  const [unidades, setUnidades] = useState([]);
 
   let { documento } = useParams();
   const [editMode, setEditMode] = useState(!!documento);
@@ -80,7 +74,7 @@ function UserForm() {
 
         setTxtName(data.nome);
         setTxtEmail(data.email);
-        setTxtPhone(data.telefone);
+        setTxtPhone(maskPhone(data.telefone));
         setTxtDocument(maskCpfCnpj(data.documento));
 
         data.papeis.forEach((x) => {
@@ -103,6 +97,16 @@ function UserForm() {
     }
   }, [editMode]);
 
+  useEffect(() => {
+    UnityRepository.findAll()
+      .then((response) => {
+        setUnidades(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   const token = SessionData.getToken();
 
   function handleNameChange(event) {
@@ -117,7 +121,7 @@ function UserForm() {
 
   function handlePhoneChange(event) {
     const value = event.target.value;
-    setTxtPhone(value);
+    setTxtPhone(maskPhone(value));
   }
 
   function handleDocumentChange(event) {
@@ -160,6 +164,15 @@ function UserForm() {
     return roles;
   }
 
+  function getUnitsIds() {
+    return [];
+    let unitsId = [];
+    unidadesSelecionadas.forEach((unidade) => {
+      unitsId.push(unidade.id);
+    });
+    return unitsId;
+  }
+
   function handleSubmit() {
     if (
       txtDocument.length < 1 ||
@@ -174,17 +187,18 @@ function UserForm() {
     }
 
     const documento = txtDocument.replace(/[^\d]+/g, '');
+    const telefone = txtPhone.replace(/[^\d]+/g, '');
     if (editMode) {
       updateUserApi(
         token,
         {
           nome: txtName,
-          senha: documento,
+          senha: documento, // TODO: No atualizar dados nao pode forcar que a id seja o documento novamente..
           email: txtEmail,
           documento: documento,
-          telefone: txtPhone,
+          telefone: telefone,
           papeis: getRoles(),
-          unidades: null,
+          unidades: getUnitsIds(),
         },
         documento
       )
@@ -208,9 +222,9 @@ function UserForm() {
         senha: documento,
         email: txtEmail,
         documento: documento,
-        telefone: txtPhone,
+        telefone: telefone,
         papeis: roles,
-        unidades: null,
+        unidades: getUnitsIds(),
       })
         .then((response) => {
           Toaster.showSuccess('Novo acesso criado!');
@@ -340,6 +354,7 @@ function UserForm() {
         {/*<AutocompleteField*/}
         {/*  items={unidades}*/}
         {/*  onChangeAutocomplete={onChangeAutocomplete}*/}
+        {/*  disabled={unidades.length <= 0}*/}
         {/*  label="Chácara"*/}
         {/*  optionName="titulo"*/}
         {/*  optionKey="id"*/}
