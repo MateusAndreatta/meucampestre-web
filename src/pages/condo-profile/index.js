@@ -1,25 +1,43 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Navbar from '../../components/navbar';
 import InputField from '../../components/fields/inputField';
 import EditIcon from '../../components/icons/editIcon';
 import { storage } from '../../firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import MeuCampestreLogo from '../../resources/MeuCampestreLogo.svg';
 import SessionData from '../../utils/sessionData';
-import { maskCpfCnpj, maskPhone } from '../../mask';
-import MyAccountRepository from '../../repository/MyAccountRepository';
+import CondoRepository from '../../repository/CondoRepository';
 import Toaster from '../../utils/ui/toaster';
+import { maskCpfCnpj } from '../../mask';
+import { ROLES } from '../../utils/Constants';
 
-export default function Profile() {
-  const user = SessionData.getUser();
-  console.log(user);
+export default function CondoProfile() {
+  const [txtName, setTxtName] = useState('');
+  const [txtEmail, setTxtEmail] = useState('');
+  const [txtDescription, setTxtDescription] = useState('');
+  const [txtDocument, setTxtDocument] = useState('');
+  const [txtAddress, setTxtAddress] = useState('');
 
-  const [txtName, setTxtName] = useState(user.nome);
-  const [txtEmail, setTxtEmail] = useState(user.email);
-  const [txtPhone, setTxtPhone] = useState(maskPhone(user.telefone));
-  const [txtDocument, setTxtDocument] = useState(maskCpfCnpj(user.documento));
+  const condo = SessionData.getCondo();
+  const roles = SessionData.getRoles();
 
   const inputFile = useRef(null);
   const [img, setImg] = useState();
+  const [imgLink, setImgLink] = useState();
+  const [editEnabled, setEditEnabled] = useState(roles.includes(ROLES.SINDICO));
+
+  // TODO: Não tem necessidade de fazer esse request, em tese todos os dados do condo já estão no navegador
+  useEffect(() => {
+    CondoRepository.findById(condo.id).then((response) => {
+      console.log(response);
+      setTxtName(response.nome);
+      setTxtEmail(response.email);
+      setTxtDocument(maskCpfCnpj(response.documento));
+      setTxtDescription(response.descricao);
+      setTxtAddress(response.endereco);
+      setImgLink(response.imagemUrl);
+    });
+  }, []);
 
   function handleNameChange(event) {
     const value = event.target.value;
@@ -31,9 +49,9 @@ export default function Profile() {
     setTxtEmail(value);
   }
 
-  function handlePhoneChange(event) {
+  function handleDescriptionChange(event) {
     const value = event.target.value;
-    setTxtPhone(maskPhone(value));
+    setTxtDescription(value);
   }
 
   function handleDocumentChange(event) {
@@ -41,43 +59,31 @@ export default function Profile() {
     setTxtDocument(value);
   }
 
+  function handleAddressChange(event) {
+    const value = event.target.value;
+    setTxtAddress(value);
+  }
+
   const onButtonClick = () => {
-    if (img) {
-      sendFileFirebase(img);
-    } else {
-      sendDataToDatabase(user.imagemUrl);
+    if (editEnabled) {
+      if (img) {
+        sendFileFirebase(img);
+      } else {
+        const documento = txtDocument.replace(/[^\d]+/g, '');
+        sendDataToDatabase({
+          nome: txtName,
+          descricao: txtDescription,
+          email: txtEmail,
+          endereco: txtAddress,
+          documento: documento,
+          imagemUrl: imgLink,
+        });
+      }
     }
   };
 
   function onPicEditClick() {
     inputFile.current.click();
-  }
-
-  function sendDataToDatabase(imageLink) {
-    MyAccountRepository.update({
-      nome: txtName,
-      email: txtEmail,
-      telefone: txtPhone,
-      imagemUrl: imageLink,
-    })
-      .then((response) => {
-        console.log(user);
-        let newUser = { ...user };
-        Toaster.showInfo('Conta atualizada');
-        newUser.nome = txtName;
-        newUser.email = txtEmail;
-        newUser.telefone = txtPhone;
-        newUser.imagemUrl = imageLink;
-        console.log(newUser);
-        SessionData.setUser(newUser);
-      })
-      .catch((error) => {
-        if (error.response.data.message) {
-          Toaster.showError(error.response.data.message);
-        } else {
-          Toaster.showError('Ops, ocorreu um erro, tente novamente mais tarde');
-        }
-      });
   }
 
   const onImageChange = (e) => {
@@ -90,7 +96,7 @@ export default function Profile() {
   function sendFileFirebase(file) {
     const storageRef = ref(
       storage,
-      `images/profile/${btoa(`profile_${user.id}_MeuCampestre`)}.jpg` //TODO: Concatenar o id do usuário
+      `images/condo/profile/${btoa(`profile_${condo.id}_MeuCampestre`)}.jpg`
     );
 
     const metadata = {
@@ -137,17 +143,42 @@ export default function Profile() {
         // Upload completed successfully, now we can get the download URL
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           console.log('File available at', downloadURL);
-          sendDataToDatabase(downloadURL);
+          setImgLink(downloadURL);
+          const documento = txtDocument.replace(/[^\d]+/g, '');
+          sendDataToDatabase({
+            nome: txtName,
+            descricao: txtDescription,
+            email: txtEmail,
+            endereco: txtAddress,
+            documento: documento,
+            imagemUrl: downloadURL,
+          });
         });
       }
     );
+  }
+
+  function sendDataToDatabase(data) {
+    CondoRepository.update(data)
+      .then((response) => {
+        Toaster.showInfo('Informações foram salvas!');
+        // atualizar os dados da variavel condo e depois fazer o set dele lá no SessionData
+      })
+      .catch((error) => {
+        console.log(error);
+        if (error.response.data.message) {
+          Toaster.showError(error.response.data.message);
+        } else {
+          Toaster.showError('Ops, ocorreu um erro, tente novamente mais tarde');
+        }
+      });
   }
 
   return (
     <div>
       <Navbar />
       <div className="container mx-auto">
-        <h1 className=" my-8 text-2xl">Meu perfil</h1>
+        <h1 className=" my-8 text-2xl">Perfil condomínio</h1>
 
         <div className="mb-4 flex justify-center">
           <div className="relative">
@@ -156,14 +187,16 @@ export default function Profile() {
               src={
                 img
                   ? URL.createObjectURL(img)
-                  : user.imagemUrl
-                  ? user.imagemUrl
-                  : `https://ui-avatars.com/api/?name=${user.nome}`
-              } //TODO ADD FALBACK INITIALS
-              className="h-32 w-32 cursor-pointer rounded-full bg-gray-500 object-cover md:h-48 md:w-48 lg:h-64 lg:w-64"
+                  : imgLink
+                  ? imgLink
+                  : MeuCampestreLogo
+              }
+              className="h-32 w-auto max-w-full cursor-pointer bg-transparent object-contain md:h-48 lg:h-64"
             />
             <div
-              className="absolute right-1 bottom-0 h-10 w-10 cursor-pointer rounded-full border-2 border-gray-100 bg-white shadow lg:h-14 lg:w-14"
+              className={` ${
+                !editEnabled ? 'hidden' : ''
+              } absolute right-1 bottom-0 h-10 w-10 cursor-pointer rounded-full border-2 border-gray-100 bg-white shadow lg:h-14 lg:w-14`}
               onClick={onPicEditClick}>
               <div className="flex h-full items-center justify-center">
                 <EditIcon color="" />
@@ -184,10 +217,22 @@ export default function Profile() {
             <InputField
               name="txtName"
               value={txtName}
-              label="Nome completo"
+              label="Nome"
               type="text"
               required={true}
+              disabled={!editEnabled}
               onChange={handleNameChange}
+            />
+          </div>
+          <div className="mb-2">
+            <InputField
+              name="txtDescription"
+              value={txtDescription}
+              label="Descrição"
+              type="text"
+              required={true}
+              disabled={!editEnabled}
+              onChange={handleDescriptionChange}
             />
           </div>
           <div className="mb-2">
@@ -198,17 +243,19 @@ export default function Profile() {
               type="email"
               errorLabel="O e-mail informado não é válido"
               required={true}
+              disabled={!editEnabled}
               onChange={handleEmailChange}
             />
           </div>
           <div className="mb-2">
             <InputField
-              name="txtPhone"
-              value={txtPhone}
-              label="Telefone"
-              type="tel"
+              name="txtAddress"
+              value={txtAddress}
+              label="Endereço"
+              type="text"
               required={true}
-              onChange={handlePhoneChange}
+              disabled={!editEnabled}
+              onChange={handleAddressChange}
             />
           </div>
           <div className="mb-2">
@@ -224,7 +271,9 @@ export default function Profile() {
           </div>
         </form>
         <div className=" flex flex-row-reverse">
-          <button className="btn-outline" onClick={onButtonClick}>
+          <button
+            className={`btn-outline  ${!editEnabled ? 'hidden' : ''}`}
+            onClick={onButtonClick}>
             Salvar
           </button>
         </div>

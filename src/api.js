@@ -1,9 +1,7 @@
 import axios from 'axios';
-import store from './store';
 
 import { API_ENDPOINT } from './globals';
-
-// console.log(store.get('token'));
+import SessionData from './utils/sessionData';
 
 export default {
   get: function (url, params = {}) {
@@ -12,7 +10,7 @@ export default {
       url: `${API_ENDPOINT}${url}`,
       params: params,
       headers: {
-        Authorization: `Bearer ${store.get('token')}`,
+        Authorization: `Bearer ${SessionData.getToken()}`,
       },
     });
   },
@@ -24,7 +22,7 @@ export default {
       params: params,
       data: data,
       headers: {
-        Authorization: `Bearer ${store.get('token')}`,
+        Authorization: `Bearer ${SessionData.getToken()}`,
       },
     });
   },
@@ -36,7 +34,7 @@ export default {
       params: params,
       data: data,
       headers: {
-        Authorization: `Bearer ${store.get('token')}`,
+        Authorization: `Bearer ${SessionData.getToken()}`,
       },
     });
   },
@@ -47,8 +45,12 @@ export default {
       url: `${API_ENDPOINT}${url}`,
       params: params,
       headers: {
-        Authorization: `Bearer ${store.get('token')}`,
+        Authorization: `Bearer ${SessionData.getToken()}`,
       },
     });
+  },
+
+  condo: function () {
+    return SessionData.getCondo();
   },
 };

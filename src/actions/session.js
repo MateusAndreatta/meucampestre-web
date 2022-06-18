@@ -5,6 +5,7 @@ import jwtDecode from 'jwt-decode';
 
 import * as types from '../actionTypes';
 import { API_ENDPOINT } from '../globals';
+import SessionData from '../utils/sessionData';
 
 function _fetchToken(dispatch, data) {
   return new Promise((resolve, reject) => {
@@ -81,7 +82,7 @@ export function apiRenewToken(token) {
 export function fetchUser(token) {
   const request = axios({
     method: 'get',
-    url: `${API_ENDPOINT}/minhaConta/`,
+    url: `${API_ENDPOINT}/minhaConta`,
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -100,24 +101,19 @@ export function login(data) {
     const fetchTokenResponse = await _fetchToken(dispatch, data).catch(
       console.error
     );
-    console.log('a');
     console.log(fetchTokenResponse);
     if (fetchTokenResponse.value) {
       const token = fetchTokenResponse.value.data.access_token;
       console.log(token);
       if (token) {
         store.set('token', token);
-        // Extrarir o sub do token (documento)
-        // bater em minhaCOnta
-
-        // const tokenData = jwtDecode(token);
-        // const userId = tokenData.user.id;
+        SessionData.setToken(token);
         const fetchUserResponse = await _fetchUser(dispatch, token).catch(
           console.error
         );
         const userData = fetchUserResponse.value.data;
-        console.log(userData);
         store.set('user', userData);
+        SessionData.setUser(userData);
       }
     }
 
