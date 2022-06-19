@@ -1,4 +1,5 @@
 import api from '../api';
+import { API_ENDPOINT } from '../globals';
 
 export default {
   findAll() {
@@ -14,10 +15,10 @@ export default {
     });
   },
 
-  findById(id) {
+  findByDocument(document) {
     return new Promise((resolve, reject) => {
       api
-        .get(`/usuarios/${id}`)
+        .get(`/usuarios/${api.condo().id}/usuario/${document}`)
         .then((response) => {
           const data = response.data;
           if (data) resolve(data);
@@ -38,10 +39,10 @@ export default {
     });
   },
 
-  update(data) {
+  update(data, document) {
     return new Promise((resolve, reject) => {
       api
-        .put(`/usuarios/${api.condo().id}/usuario`, {}, data)
+        .put(`/usuarios/${api.condo().id}/usuario/${document}`, {}, data)
         .then((response) => {
           resolve(response);
         })
@@ -49,10 +50,10 @@ export default {
     });
   },
 
-  remove(documento) {
+  remove(document) {
     return new Promise((resolve, reject) => {
       api
-        .remove(`/usuarios/${api.condo().id}/usuario/${documento}`)
+        .remove(`/usuarios/${api.condo().id}/usuario/${document}`)
         .then((response) => {
           resolve(response);
         })

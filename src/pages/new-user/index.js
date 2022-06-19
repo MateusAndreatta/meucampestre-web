@@ -1,56 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../../components/navbar';
 import InputField from '../../components/fields/inputField';
-import AutocompleteField from '../../components/fields/autocompleteField';
-import axios from 'axios';
-import { API_ENDPOINT } from '../../globals';
 import { useNavigate, useParams } from 'react-router-dom';
 import Toaster from '../../utils/ui/toaster';
 import { maskCpfCnpj, maskPhone } from '../../mask';
-import SessionData from '../../utils/sessionData';
 import { ROLES } from '../../utils/Constants';
 import UnityRepository from '../../repository/UnityRepository';
-
-const condo = SessionData.getCondo();
-console.log(condo);
-//TODO: Refatorar chamadas para a API usando o repository
-function sendDataToApi(token, data) {
-  return axios({
-    method: 'POST',
-    url: `${API_ENDPOINT}/usuarios/${condo.id}/usuario`,
-    params: {},
-    data: data,
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-}
-
-function updateUserApi(token, data, documento) {
-  return axios({
-    method: 'PUT',
-    url: `${API_ENDPOINT}/usuarios/${condo.id}/usuario/${documento}`,
-    params: {},
-    data: data,
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-}
-
-function getDataFromApi(token, documento) {
-  const condo = SessionData.getCondo();
-  console.log(condo);
-
-  return axios({
-    method: 'GET',
-    url: `${API_ENDPOINT}/usuarios/${condo.id}/usuario/${documento}`,
-    params: {},
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-}
+import UserRepository from '../../repository/UserRepository';
 
 function UserForm() {
   const [txtName, setTxtName] = useState('');
@@ -67,14 +23,12 @@ function UserForm() {
   //TODO: Popular com os dados do banco
   const [unidades, setUnidades] = useState([]);
 
-  let { documento } = useParams();
+  const { documento } = useParams();
   const [editMode, setEditMode] = useState(!!documento);
 
   useEffect(() => {
     if (editMode) {
-      getDataFromApi(token, documento).then((response) => {
-        let data = response.data;
-
+      UserRepository.findByDocument(documento).then((data) => {
         setTxtName(data.nome);
         setTxtEmail(data.email);
         setTxtPhone(maskPhone(data.telefone));
@@ -109,8 +63,6 @@ function UserForm() {
         console.log(error);
       });
   }, []);
-
-  const token = SessionData.getToken();
 
   function handleNameChange(event) {
     const value = event.target.value;
@@ -192,8 +144,7 @@ function UserForm() {
     const documento = txtDocument.replace(/[^\d]+/g, '');
     const telefone = txtPhone.replace(/[^\d]+/g, '');
     if (editMode) {
-      updateUserApi(
-        token,
+      UserRepository.update(
         {
           nome: txtName,
           senha: documento, // TODO: No atualizar dados nao pode forcar que a id seja o documento novamente..
@@ -204,7 +155,7 @@ function UserForm() {
         },
         documento
       )
-        .then((response) => {
+        .then(() => {
           Toaster.showSuccess('Usuario editado com sucesso!');
           navigate('/acessos');
         })
@@ -219,7 +170,7 @@ function UserForm() {
         });
     } else {
       let roles = getRoles();
-      sendDataToApi(token, {
+      UserRepository.create({
         nome: txtName,
         senha: documento,
         email: txtEmail,
@@ -227,7 +178,7 @@ function UserForm() {
         telefone: telefone,
         papeis: roles,
       })
-        .then((response) => {
+        .then(() => {
           Toaster.showSuccess('Novo acesso criado!');
           navigate('/acessos');
         })
