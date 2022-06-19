@@ -7,6 +7,7 @@ import { maskCpfCnpj, maskPhone } from '../../mask';
 import { ROLES } from '../../utils/Constants';
 import UnityRepository from '../../repository/UnityRepository';
 import UserRepository from '../../repository/UserRepository';
+import CheckboxField from '../../components/fields/checkboxField';
 
 function UserForm() {
   const [txtName, setTxtName] = useState('');
@@ -24,7 +25,7 @@ function UserForm() {
   const [unidades, setUnidades] = useState([]);
 
   const { documento } = useParams();
-  const [editMode, setEditMode] = useState(!!documento);
+  const [editMode] = useState(!!documento);
 
   useEffect(() => {
     if (editMode) {
@@ -211,7 +212,6 @@ function UserForm() {
 
   return (
     <div>
-      {/* md:grid-cols-2 */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-1">
         <div className="mb-2">
           <InputField
@@ -257,50 +257,34 @@ function UserForm() {
           />
         </div>
         <div className="mb-2">
-          {/*TODO: Transformar os Checkbox em um componente reutilizavel*/}
-          <label className="mr-6 mb-3 flex items-center space-x-3">
-            <input
-              type="checkbox"
-              name="condominio"
-              className="h-6 w-6 appearance-none rounded-md border border-gray-300 bg-white checked:border-transparent checked:bg-blue-500 checked:bg-check focus:outline-none"
+          <div className="mb-3">
+            <CheckboxField
+              label="Condômino"
               checked={checkRoleCondomino}
               onChange={handleChangeCondomino}
             />
-            <span className="font-normal text-gray-700">Condômino</span>
-          </label>
-
-          <label className="mr-6 mb-3 flex items-center space-x-3">
-            <input
-              type="checkbox"
-              name="checkPorteiro"
-              className="h-6 w-6 appearance-none rounded-md border border-gray-300 bg-white checked:border-transparent checked:bg-blue-500 checked:bg-check focus:outline-none"
+          </div>
+          <div className="mb-3">
+            <CheckboxField
+              label="Porteiro"
               checked={checkRolePorteiro}
               onChange={handleChangePorteiro}
             />
-            <span className="font-normal text-gray-700">Porteiro</span>
-          </label>
-
-          <label className="mr-6 mb-3 flex items-center space-x-3">
-            <input
-              type="checkbox"
-              name="filterCondominio"
-              className="h-6 w-6 appearance-none rounded-md border border-gray-300 bg-white checked:border-transparent checked:bg-blue-500 checked:bg-check focus:outline-none"
+          </div>
+          <div className="mb-3">
+            <CheckboxField
+              label="Conselho"
               checked={checkRoleConselheiro}
               onChange={handleChangeConselheiro}
             />
-            <span className="font-normal text-gray-700">Conselho</span>
-          </label>
-
-          <label className="mr-6 flex items-center space-x-3">
-            <input
-              type="checkbox"
-              name="filterCondominio"
-              className="h-6 w-6 appearance-none rounded-md border border-gray-300 bg-white checked:border-transparent checked:bg-blue-500 checked:bg-check focus:outline-none"
+          </div>
+          <div className="mb-3">
+            <CheckboxField
+              label="Síndico"
               checked={checkRoleSindico}
               onChange={handleChangeSindico}
             />
-            <span className="font-normal text-gray-700">Síndico</span>
-          </label>
+          </div>
         </div>
 
         {/*<AutocompleteField*/}
