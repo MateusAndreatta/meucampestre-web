@@ -6,12 +6,10 @@ import ProfileIcon from '../../components/icons/profileIcon';
 import TrashIcon from '../../components/icons/trashIcon';
 import LockClosedIcon from '../../components/icons/lockClosedIcon';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { API_ENDPOINT } from '../../globals';
-import { useSelector } from 'react-redux';
 import Toaster from '../../utils/ui/toaster';
 import SessionData from '../../utils/sessionData';
 import { ROLES } from '../../utils/Constants';
+import UserRepository from '../../repository/UserRepository';
 
 //TODO: O DataTable deve virar um Componente externo para ser reaproveitado
 //https://react-data-table-component.netlify.app/?path=/docs/getting-started-patterns--page
@@ -19,8 +17,6 @@ import { ROLES } from '../../utils/Constants';
 //TODO: no ActionItem corrigir o dropdown no mobile
 //TODO: Adicionar paginação customizada
 //TODO: Adicionar search bar
-//TODO: Adicionar comportamento quando a lista estiver vazia
-//TODO: Remover usuario logado da listagem
 
 function ActionItem(props) {
   return (
@@ -74,31 +70,6 @@ function ActionItem(props) {
   );
 }
 
-//TODO: Colocar parametro dinamico
-function getDataFromApi(token) {
-  return axios({
-    method: 'GET',
-    url: `${API_ENDPOINT}/usuarios/${SessionData.getCondo().id}/usuario`,
-    params: {},
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-}
-// TODO mover todos as chamadas do axios para uma classe global de requests
-function deleteUser(token, document) {
-  return axios({
-    method: 'DELETE',
-    url: `${API_ENDPOINT}/usuarios/${
-      SessionData.getCondo().id
-    }/usuario/${document}`,
-    params: {},
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-}
-
 export default function Users() {
   const [filterCondomino, setFilterCondomino] = useState(false);
   const [filterConselheiro, setFilterConselheiro] = useState(false);
@@ -113,10 +84,10 @@ export default function Users() {
     navigate(`/editar-acesso/${row.documento}`);
   }
   function handleClickDeletar(row) {
-    deleteUser(token, row.documento).then((response) => {
-      getDataFromApi(token).then((response) => {
+    UserRepository.remove(row.documento).then(() => {
+      UserRepository.findAll().then((response) => {
         Toaster.showInfo('Acesso do usuário removido do condomínio.');
-        setDataToStates(response.data);
+        setDataToStates(response);
       });
     });
   }
@@ -128,8 +99,8 @@ export default function Users() {
   }
 
   useEffect(() => {
-    getDataFromApi(token).then((response) => {
-      setDataToStates(response.data);
+    UserRepository.findAll().then((response) => {
+      setDataToStates(response);
     });
   }, []);
 
