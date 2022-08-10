@@ -10,6 +10,7 @@ import CondoRepository from '../../repository/CondoRepository';
 import Toaster from '../../utils/ui/toaster';
 import { maskCpfCnpj } from '../../mask';
 import { ROLES } from '../../utils/Constants';
+import Button from '../../components/buttons/button';
 
 export default function CondoProfile() {
   const [txtName, setTxtName] = useState('');
@@ -17,6 +18,8 @@ export default function CondoProfile() {
   const [txtDescription, setTxtDescription] = useState('');
   const [txtDocument, setTxtDocument] = useState('');
   const [txtAddress, setTxtAddress] = useState('');
+
+  const [loadingButton, setLoadingButton] = useState(false);
 
   const condo = SessionData.getCondo();
   const roles = SessionData.getRoles();
@@ -65,6 +68,7 @@ export default function CondoProfile() {
   }
 
   const onButtonClick = () => {
+    setLoadingButton(true);
     if (editEnabled) {
       if (img) {
         sendFileFirebase(img);
@@ -171,6 +175,9 @@ export default function CondoProfile() {
         } else {
           Toaster.showError('Ops, ocorreu um erro, tente novamente mais tarde');
         }
+      })
+      .finally(() => {
+        setLoadingButton(false);
       });
   }
 
@@ -270,12 +277,13 @@ export default function CondoProfile() {
             />
           </div>
         </form>
-        <div className=" flex flex-row-reverse">
-          <button
-            className={`btn-outline  ${!editEnabled ? 'hidden' : ''}`}
-            onClick={onButtonClick}>
+        <div
+          className={`mb-5 flex flex-row-reverse ${
+            !editEnabled ? 'hidden' : ''
+          }`}>
+          <Button onClick={onButtonClick} loading={loadingButton}>
             Salvar
-          </button>
+          </Button>
         </div>
       </div>
     </div>

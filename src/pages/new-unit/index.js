@@ -4,10 +4,12 @@ import InputField from '../../components/fields/inputField';
 import { useNavigate, useParams } from 'react-router-dom';
 import Toaster from '../../utils/ui/toaster';
 import UnityRepository from '../../repository/UnityRepository';
+import Button from '../../components/buttons/button';
 
 export default function NewUnit() {
   let { id } = useParams();
   const [editMode, setEditMode] = useState(!!id);
+  const [loadingButton, setLoadingButton] = useState(false);
 
   const [txtTitle, setTxtTitle] = useState('');
   const [txtAddress, setTxtAddress] = useState('');
@@ -53,7 +55,7 @@ export default function NewUnit() {
       Toaster.showInfo('É necessário informar o titulo');
       return;
     }
-
+    setLoadingButton(true);
     if (editMode) {
       UnityRepository.update(
         {
@@ -77,6 +79,9 @@ export default function NewUnit() {
               'Ops, ocorreu um erro, tente novamente mais tarde'
             );
           }
+        })
+        .finally(() => {
+          setLoadingButton(false);
         });
     } else {
       UnityRepository.create({
@@ -94,6 +99,9 @@ export default function NewUnit() {
           Toaster.showError(
             'Não foi possivel cadastrar a unidade, tente novamente mais tarde'
           );
+        })
+        .finally(() => {
+          setLoadingButton(false);
         });
     }
   }
@@ -153,9 +161,9 @@ export default function NewUnit() {
             {/*</div>*/}
           </form>
           <div className="flex flex-row-reverse">
-            <button className="btn-outline" onClick={handleSubmit}>
+            <Button loading={loadingButton} onClick={handleSubmit}>
               Salvar
-            </button>
+            </Button>
           </div>
         </div>
       </div>

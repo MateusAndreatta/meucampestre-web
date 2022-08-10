@@ -8,6 +8,7 @@ import SessionData from '../../utils/sessionData';
 import { maskCpfCnpj, maskPhone } from '../../mask';
 import MyAccountRepository from '../../repository/MyAccountRepository';
 import Toaster from '../../utils/ui/toaster';
+import Button from '../../components/buttons/button';
 
 export default function Profile() {
   const user = SessionData.getUser();
@@ -20,6 +21,7 @@ export default function Profile() {
 
   const inputFile = useRef(null);
   const [img, setImg] = useState();
+  const [loadingButton, setLoadingButton] = useState(false);
 
   function handleNameChange(event) {
     const value = event.target.value;
@@ -42,6 +44,7 @@ export default function Profile() {
   }
 
   const onButtonClick = () => {
+    setLoadingButton(true);
     if (img) {
       sendFileFirebase(img);
     } else {
@@ -77,6 +80,9 @@ export default function Profile() {
         } else {
           Toaster.showError('Ops, ocorreu um erro, tente novamente mais tarde');
         }
+      })
+      .finally(() => {
+        setLoadingButton(false);
       });
   }
 
@@ -224,9 +230,9 @@ export default function Profile() {
           </div>
         </form>
         <div className=" flex flex-row-reverse">
-          <button className="btn-outline" onClick={onButtonClick}>
+          <Button loading={loadingButton} onClick={onButtonClick}>
             Salvar
-          </button>
+          </Button>
         </div>
       </div>
     </div>

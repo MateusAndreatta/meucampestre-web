@@ -8,6 +8,7 @@ import { ROLES } from '../../utils/Constants';
 import UnityRepository from '../../repository/UnityRepository';
 import UserRepository from '../../repository/UserRepository';
 import CheckboxField from '../../components/fields/checkboxField';
+import Button from '../../components/buttons/button';
 
 function UserForm() {
   const [txtName, setTxtName] = useState('');
@@ -26,6 +27,7 @@ function UserForm() {
 
   const { documento } = useParams();
   const [editMode] = useState(!!documento);
+  const [loadingButton, setLoadingButton] = useState(false);
 
   useEffect(() => {
     if (editMode) {
@@ -141,14 +143,14 @@ function UserForm() {
       Toaster.showInfo('Preencha todos os campos');
       return;
     }
-
+    setLoadingButton(true);
     const documento = txtDocument.replace(/[^\d]+/g, '');
     const telefone = txtPhone.replace(/[^\d]+/g, '');
     if (editMode) {
       UserRepository.update(
         {
           nome: txtName,
-          senha: documento, // TODO: No atualizar dados nao pode forcar que a id seja o documento novamente..
+          senha: documento, // TODO: No atualizar dados nao pode forcar que a senha seja o documento novamente..
           email: txtEmail,
           documento: documento,
           telefone: telefone,
@@ -160,14 +162,8 @@ function UserForm() {
           Toaster.showSuccess('Usuario editado com sucesso!');
           navigate('/acessos');
         })
-        .catch((error) => {
-          if (error.response.data.message) {
-            Toaster.showError(error.response.data.message);
-          } else {
-            Toaster.showError(
-              'Ops, ocorreu um erro, tente novamente mais tarde'
-            );
-          }
+        .finally(() => {
+          setLoadingButton(false);
         });
     } else {
       let roles = getRoles();
@@ -183,14 +179,8 @@ function UserForm() {
           Toaster.showSuccess('Novo acesso criado!');
           navigate('/acessos');
         })
-        .catch((error) => {
-          if (error.response.data.message) {
-            Toaster.showError(error.response.data.message);
-          } else {
-            Toaster.showError(
-              'Ops, ocorreu um erro, tente novamente mais tarde'
-            );
-          }
+        .finally(() => {
+          setLoadingButton(false);
         });
     }
   }
@@ -320,9 +310,9 @@ function UserForm() {
         {/*</div>*/}
       </div>
       <div className="flex flex-row-reverse">
-        <button className="btn-outline" onClick={handleSubmit}>
+        <Button onClick={handleSubmit} loading={loadingButton}>
           Salvar
-        </button>
+        </Button>
       </div>
     </div>
   );
