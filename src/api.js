@@ -2,6 +2,18 @@ import axios from 'axios';
 
 import { API_ENDPOINT } from './globals';
 import SessionData from './utils/sessionData';
+import Toaster from './utils/ui/toaster';
+
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response.data.message) {
+      Toaster.showError(error.response.data.message);
+    } else {
+      Toaster.showError('Ops, ocorreu um erro, tente novamente mais tarde');
+    }
+  }
+);
 
 export default {
   get: function (url, params = {}) {
