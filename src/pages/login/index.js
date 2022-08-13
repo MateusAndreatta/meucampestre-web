@@ -83,6 +83,7 @@ export default function Login() {
   if (auth.error) {
     Toaster.showError(auth.error);
     auth.error = null;
+    setLoding(false);
   }
 
   return (
