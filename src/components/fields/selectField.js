@@ -41,6 +41,7 @@ export default function SelectField(props) {
 
   useEffect(() => {
     setShowList(false);
+    onChange(selectedValue);
   }, [selectedValue]);
 
   return (
@@ -84,7 +85,7 @@ export default function SelectField(props) {
                     onClick={() => setSelectedValue(value)}
                     className="relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900 hover:bg-sky-500 hover:text-white">
                     <div className="flex items-center">
-                      <span className="ml-3 block truncate font-normal">
+                      <span className="block truncate font-normal">
                         {value[optionName]}
                       </span>
                     </div>
