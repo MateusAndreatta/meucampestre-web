@@ -6,6 +6,7 @@ import PictureConsumption from './pictureConsumption';
 import ConfirmConsumption from './confirmConsumption';
 import OutOfPeriodConsumption from './outOfPeriodConsumption';
 import moment from 'moment';
+import AllCompletedConsumption from './allCompletedConsumption';
 
 export default function NewWaterConsumption() {
   const [mainState, setMainState] = useState({});
@@ -31,6 +32,10 @@ export default function NewWaterConsumption() {
 
   function getComponentStep() {
     if (moment().date() < 20) return <OutOfPeriodConsumption />;
+
+    if (mockData.every((element) => element.disponivel === false))
+      return <AllCompletedConsumption />;
+
     switch (formStep) {
       case 0:
         return (
