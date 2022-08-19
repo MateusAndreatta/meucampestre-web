@@ -36,7 +36,7 @@ export default function RegisterConsumption(props) {
             label="Chácara"
             required={true}
             data={data}
-            optionName="unidade"
+            optionName="titulo"
             optionKey="id"
             onChange={handleUnidadeChange}
           />

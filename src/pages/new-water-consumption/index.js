@@ -7,20 +7,18 @@ import ConfirmConsumption from './confirmConsumption';
 import OutOfPeriodConsumption from './outOfPeriodConsumption';
 import moment from 'moment';
 import AllCompletedConsumption from './allCompletedConsumption';
+import SessionData from '../../utils/sessionData';
 
 export default function NewWaterConsumption() {
   const [mainState, setMainState] = useState({});
   const [formStep, setFormStep] = useState(0);
 
   useEffect(() => {
-    // TODO: Fazer o request buscando as unidades do usuario logado
+    // TODO: Fazer o request buscando as unidades do usuario logado - Já traz no minhaconta
+    // TODO: Retornar para a home com o feeddback de erro caso não encontre nenhuma unidade
   }, []);
 
-  const mockData = [
-    { id: 1, unidade: 'Chácara 2', disponivel: true },
-    { id: 2, unidade: 'Chácara 3', disponivel: false },
-    { id: 3, unidade: 'Chácara 4', disponivel: true },
-  ];
+  const mockData = SessionData.getUnits();
 
   function onClickButton(event) {
     if (formStep < 2) {
@@ -31,7 +29,7 @@ export default function NewWaterConsumption() {
   }
 
   function getComponentStep() {
-    if (moment().date() < 20) return <OutOfPeriodConsumption />;
+    if (moment().date() < 18) return <OutOfPeriodConsumption />;
 
     if (mockData.every((element) => element.disponivel === false))
       return <AllCompletedConsumption />;

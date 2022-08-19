@@ -80,7 +80,7 @@ export default function ConfirmConsumption(props) {
         Para finalizar sua leitura, confirme os dados abaixo. (Lembrando que os
         dados inseridos não poderão ser alterados).
       </p>
-      <p>Chácara selecionada: {props.state.unidade.unidade}</p>
+      <p>Chácara selecionada: {props.state.unidade.titulo}</p>
       <p>Consumo informado: {props.state.consumo}</p>
       <div className="mt-7 grid place-content-center">
         <img
