@@ -8,17 +8,23 @@ import OutOfPeriodConsumption from './outOfPeriodConsumption';
 import moment from 'moment';
 import AllCompletedConsumption from './allCompletedConsumption';
 import SessionData from '../../utils/sessionData';
+import Toaster from '../../utils/ui/toaster';
+import { useNavigate } from 'react-router-dom';
 
 export default function NewWaterConsumption() {
   const [mainState, setMainState] = useState({});
   const [formStep, setFormStep] = useState(0);
+  const navigate = useNavigate();
+  let unidades = SessionData.getUnits();
 
   useEffect(() => {
-    // TODO: Fazer o request buscando as unidades do usuario logado - Já traz no minhaconta
-    // TODO: Retornar para a home com o feeddback de erro caso não encontre nenhuma unidade
-  }, []);
+    // TODO: É interessante ter um request que envie as unidades do usuario, e retorne dizendo quais ainda ta disponivel para leitura
 
-  const mockData = SessionData.getUnits();
+    if (unidades === null || unidades.length <= 0) {
+      Toaster.showError('Você não tem unidades cadastradas');
+      navigate('/home');
+    }
+  }, []);
 
   function onClickButton(event) {
     if (formStep < 2) {
@@ -31,14 +37,14 @@ export default function NewWaterConsumption() {
   function getComponentStep() {
     if (moment().date() < 18) return <OutOfPeriodConsumption />;
 
-    if (mockData.every((element) => element.disponivel === false))
+    if (unidades.every((element) => element.disponivel === false))
       return <AllCompletedConsumption />;
 
     switch (formStep) {
       case 0:
         return (
           <RegisterConsumption
-            data={mockData}
+            data={unidades}
             onClick={onClickButton}
             state={mainState}
           />
