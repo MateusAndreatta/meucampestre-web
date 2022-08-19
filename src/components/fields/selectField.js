@@ -16,6 +16,11 @@ export default function SelectField(props) {
 
   const [selectedValue, setSelectedValue] = useState(data[0]);
 
+  useEffect(() => {
+    setSelectedValue(data[0]);
+    onChange(data[0]);
+  });
+
   const panelResultElement = useRef();
   const selectButton = useRef();
 
@@ -39,10 +44,11 @@ export default function SelectField(props) {
     };
   }, [handleClickOutside]);
 
-  useEffect(() => {
+  const handleClick = (value) => {
+    setSelectedValue(value);
     setShowList(false);
     onChange(selectedValue);
-  }, [selectedValue]);
+  };
 
   return (
     <div className="w-full">
@@ -82,7 +88,7 @@ export default function SelectField(props) {
                   <li
                     key={value[optionKey]}
                     id="listbox-item-0"
-                    onClick={() => setSelectedValue(value)}
+                    onClick={() => handleClick(value)}
                     className="relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900 hover:bg-sky-500 hover:text-white">
                     <div className="flex items-center">
                       <span className="block truncate font-normal">
