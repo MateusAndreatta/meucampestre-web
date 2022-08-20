@@ -2,10 +2,12 @@ import React from 'react';
 
 export default function LoadingIcon(props) {
   let color = props.color || 'text-zinc-500';
+  let width = props.width || 'w-5';
+  let height = props.height || 'h-5';
 
   return (
     <svg
-      className={`${color} ml-1 mr-1 h-5 w-5 animate-spin`}
+      className={`${color} ml-1 mr-1 ${height} ${width} animate-spin`}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24">

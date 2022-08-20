@@ -19,7 +19,7 @@ export default function SelectField(props) {
   useEffect(() => {
     setSelectedValue(data[0]);
     onChange(data[0]);
-  });
+  }, []);
 
   const panelResultElement = useRef();
   const selectButton = useRef();
@@ -47,7 +47,7 @@ export default function SelectField(props) {
   const handleClick = (value) => {
     setSelectedValue(value);
     setShowList(false);
-    onChange(selectedValue);
+    onChange(value);
   };
 
   return (

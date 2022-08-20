@@ -10,7 +10,6 @@ import SelectField from '../../components/fields/selectField';
 
 export default function RegisterConsumption(props) {
   const data = props.data;
-  console.log(props.state);
 
   const [txtConsumo, setTxtConsumo] = useState('');
 
@@ -22,6 +21,14 @@ export default function RegisterConsumption(props) {
     const value = event.target.value;
     setTxtConsumo(maskHydrometer(value));
     props.state.consumo = maskHydrometer(value);
+  }
+
+  function handleClick() {
+    if (txtConsumo.length > 0) {
+      props.onClick();
+    } else {
+      Toaster.showError('Preencha o campo consumo');
+    }
   }
 
   return (
@@ -54,7 +61,7 @@ export default function RegisterConsumption(props) {
         </div>
       </form>
       <div className="mt-7 flex flex-row-reverse">
-        <Button onClick={props.onClick}>Próximo</Button>
+        <Button onClick={handleClick}>Próximo</Button>
       </div>
     </div>
   );
