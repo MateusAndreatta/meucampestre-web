@@ -3,11 +3,11 @@ import Button from '../../components/buttons/button';
 import { storage } from '../../firebase';
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 import SessionData from '../../utils/sessionData';
+import WaterConsumptionRepository from '../../repository/WaterConsumptionRepository';
+import Toaster from '../../utils/ui/toaster';
 
 export default function ConfirmConsumption(props) {
   const user = SessionData.getUser();
-  console.log(user);
-  console.log(props.state);
   const [loadingButton, setLoadingButton] = useState(false);
 
   function sendFileFirebase(file) {
@@ -40,33 +40,42 @@ export default function ConfirmConsumption(props) {
         }
       },
       (error) => {
-        // A full list of error codes is available at
-        // https://firebase.google.com/docs/storage/web/handle-errors
         console.log(error.code);
         switch (error.code) {
           case 'storage/unauthorized':
-            // User doesn't have permission to access the object
             break;
           case 'storage/canceled':
-            // User canceled the upload
             break;
-
-          // ...
-
           case 'storage/unknown':
-            // Unknown error occurred, inspect error.serverResponse
             break;
         }
       },
       () => {
-        // Upload completed successfully, now we can get the download URL
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           console.log('File available at', downloadURL);
-          // sendDataToDatabase(downloadURL);
-          setLoadingButton(false);
+          sendDataToDatabase(downloadURL);
         });
       }
     );
+  }
+
+  function sendDataToDatabase(downloadURL) {
+    WaterConsumptionRepository.create(
+      {
+        valor: props.state.consumo,
+        foto: downloadURL,
+      },
+      props.state.unidade.id
+    )
+      .then((response) => {
+        Toaster.showSuccess('Leitura cadastrada com sucesso!');
+        props.state.unidade.leituraRealizada = true;
+        props.onClick();
+      })
+      .catch(() => {})
+      .finally(() => {
+        setLoadingButton(false);
+      });
   }
 
   function onConfirmButtonClick() {

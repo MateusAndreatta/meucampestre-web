@@ -1,10 +1,14 @@
 import api from '../api';
 
 export default {
-  create(data) {
+  create(data, idUnidade) {
     return new Promise((resolve, reject) => {
       api
-        .post(`/condominios/${api.condo().id}/unidades`, {}, data)
+        .post(
+          `/condominios/${api.condo().id}/hidrometros/${idUnidade}`,
+          {},
+          data
+        )
         .then((response) => {
           resolve(response);
         })

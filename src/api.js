@@ -12,6 +12,7 @@ axios.interceptors.response.use(
     } else {
       Toaster.showError('Ops, ocorreu um erro, tente novamente mais tarde');
     }
+    return Promise.reject(error);
   }
 );
 
