@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../../components/navbar';
-import DataTable from 'react-data-table-component';
 import DotsIcon from '../../components/icons/dotsIcon';
 import ProfileIcon from '../../components/icons/profileIcon';
 import TrashIcon from '../../components/icons/trashIcon';
@@ -10,6 +9,7 @@ import Toaster from '../../utils/ui/toaster';
 import SessionData from '../../utils/sessionData';
 import { ROLES } from '../../utils/Constants';
 import UserRepository from '../../repository/UserRepository';
+import DataTableBase from '../../components/data-table';
 
 //TODO: O DataTable deve virar um Componente externo para ser reaproveitado
 //https://react-data-table-component.netlify.app/?path=/docs/getting-started-patterns--page
@@ -74,7 +74,6 @@ export default function Users() {
   const [filterCondomino, setFilterCondomino] = useState(false);
   const [filterConselheiro, setFilterConselheiro] = useState(false);
   const [filterPorteiro, setFilterPorteiro] = useState(false);
-  const token = SessionData.getToken();
   const navigate = useNavigate();
 
   const [data, setData] = useState([]);
@@ -232,40 +231,6 @@ export default function Users() {
     },
   ];
 
-  const customStyles = {
-    table: {
-      style: {
-        borderWidth: '2px',
-        borderColor: 'rgba(0,0,0,.12)',
-        borderStyle: 'solid',
-        borderRadius: '5px',
-        marginBottom: '10px',
-      },
-    },
-    rows: {
-      style: {},
-    },
-    cells: {
-      style: {},
-    },
-    pagination: {
-      style: {
-        borderWidth: '2px',
-        borderColor: 'rgba(0,0,0,.12)',
-        borderStyle: 'solid',
-        borderRadius: '5px',
-        marginBottom: '10px',
-      },
-    },
-  };
-
-  const paginationComponentOptions = {
-    rangeSeparatorText: 'de',
-    selectAllRowsItem: true,
-    selectAllRowsItemText: 'Todos',
-    noRowsPerPage: true,
-  };
-
   return (
     <div>
       <Navbar />
@@ -310,14 +275,9 @@ export default function Users() {
           </label>
         </div>
 
-        <DataTable
+        <DataTableBase
           columns={columns}
           data={data}
-          noTableHead={true}
-          responsive={false}
-          customStyles={customStyles}
-          pagination
-          paginationComponentOptions={paginationComponentOptions}
           noDataComponent={
             <div>
               <br />
@@ -325,7 +285,6 @@ export default function Users() {
               <br />
             </div>
           }
-          // TODO: Quando refatorar a tabela, já criar um componente de listagem vazia generico
         />
       </div>
     </div>
