@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import Button from '../../components/buttons/button';
 import { useNavigate } from 'react-router-dom';
 import { Player } from '@lottiefiles/react-lottie-player';
@@ -20,7 +20,7 @@ export default function AllCompletedConsumption(props) {
       </p>
 
       <div className="my-7 grid place-content-center">
-        <Button onClick={() => navigate('/home')}>Voltar</Button>
+        <Button onClick={() => navigate('/consumo-hidrico')}>Voltar</Button>
       </div>
     </div>
   );

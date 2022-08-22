@@ -10,7 +10,7 @@ export default function DashboardCard(props) {
           {label}
         </span>
         <div
-          className={`${bgColor} grid h-7 h-screen w-7 place-items-center rounded bg-blue-300`}>
+          className={`${bgColor} grid h-7 w-7 place-items-center rounded bg-blue-300`}>
           <Icon width="w-5" height="h-5" />
         </div>
       </div>

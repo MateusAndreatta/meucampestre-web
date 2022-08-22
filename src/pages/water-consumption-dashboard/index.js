@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../../components/navbar';
+import moment from 'moment';
 import 'moment/locale/pt-br';
 import SessionData from '../../utils/sessionData';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -75,11 +76,19 @@ export default function WaterConsumptionDashboard() {
     ],
   };
 
+  const a = moment().endOf('month');
+  const days = a.diff(moment(), 'days');
+
   return (
     <div>
       <Navbar />
       <div className="container mx-auto">
-        <h1 className="my-8 text-2xl">Consumo hídrico</h1>
+        <div className="my-8 flex justify-between">
+          <h1 className="text-2xl">Consumo hídrico</h1>
+          <Link to="/nova-leitura">
+            <button className="btn-outline">Nova leitura</button>
+          </Link>
+        </div>
         <div className="dashboard-card p-5">
           <Bar options={options} data={data} />
         </div>
@@ -128,7 +137,7 @@ export default function WaterConsumptionDashboard() {
             bgColor={'bg-green-400'}
             label={'Leituras realizadas'}
             percentage={75}
-            description={'10 dias para fechar o mês'}
+            description={`${days} dias para fechar o mês`}
           />
         </div>
       </div>
