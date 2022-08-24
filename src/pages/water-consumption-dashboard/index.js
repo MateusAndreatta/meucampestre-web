@@ -19,15 +19,40 @@ import DolarIcon from '../../components/icons/dolarIcon';
 import WaterDropIcon from '../../components/icons/waterDropIcon';
 import DashboardCardProgress from '../../components/dashboard-card-progress';
 import LupaIcon from '../../components/icons/lupaIcon';
+import WaterConsumptionRepository from '../../repository/WaterConsumptionRepository';
 
 export default function WaterConsumptionDashboard() {
   const [mainState, setMainState] = useState({});
   const [formStep, setFormStep] = useState(0);
   const [unidades, setUnidades] = useState(SessionData.getUnits());
   const [loading, setLoading] = useState(true);
+  const [condoDashboard, setCondoDashboard] = useState({});
+  const [userDashboard, setUserDashboard] = useState({});
   const navigate = useNavigate();
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    // TODO: Somenete realizar se o usuario for sindico!
+    WaterConsumptionRepository.getCondoDashboard(moment().format('M')).then(
+      (response) => {
+        console.log(response);
+        setCondoDashboard(response);
+      }
+    );
+    console.log(SessionData.getUser());
+    WaterConsumptionRepository.getUserDashboard(
+      SessionData.getUser().documento
+    ).then((response) => {
+      console.log(response);
+      setUserDashboard(response);
+    });
+  }, []);
+
+  const formatarValorMonetario = (valor) => {
+    return valor.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    });
+  };
 
   ChartJS.register(
     CategoryScale,
@@ -70,7 +95,7 @@ export default function WaterConsumptionDashboard() {
     datasets: [
       {
         label: 'Consumo',
-        data: labels.map(() => Math.random() * 2),
+        data: userDashboard.grafico,
         backgroundColor: '#0ea5e9',
       },
     ],
@@ -78,6 +103,9 @@ export default function WaterConsumptionDashboard() {
 
   const a = moment().endOf('month');
   const days = a.diff(moment(), 'days');
+
+  const percentage = (condoDashboard.leituras / condoDashboard.unidades) * 100;
+  console.log(percentage);
 
   return (
     <div>
@@ -97,46 +125,46 @@ export default function WaterConsumptionDashboard() {
             icon={WaterDropIcon}
             bgColor={'bg-sky-300'}
             label={'Consumo mês'}
-            value={'43m³'}
+            value={`${userDashboard.consumo}m³`}
           />
           <DashboardCard
             icon={DolarIcon}
-            bgColor={'bg-yellow-200'}
+            bgColor={'bg-yellow-100'}
             label={'Valor mês'}
-            value={'R$ 58,00'}
+            value={`${formatarValorMonetario(userDashboard.valor)}`}
           />
           <DashboardCard
             icon={WaterDropIcon}
             bgColor={'bg-sky-300'}
             label={'Consumo médio'}
-            value={'48m³'}
+            value={`${userDashboard.consumoMedio}m³`}
           />
           <DashboardCard
             icon={DolarIcon}
-            bgColor={'bg-yellow-200'}
+            bgColor={'bg-yellow-100'}
             label={'Valor médio'}
-            value={'R$60,00'}
+            value={`${formatarValorMonetario(userDashboard.valorMedio)}`}
           />
         </div>
         <h1 className="my-8 text-2xl">Consumo condomínio</h1>
         <div className="my-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
           <DashboardCard
             icon={DolarIcon}
-            bgColor={'bg-yellow-200'}
+            bgColor={'bg-yellow-100'}
             label={'Valor acumulado'}
-            value={'R$ 12.433,00'}
+            value={`${formatarValorMonetario(condoDashboard.valor)}`}
           />
           <DashboardCard
             icon={WaterDropIcon}
             bgColor={'bg-sky-300'}
             label={'Consumo total'}
-            value={'4304m³'}
+            value={`${condoDashboard.consumo}m³`}
           />
           <DashboardCardProgress
             icon={LupaIcon}
             bgColor={'bg-green-400'}
             label={'Leituras realizadas'}
-            percentage={75}
+            percentage={percentage}
             description={`${days} dias para fechar o mês`}
           />
         </div>

@@ -26,4 +26,34 @@ export default {
         .catch(reject);
     });
   },
+
+  getCondoDashboard(month) {
+    return new Promise((resolve, reject) => {
+      api
+        .get(`/condominios/${api.condo().id}/hidrometros/dashboard/${month}`)
+        .then((response) => {
+          const data = response.data;
+          if (data) resolve(data);
+          else reject(response);
+        })
+        .catch(reject);
+    });
+  },
+
+  getUserDashboard(document) {
+    return new Promise((resolve, reject) => {
+      api
+        .get(
+          `/condominios/${
+            api.condo().id
+          }/hidrometros/dashboard/morador/${document}`
+        )
+        .then((response) => {
+          const data = response.data;
+          if (data) resolve(data);
+          else reject(response);
+        })
+        .catch(reject);
+    });
+  },
 };
