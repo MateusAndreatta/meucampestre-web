@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import UsersIcon from '../../components/icons/usersIcon';
 import CollectionIcon from '../../components/icons/collection';
 import HomeIcon from '../../components/icons/home';
+import ChartBarIcon from '../../components/icons/ChartBarIcon';
 
 export default function Home() {
   return (
@@ -22,6 +23,9 @@ export default function Home() {
           </Link>
           <Link to="/unidades">
             <Card icon={CollectionIcon} title="Unidades" />
+          </Link>
+          <Link to="/consumo-hidrico">
+            <Card icon={ChartBarIcon} title="Consumo hídrico" />
           </Link>
         </div>
       </div>

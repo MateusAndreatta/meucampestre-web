@@ -7,6 +7,7 @@ import { Navigate } from 'react-router-dom';
 import { maskCpfCnpj } from '../../mask';
 import SessionData from '../../utils/sessionData';
 import MyAccountRepository from '../../repository/MyAccountRepository';
+import LoadingIcon from '../../components/icons/loadingIcon';
 
 export default function Login() {
   const session = useSelector((state) => state);
@@ -15,6 +16,8 @@ export default function Login() {
   console.log(session);
   const [txtDocumento, setTxtDocumento] = useState('');
   const [txtPassword, setTxtPassword] = useState('');
+
+  const [loading, setLoding] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -37,7 +40,7 @@ export default function Login() {
       Toaster.showInfo('Preencha todos os campos');
       return;
     }
-
+    setLoding(true);
     const documento = txtDocumento.replace(/[^\d]+/g, '');
     dispatch(login({ documento: documento, senha: txtPassword }));
   }
@@ -62,6 +65,9 @@ export default function Login() {
             Toaster.showError(
               'Não foi possivel concluir seu login, tente novamente mais tarde'
             );
+          })
+          .finally(() => {
+            setLoding(false);
           });
         return <Navigate to="/home" replace={true} />;
       } else if (user.data.condominios.length > 1) {
@@ -69,6 +75,7 @@ export default function Login() {
       } else {
         Toaster.showError('Ops! Não foi possível encontrar seu condomínio.');
         user.data = null;
+        setLoding(false);
       }
     }
   }
@@ -76,6 +83,7 @@ export default function Login() {
   if (auth.error) {
     Toaster.showError(auth.error);
     auth.error = null;
+    setLoding(false);
   }
 
   return (
@@ -120,7 +128,10 @@ export default function Login() {
               <button
                 type="submit"
                 className="w-full rounded-lg bg-purple-600 py-2 px-4 text-center text-base font-semibold text-white shadow-md transition duration-200 ease-in hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2  focus:ring-offset-purple-200">
-                Entrar
+                <div className="inline-flex items-center ">
+                  Entrar
+                  {loading ? <LoadingIcon color="text-white" /> : ''}
+                </div>
               </button>
             </div>
           </form>

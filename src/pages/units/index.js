@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../../components/navbar';
-import DataTable from 'react-data-table-component';
 import DotsIcon from '../../components/icons/dotsIcon';
 import ProfileIcon from '../../components/icons/profileIcon';
 import TrashIcon from '../../components/icons/trashIcon';
 import { Link, useNavigate } from 'react-router-dom';
 import Toaster from '../../utils/ui/toaster';
-import SessionData from '../../utils/sessionData';
 import UnityRepository from '../../repository/UnityRepository';
+import DataTableBase from '../../components/data-table';
 
 function ActionItem(props) {
   return (
@@ -112,40 +111,6 @@ export default function Units() {
     },
   ];
 
-  const customStyles = {
-    table: {
-      style: {
-        borderWidth: '2px',
-        borderColor: 'rgba(0,0,0,.12)',
-        borderStyle: 'solid',
-        borderRadius: '5px',
-        marginBottom: '10px',
-      },
-    },
-    rows: {
-      style: {},
-    },
-    cells: {
-      style: {},
-    },
-    pagination: {
-      style: {
-        borderWidth: '2px',
-        borderColor: 'rgba(0,0,0,.12)',
-        borderStyle: 'solid',
-        borderRadius: '5px',
-        marginBottom: '10px',
-      },
-    },
-  };
-
-  const paginationComponentOptions = {
-    rangeSeparatorText: 'de',
-    selectAllRowsItem: true,
-    selectAllRowsItemText: 'Todos',
-    noRowsPerPage: true,
-  };
-
   return (
     <div>
       <Navbar />
@@ -157,14 +122,9 @@ export default function Units() {
           </Link>
         </div>
 
-        <DataTable
+        <DataTableBase
           columns={columns}
           data={data}
-          noTableHead={true}
-          responsive={false}
-          customStyles={customStyles}
-          pagination
-          paginationComponentOptions={paginationComponentOptions}
           noDataComponent={
             <div>
               <br />
@@ -172,7 +132,6 @@ export default function Units() {
               <br />
             </div>
           }
-          // TODO: Quando refatorar a tabela, já criar um componente de listagem vazia generico
         />
       </div>
     </div>

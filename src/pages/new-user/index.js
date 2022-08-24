@@ -1,56 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../../components/navbar';
 import InputField from '../../components/fields/inputField';
-import AutocompleteField from '../../components/fields/autocompleteField';
-import axios from 'axios';
-import { API_ENDPOINT } from '../../globals';
 import { useNavigate, useParams } from 'react-router-dom';
 import Toaster from '../../utils/ui/toaster';
 import { maskCpfCnpj, maskPhone } from '../../mask';
-import SessionData from '../../utils/sessionData';
 import { ROLES } from '../../utils/Constants';
 import UnityRepository from '../../repository/UnityRepository';
-
-const condo = SessionData.getCondo();
-console.log(condo);
-//TODO: Refatorar chamadas para a API usando o repository
-function sendDataToApi(token, data) {
-  return axios({
-    method: 'POST',
-    url: `${API_ENDPOINT}/usuarios/${condo.id}/usuario`,
-    params: {},
-    data: data,
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-}
-
-function updateUserApi(token, data, documento) {
-  return axios({
-    method: 'PUT',
-    url: `${API_ENDPOINT}/usuarios/${condo.id}/usuario/${documento}`,
-    params: {},
-    data: data,
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-}
-
-function getDataFromApi(token, documento) {
-  const condo = SessionData.getCondo();
-  console.log(condo);
-
-  return axios({
-    method: 'GET',
-    url: `${API_ENDPOINT}/usuarios/${condo.id}/usuario/${documento}`,
-    params: {},
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-}
+import UserRepository from '../../repository/UserRepository';
+import CheckboxField from '../../components/fields/checkboxField';
+import Button from '../../components/buttons/button';
 
 function UserForm() {
   const [txtName, setTxtName] = useState('');
@@ -67,14 +25,13 @@ function UserForm() {
   //TODO: Popular com os dados do banco
   const [unidades, setUnidades] = useState([]);
 
-  let { documento } = useParams();
-  const [editMode, setEditMode] = useState(!!documento);
+  const { documento } = useParams();
+  const [editMode] = useState(!!documento);
+  const [loadingButton, setLoadingButton] = useState(false);
 
   useEffect(() => {
     if (editMode) {
-      getDataFromApi(token, documento).then((response) => {
-        let data = response.data;
-
+      UserRepository.findByDocument(documento).then((data) => {
         setTxtName(data.nome);
         setTxtEmail(data.email);
         setTxtPhone(maskPhone(data.telefone));
@@ -109,8 +66,6 @@ function UserForm() {
         console.log(error);
       });
   }, []);
-
-  const token = SessionData.getToken();
 
   function handleNameChange(event) {
     const value = event.target.value;
@@ -188,15 +143,14 @@ function UserForm() {
       Toaster.showInfo('Preencha todos os campos');
       return;
     }
-
+    setLoadingButton(true);
     const documento = txtDocument.replace(/[^\d]+/g, '');
     const telefone = txtPhone.replace(/[^\d]+/g, '');
     if (editMode) {
-      updateUserApi(
-        token,
+      UserRepository.update(
         {
           nome: txtName,
-          senha: documento, // TODO: No atualizar dados nao pode forcar que a id seja o documento novamente..
+          senha: documento, // TODO: No atualizar dados nao pode forcar que a senha seja o documento novamente..
           email: txtEmail,
           documento: documento,
           telefone: telefone,
@@ -204,22 +158,16 @@ function UserForm() {
         },
         documento
       )
-        .then((response) => {
+        .then(() => {
           Toaster.showSuccess('Usuario editado com sucesso!');
           navigate('/acessos');
         })
-        .catch((error) => {
-          if (error.response.data.message) {
-            Toaster.showError(error.response.data.message);
-          } else {
-            Toaster.showError(
-              'Ops, ocorreu um erro, tente novamente mais tarde'
-            );
-          }
+        .finally(() => {
+          setLoadingButton(false);
         });
     } else {
       let roles = getRoles();
-      sendDataToApi(token, {
+      UserRepository.create({
         nome: txtName,
         senha: documento,
         email: txtEmail,
@@ -227,18 +175,12 @@ function UserForm() {
         telefone: telefone,
         papeis: roles,
       })
-        .then((response) => {
+        .then(() => {
           Toaster.showSuccess('Novo acesso criado!');
           navigate('/acessos');
         })
-        .catch((error) => {
-          if (error.response.data.message) {
-            Toaster.showError(error.response.data.message);
-          } else {
-            Toaster.showError(
-              'Ops, ocorreu um erro, tente novamente mais tarde'
-            );
-          }
+        .finally(() => {
+          setLoadingButton(false);
         });
     }
   }
@@ -260,7 +202,6 @@ function UserForm() {
 
   return (
     <div>
-      {/* md:grid-cols-2 */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-1">
         <div className="mb-2">
           <InputField
@@ -306,50 +247,34 @@ function UserForm() {
           />
         </div>
         <div className="mb-2">
-          {/*TODO: Transformar os Checkbox em um componente reutilizavel*/}
-          <label className="mr-6 mb-3 flex items-center space-x-3">
-            <input
-              type="checkbox"
-              name="condominio"
-              className="h-6 w-6 appearance-none rounded-md border border-gray-300 bg-white checked:border-transparent checked:bg-blue-500 checked:bg-check focus:outline-none"
+          <div className="mb-3">
+            <CheckboxField
+              label="Condômino"
               checked={checkRoleCondomino}
               onChange={handleChangeCondomino}
             />
-            <span className="font-normal text-gray-700">Condômino</span>
-          </label>
-
-          <label className="mr-6 mb-3 flex items-center space-x-3">
-            <input
-              type="checkbox"
-              name="checkPorteiro"
-              className="h-6 w-6 appearance-none rounded-md border border-gray-300 bg-white checked:border-transparent checked:bg-blue-500 checked:bg-check focus:outline-none"
+          </div>
+          <div className="mb-3">
+            <CheckboxField
+              label="Porteiro"
               checked={checkRolePorteiro}
               onChange={handleChangePorteiro}
             />
-            <span className="font-normal text-gray-700">Porteiro</span>
-          </label>
-
-          <label className="mr-6 mb-3 flex items-center space-x-3">
-            <input
-              type="checkbox"
-              name="filterCondominio"
-              className="h-6 w-6 appearance-none rounded-md border border-gray-300 bg-white checked:border-transparent checked:bg-blue-500 checked:bg-check focus:outline-none"
+          </div>
+          <div className="mb-3">
+            <CheckboxField
+              label="Conselho"
               checked={checkRoleConselheiro}
               onChange={handleChangeConselheiro}
             />
-            <span className="font-normal text-gray-700">Conselho</span>
-          </label>
-
-          <label className="mr-6 flex items-center space-x-3">
-            <input
-              type="checkbox"
-              name="filterCondominio"
-              className="h-6 w-6 appearance-none rounded-md border border-gray-300 bg-white checked:border-transparent checked:bg-blue-500 checked:bg-check focus:outline-none"
+          </div>
+          <div className="mb-3">
+            <CheckboxField
+              label="Síndico"
               checked={checkRoleSindico}
               onChange={handleChangeSindico}
             />
-            <span className="font-normal text-gray-700">Síndico</span>
-          </label>
+          </div>
         </div>
 
         {/*<AutocompleteField*/}
@@ -385,9 +310,9 @@ function UserForm() {
         {/*</div>*/}
       </div>
       <div className="flex flex-row-reverse">
-        <button className="btn-outline" onClick={handleSubmit}>
+        <Button onClick={handleSubmit} loading={loadingButton}>
           Salvar
-        </button>
+        </Button>
       </div>
     </div>
   );

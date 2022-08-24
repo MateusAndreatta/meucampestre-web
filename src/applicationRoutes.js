@@ -18,6 +18,9 @@ import SessionData from './utils/sessionData';
 import CondoProfile from './pages/condo-profile';
 import Units from './pages/units';
 import NewUnit from './pages/new-unit';
+import NewWaterConsumption from './pages/new-water-consumption';
+import WaterConsumptionDashboard from './pages/water-consumption-dashboard';
+import EditWaterConsumption from './pages/edit-water-consumption';
 
 function loggedIn() {
   return SessionData.hasFullData();
@@ -58,6 +61,15 @@ const ApplicationRoutes = () => {
         </Route>
         <Route path="/editar-unidade/:id" element={<PrivateOutlet />}>
           <Route path="" element={<NewUnit />} />
+        </Route>
+        <Route path="/nova-leitura" element={<PrivateOutlet />}>
+          <Route path="" element={<NewWaterConsumption />} />
+        </Route>
+        <Route path="/consumo-hidrico" element={<PrivateOutlet />}>
+          <Route path="" element={<WaterConsumptionDashboard />} />
+        </Route>
+        <Route path="/editar-leitura" element={<PrivateOutlet />}>
+          <Route path="" element={<EditWaterConsumption />} />
         </Route>
         <Route path="*" element={<Error404 />} />
       </Routes>

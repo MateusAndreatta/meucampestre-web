@@ -31,6 +31,10 @@ export default class SessionData {
     return JSON.parse(sessionStorage.getItem('scopePermissions'));
   }
 
+  static getUnits() {
+    return this.getCondo().unidades;
+  }
+
   static logout() {
     sessionStorage.clear();
     window.location.reload(); // TODO: remove this when stop using redux on login page
