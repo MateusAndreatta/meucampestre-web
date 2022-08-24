@@ -56,4 +56,28 @@ export default {
         .catch(reject);
     });
   },
+
+  getCondoValues() {
+    return new Promise((resolve, reject) => {
+      api
+        .get(`/condominios/${api.condo().id}/hidrometros`)
+        .then((response) => {
+          const data = response.data;
+          if (data) resolve(data);
+          else reject(response);
+        })
+        .catch(reject);
+    });
+  },
+
+  remove(id) {
+    return new Promise((resolve, reject) => {
+      api
+        .remove(`/condominios/${api.condo().id}/hidrometros/leituras/${id}`)
+        .then((response) => {
+          resolve(response);
+        })
+        .catch(reject);
+    });
+  },
 };
