@@ -80,4 +80,19 @@ export default {
         .catch(reject);
     });
   },
+
+  update(data, id) {
+    return new Promise((resolve, reject) => {
+      api
+        .put(
+          `/condominios/${api.condo().id}/hidrometros/leituras/${id}`,
+          {},
+          data
+        )
+        .then((response) => {
+          resolve(response);
+        })
+        .catch(reject);
+    });
+  },
 };

@@ -104,11 +104,15 @@ export default function WaterConsumptionDashboard() {
       console.log(response);
       setUserDashboard(response);
     });
+    getCondoValues();
+  }, []);
+
+  const getCondoValues = () => {
     WaterConsumptionRepository.getCondoValues().then((response) => {
       console.log(response);
       setCondoList(response.leituras);
     });
-  }, []);
+  };
 
   const formatarValorMonetario = (valor) => {
     if (valor == null) {
@@ -229,7 +233,7 @@ export default function WaterConsumptionDashboard() {
               handleClickDeletar(row);
             }}
             onClickEditar={() => {
-              // handleClickEditar(row);
+              handleClickEditar(row);
             }}
           />
         );
@@ -242,8 +246,14 @@ export default function WaterConsumptionDashboard() {
     fileWindow.location.href = row.foto;
   };
 
+  const handleClickEditar = (row) => {
+    navigate(`/editar-leitura`, { state: { data: row } });
+  };
+
   const handleClickDeletar = (row) => {
-    WaterConsumptionRepository.remove(row.idLeitura).then(() => {});
+    WaterConsumptionRepository.remove(row.idLeitura).then(() => {
+      getCondoValues();
+    });
   };
 
   return (
