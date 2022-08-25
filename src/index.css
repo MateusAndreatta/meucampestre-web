@@ -68,4 +68,8 @@
   .default-icon-color {
     @apply text-gray-400;
   }
+
+  .dataTableWrapper div {
+    overflow: visible!important;
+  }
 }

@@ -81,6 +81,7 @@ export default function CondoDashboard(props) {
     WaterConsumptionRepository.getCondoDashboard(moment().format('M')).then(
       (response) => {
         setCondoDashboard(response);
+        setLoading(false);
       }
     );
     getCondoValues();
@@ -185,6 +186,32 @@ export default function CondoDashboard(props) {
     });
   };
 
+  const customStyles = {
+    table: {
+      style: {
+        backgroundColor: 'rgba(255,255,255,0)',
+        overflow: 'visible',
+      },
+    },
+    headRow: {
+      style: {
+        backgroundColor: 'rgba(255,255,255,0)',
+        overflow: 'visible',
+      },
+    },
+    cells: {
+      style: {
+        backgroundColor: 'rgba(255,255,255,0)',
+      },
+    },
+    pagination: {
+      style: {
+        backgroundColor: 'rgba(255,255,255,0)',
+        zIndex: 1,
+      },
+    },
+  };
+
   return (
     <div>
       <h1 className="my-8 text-2xl">Consumo condomínio</h1>
@@ -194,12 +221,14 @@ export default function CondoDashboard(props) {
           bgColor={'bg-yellow-100'}
           label={'Valor acumulado'}
           value={`${formatarValorMonetario(condoDashboard.valor)}`}
+          loading={loading}
         />
         <DashboardCard
           icon={WaterDropIcon}
           bgColor={'bg-sky-300'}
           label={'Consumo total'}
           value={`${condoDashboard.consumo}m³`}
+          loading={loading}
         />
         <DashboardCardProgress
           icon={LupaIcon}
@@ -207,20 +236,24 @@ export default function CondoDashboard(props) {
           label={'Leituras realizadas'}
           percentage={percentage}
           description={`${days} dias para fechar o mês`}
+          loading={loading}
         />
       </div>
-      <DataTableBase
-        columns={columns}
-        data={condoList}
-        noTableHead={false}
-        noDataComponent={
-          <div>
-            <br />
-            <p>Nenhuma unidade encontrada</p>
-            <br />
-          </div>
-        }
-      />
+      <div className="dashboard-card mb-10 flex flex-col overflow-visible">
+        <DataTableBase
+          columns={columns}
+          data={condoList}
+          noTableHead={false}
+          customStyles={customStyles}
+          noDataComponent={
+            <div>
+              <br />
+              <p>Nenhuma unidade encontrada</p>
+              <br />
+            </div>
+          }
+        />
+      </div>
     </div>
   );
 }

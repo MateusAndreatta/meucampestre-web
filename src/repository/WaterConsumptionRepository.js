@@ -40,14 +40,10 @@ export default {
     });
   },
 
-  getUserDashboard(document) {
+  getUserDashboard() {
     return new Promise((resolve, reject) => {
       api
-        .get(
-          `/condominios/${
-            api.condo().id
-          }/hidrometros/dashboard/morador/${document}`
-        )
+        .get(`/condominios/${api.condo().id}/hidrometros/dashboard/morador/`)
         .then((response) => {
           const data = response.data;
           if (data) resolve(data);

@@ -37,21 +37,23 @@ function DataTableBase(props) {
   };
 
   return (
-    <DataTable
-      noTableHead={true}
-      responsive={false}
-      customStyles={customStyles}
-      pagination
-      paginationComponentOptions={paginationComponentOptions}
-      noDataComponent={
-        <div>
-          <br />
-          <p>Nenhum registro encontrado</p>
-          <br />
-        </div>
-      }
-      {...props}
-    />
+    <div className="dataTableWrapper">
+      <DataTable
+        noTableHead={true}
+        responsive={true}
+        customStyles={customStyles}
+        pagination
+        paginationComponentOptions={paginationComponentOptions}
+        noDataComponent={
+          <div>
+            <br />
+            <p>Nenhum registro encontrado</p>
+            <br />
+          </div>
+        }
+        {...props}
+      />
+    </div>
   );
 }
 
