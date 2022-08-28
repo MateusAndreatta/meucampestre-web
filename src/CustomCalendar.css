@@ -1,6 +1,5 @@
 .react-calendar {
-    width: 350px;
-    @apply shadow-lg rounded-2xl p-4 bg-white dark:bg-gray-700 max-w-full;
+    @apply shadow rounded-2xl p-4 bg-white dark:bg-gray-700 max-w-full w-96;
 }
 .react-calendar,
 .react-calendar *,

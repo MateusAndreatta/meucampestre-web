@@ -8,6 +8,7 @@ import CalendarItem from '../../components/calendar-item';
 import CommonAreaItem from '../../components/common-area-item';
 import SessionData from '../../utils/sessionData';
 import { ROLES } from '../../utils/Constants';
+import Toaster from '../../utils/ui/toaster';
 
 export default function CommonAreas() {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ export default function CommonAreas() {
       disponivel: true,
     },
     {
-      id: 2,
+      id: 3,
       titulo: 'Area em manutenção',
       descricao: 'Manutenção em andamento',
       foto: 'http://lorempixel.com.br/500/400/?3',
@@ -44,6 +45,20 @@ export default function CommonAreas() {
   useEffect(() => {
     console.log(value);
   }, [value]);
+
+  function handleClick(item) {
+    if (!item.disponivel) {
+      if (!adminEnable) {
+        Toaster.showInfo(
+          'Esse espaço está indiponivel, por favor contacte o síndico para mais informações'
+        );
+      } else {
+        navigate(`/editar-area-comum/${item.id}`);
+      }
+      return;
+    }
+    navigate(`/reservar-area-comum`, { state: { data: item } });
+  }
 
   return (
     <div>
@@ -60,9 +75,6 @@ export default function CommonAreas() {
         </p>
         <div className="mb-4 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {data.map((item) => {
-            if (!item.disponivel) {
-              return;
-            }
             return (
               <CommonAreaItem
                 key={item.id}
@@ -70,12 +82,17 @@ export default function CommonAreas() {
                 photo={item.foto}
                 description={item.descricao}
                 loading={loading}
+                enable={item.disponivel}
+                admin={adminEnable}
+                onClick={() => {
+                  handleClick(item);
+                }}
               />
             );
           })}
           {adminEnable && (
             <Link
-              to="/areas-comuns-cadastro"
+              to="/nova-area-comum"
               className="group flex w-full flex-col items-center justify-center rounded-md border-2 border-dashed border-slate-300 py-3 text-sm  leading-6 text-slate-900 hover:border-solid hover:border-blue-500 hover:bg-white hover:text-blue-500">
               <svg
                 className="mb-1 text-slate-400 group-hover:text-blue-500"
@@ -88,20 +105,6 @@ export default function CommonAreas() {
               Nova área
             </Link>
           )}
-        </div>
-
-        <div className="flex hidden items-center justify-center">
-          <CalendarBase
-            onChange={onChange}
-            value={value}
-            maxDate={moment().add(30, 'd').toDate()}
-            minDate={new Date()}
-            tileContent={({ activeStartDate, date, view }) =>
-              view === 'month' && date.getDay() === 0 ? (
-                <CalendarItem color={'bg-red-400'} />
-              ) : null
-            }
-          />
         </div>
       </div>
     </div>

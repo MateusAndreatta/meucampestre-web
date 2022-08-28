@@ -1,14 +1,26 @@
+import Button from '../buttons/button';
+
 export default function CommonAreaItem(props) {
   const photo = props.photo;
   const title = props.title;
   const description = props.description;
+  const enable = props.enable;
+  const admin = props.admin;
   const loading = props.loading || false;
   if (loading) return <SkeletonComponent />;
 
   return (
-    <div className="dashboard-card flex flex-col p-4">
-      <img src={photo} className={`rounded-lg`} alt="" />
-      <span className="text-2xl font-medium ">{title}</span>
+    <div
+      className={`dashboard-card flex flex-col p-4 ${
+        !enable && !admin ? 'cursor-not-allowed' : 'cursor-pointer'
+      } `}
+      onClick={props.onClick}>
+      <img
+        src={photo}
+        className={`rounded-lg ${!enable ? 'grayscale' : ''}`}
+        alt=""
+      />
+      <span className="mt-1 text-xl font-medium ">{title}</span>
       <span className="text-neutral-500">{description}</span>
     </div>
   );

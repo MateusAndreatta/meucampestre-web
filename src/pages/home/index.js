@@ -7,6 +7,7 @@ import UsersIcon from '../../components/icons/usersIcon';
 import CollectionIcon from '../../components/icons/collection';
 import HomeIcon from '../../components/icons/home';
 import ChartBarIcon from '../../components/icons/ChartBarIcon';
+import CalendarIcon from '../../components/icons/calendarIcon';
 
 export default function Home() {
   return (
@@ -26,6 +27,9 @@ export default function Home() {
           </Link>
           <Link to="/consumo-hidrico">
             <Card icon={ChartBarIcon} title="Consumo hídrico" />
+          </Link>
+          <Link to="/areas-comuns">
+            <Card icon={CalendarIcon} title="Áreas comuns" />
           </Link>
         </div>
       </div>

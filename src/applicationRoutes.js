@@ -22,6 +22,8 @@ import NewWaterConsumption from './pages/new-water-consumption';
 import WaterConsumptionDashboard from './pages/water-consumption-dashboard';
 import EditWaterConsumption from './pages/edit-water-consumption';
 import CommonAreas from './pages/common-areas';
+import NewCommunArea from './pages/new-commun-area';
+import BookCommonArea from './pages/book-commun-area';
 
 function loggedIn() {
   return SessionData.hasFullData();
@@ -74,6 +76,15 @@ const ApplicationRoutes = () => {
         </Route>
         <Route path="/areas-comuns" element={<PrivateOutlet />}>
           <Route path="" element={<CommonAreas />} />
+        </Route>
+        <Route path="/nova-area-comum" element={<PrivateOutlet />}>
+          <Route path="" element={<NewCommunArea />} />
+        </Route>
+        <Route path="/editar-area-comum/:id" element={<PrivateOutlet />}>
+          <Route path="" element={<NewCommunArea />} />
+        </Route>
+        <Route path="/reservar-area-comum" element={<PrivateOutlet />}>
+          <Route path="" element={<BookCommonArea />} />
         </Route>
         <Route path="*" element={<Error404 />} />
       </Routes>
