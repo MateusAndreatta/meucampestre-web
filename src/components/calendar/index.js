@@ -1,6 +1,7 @@
 import React from 'react';
 import Calendar from 'react-calendar';
 import moment from 'moment';
+import '../../CustomCalendar.css';
 
 function CalendarBase(props) {
   const PrevComponent = () => {
