@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '../../components/navbar';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 import CalendarBase from '../../components/calendar';
@@ -8,7 +8,6 @@ import CalendarItem from '../../components/calendar-item';
 import CommonAreaItem from '../../components/common-area-item';
 import SessionData from '../../utils/sessionData';
 import { ROLES } from '../../utils/Constants';
-import Toaster from '../../utils/ui/toaster';
 import Button from '../../components/buttons/button';
 
 export default function BookCommonArea() {
@@ -36,9 +35,13 @@ export default function BookCommonArea() {
           <h1 className="block text-2xl lg:hidden">{data.titulo}</h1>
           <h1 className="hidden text-2xl lg:block">Reservar área comum</h1>
           {adminEnable && (
-            <Link to={`/editar-area-comum/${data.id}`}>
-              <button className="btn-outline">Editar</button>
-            </Link>
+            <button
+              className="btn-outline"
+              onClick={() => {
+                navigate(`/editar-area-comum`, { state: { data: data } });
+              }}>
+              Editar
+            </button>
           )}
         </div>
         <p className="mb-7">
@@ -51,10 +54,10 @@ export default function BookCommonArea() {
               <CommonAreaItem
                 key={data.id}
                 title={data.titulo}
-                photo={data.foto}
+                photo={data.urlFoto}
                 description={data.descricao}
                 loading={false}
-                enable={data.disponivel}
+                enable={data.ativo}
                 admin={adminEnable}
               />
             </div>

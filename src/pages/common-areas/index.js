@@ -1,14 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '../../components/navbar';
 import { Link, useNavigate } from 'react-router-dom';
-import moment from 'moment';
 import 'moment/locale/pt-br';
-import CalendarBase from '../../components/calendar';
-import CalendarItem from '../../components/calendar-item';
 import CommonAreaItem from '../../components/common-area-item';
 import SessionData from '../../utils/sessionData';
 import { ROLES } from '../../utils/Constants';
 import Toaster from '../../utils/ui/toaster';
+import CommunAreaRepository from '../../repository/CommunAreaRepository';
 
 export default function CommonAreas() {
   const navigate = useNavigate();
@@ -17,43 +15,27 @@ export default function CommonAreas() {
   const [adminEnable, setAdminEnable] = useState(roles.includes(ROLES.SINDICO));
 
   const [value, onChange] = useState(new Date());
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([
-    {
-      id: 1,
-      titulo: 'Piscina dos peixes',
-      descricao: 'Área com uma cabena e piscina com lindos peixes e 4 cadeiras',
-      foto: 'http://lorempixel.com.br/500/400/?1',
-      disponivel: true,
-    },
-    {
-      id: 2,
-      titulo: 'Area bonita',
-      descricao: 'Descrição da área bonita',
-      foto: 'http://lorempixel.com.br/500/400/?2',
-      disponivel: true,
-    },
-    {
-      id: 3,
-      titulo: 'Area em manutenção',
-      descricao: 'Manutenção em andamento',
-      foto: 'http://lorempixel.com.br/500/400/?3',
-      disponivel: false,
-    },
-  ]);
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    console.log(value);
+    CommunAreaRepository.findAll()
+      .then((response) => {
+        console.log(response.areasComuns);
+        setData(response.areasComuns);
+        setLoading(false);
+      })
+      .catch((error) => {});
   }, [value]);
 
   function handleClick(item) {
-    if (!item.disponivel) {
+    if (!item.ativo) {
       if (!adminEnable) {
         Toaster.showInfo(
           'Esse espaço está indiponivel, por favor contacte o síndico para mais informações'
         );
       } else {
-        navigate(`/editar-area-comum/${item.id}`);
+        navigate(`/editar-area-comum`, { state: { data: item } });
       }
       return;
     }
@@ -66,7 +48,7 @@ export default function CommonAreas() {
       <div className="container mx-auto">
         <div className="my-8 flex justify-between">
           <h1 className="text-2xl">Áreas comuns</h1>
-          <Link to="/novo-acesso">
+          <Link to="/solicitacoes-areas-comuns">
             <button className="btn-outline">Solicitações</button>
           </Link>
         </div>
@@ -79,10 +61,10 @@ export default function CommonAreas() {
               <CommonAreaItem
                 key={item.id}
                 title={item.titulo}
-                photo={item.foto}
+                photo={item.urlFoto}
                 description={item.descricao}
                 loading={loading}
-                enable={item.disponivel}
+                enable={item.ativo}
                 admin={adminEnable}
                 onClick={() => {
                   handleClick(item);
