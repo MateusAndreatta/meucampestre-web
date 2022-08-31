@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../../components/navbar';
 import InputField from '../../components/fields/inputField';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Toaster from '../../utils/ui/toaster';
 import Button from '../../components/buttons/button';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
@@ -170,7 +170,7 @@ export default function NewCommunArea() {
       <Navbar />
       <div className="container mx-auto">
         <div className="my-8 flex justify-between">
-          <h1 className="my-8 text-2xl">
+          <h1 className="text-2xl">
             {editMode ? 'Editar área comum' : 'Nova área comum'}
           </h1>
           {editMode && (
@@ -179,7 +179,6 @@ export default function NewCommunArea() {
             </Button>
           )}
         </div>
-
         <div>
           <form className="grid grid-cols-1 gap-4 ">
             <div className="flex justify-center">

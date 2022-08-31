@@ -56,22 +56,26 @@ export default function CommonAreas() {
           Confira as áreas comuns disponiveis para os moradores do condomínio.
         </p>
         <div className="mb-4 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {data.map((item) => {
-            return (
-              <CommonAreaItem
-                key={item.id}
-                title={item.titulo}
-                photo={item.urlFoto}
-                description={item.descricao}
-                loading={loading}
-                enable={item.ativo}
-                admin={adminEnable}
-                onClick={() => {
-                  handleClick(item);
-                }}
-              />
-            );
-          })}
+          {loading ? (
+            <CommonAreaItem loading={true} />
+          ) : (
+            data.map((item) => {
+              return (
+                <CommonAreaItem
+                  key={item.id}
+                  title={item.titulo}
+                  photo={item.urlFoto}
+                  description={item.descricao}
+                  loading={loading}
+                  enable={item.ativo}
+                  admin={adminEnable}
+                  onClick={() => {
+                    handleClick(item);
+                  }}
+                />
+              );
+            })
+          )}
           {adminEnable && (
             <Link
               to="/nova-area-comum"
