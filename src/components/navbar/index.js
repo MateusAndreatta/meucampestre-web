@@ -51,28 +51,28 @@ export default function Navbar() {
                 role="menu"
                 aria-orientation="vertical"
                 aria-labelledby="options-menu">
-                <a
-                  href="#"
-                  className="text-md block block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                  role="menuitem">
+                <div
+                  className="text-md block block cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                  role="menuitem"
+                  onClick={navigateToProfile}>
                   <span className="flex flex-col">
-                    <span onClick={navigateToProfile}>
+                    <span>
                       <ProfileIcon className="float-left mr-3" />
                       Meu perfil
                     </span>
                   </span>
-                </a>
-                <a
-                  href="#"
-                  className="text-md block block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                  role="menuitem">
+                </div>
+                <div
+                  className="text-md block block cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                  role="menuitem"
+                  onClick={logout}>
                   <span className="flex flex-col">
-                    <span onClick={logout}>
+                    <span>
                       <LogoutIcon className="float-left mr-3" />
                       Sair
                     </span>
                   </span>
-                </a>
+                </div>
               </div>
             </div>
           </div>
