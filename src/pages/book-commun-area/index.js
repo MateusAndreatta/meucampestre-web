@@ -9,6 +9,7 @@ import CommonAreaItem from '../../components/common-area-item';
 import SessionData from '../../utils/sessionData';
 import { ROLES } from '../../utils/Constants';
 import Button from '../../components/buttons/button';
+import BookCommunAreaRepository from '../../repository/BookCommunAreaRepository';
 
 export default function BookCommonArea() {
   const navigate = useNavigate();
@@ -20,12 +21,25 @@ export default function BookCommonArea() {
   const [value, onChange] = useState(new Date());
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({});
+  const [unvaibleDates, setUnvaibleDates] = useState([]);
 
   useEffect(() => {
     setData(location.state.data);
+    BookCommunAreaRepository.getUnavailableDates(location.state.data.id).then(
+      (response) => {
+        setUnvaibleDates(response.data.datasReservadas);
+        console.log(unvaibleDates);
+      }
+    );
   }, []);
 
-  function handleClick(item) {}
+  function handleClick(item) {
+    console.log(value);
+    BookCommunAreaRepository.create({
+      idAreaComum: 10,
+      dataSolicitacao: value,
+    });
+  }
 
   return (
     <div>
@@ -68,11 +82,35 @@ export default function BookCommonArea() {
               value={value}
               maxDate={moment().add(30, 'd').toDate()}
               minDate={new Date()}
-              tileContent={({ activeStartDate, date, view }) =>
-                view === 'month' && date.getDay() === 0 ? (
-                  <CalendarItem color={'bg-red-400'} />
-                ) : null
-              }
+              tileContent={({ activeStartDate, date, view }) => {
+                if (view === 'month') {
+                  let datesFiltered = unvaibleDates.filter(
+                    (e) =>
+                      moment(e.data).format('YYYY-MM-DD') ===
+                      moment(date).format('YYYY-MM-DD')
+                  );
+
+                  if (datesFiltered.length > 0) {
+                    return (
+                      <div className="flex flex-row flex-nowrap justify-center">
+                        {datesFiltered.map((e) => {
+                          if (e.status === 'PENDENTE') {
+                            return (
+                              <CalendarItem
+                                key={e.data}
+                                color={'bg-orange-400'}
+                              />
+                            );
+                          }
+                          return (
+                            <CalendarItem key={e.data} color={'bg-red-600'} />
+                          );
+                        })}
+                      </div>
+                    );
+                  }
+                }
+              }}
             />
           </div>
         </div>
