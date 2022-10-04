@@ -8,8 +8,11 @@ import Toaster from '../../utils/ui/toaster';
 import UnityRepository from '../../repository/UnityRepository';
 import DataTableBase from '../../components/data-table';
 import StatusTag from '../../components/status-tag';
+import Tooltip from '../../components/tooltip';
 import BookCommunAreaRepository from '../../repository/BookCommunAreaRepository';
 import moment from 'moment';
+import Modal from 'react-modal';
+import CloseIcon from '../../components/icons/closeIcon';
 
 function ActionItem(props) {
   return (
@@ -56,6 +59,24 @@ export default function SolicitationsCommunArea() {
   const navigate = useNavigate();
 
   const [data, setData] = useState([]);
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [modalData, setModalData] = useState(null);
+  const [justificativa, setJustificativa] = useState('');
+
+  function handleJustificativaChange(event) {
+    const value = event.target.value;
+    setJustificativa(value);
+  }
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+    setModalData(null);
+    setJustificativa('');
+  }
 
   function handleClickAprovar(row) {
     BookCommunAreaRepository.update({ status: 'APROVADA' }, row.id).then(() => {
@@ -64,8 +85,18 @@ export default function SolicitationsCommunArea() {
   }
 
   function handleClickRecusar(row) {
-    BookCommunAreaRepository.update({ status: 'RECUSADA' }, row.id).then(() => {
+    openModal();
+    setModalData(row);
+  }
+
+  function handleClickRecusarModal(data) {
+    console.log(data);
+    BookCommunAreaRepository.update(
+      { status: 'RECUSADA', justificativa: justificativa },
+      data.id
+    ).then(() => {
       requestData(requestData);
+      closeModal();
     });
   }
 
@@ -136,7 +167,14 @@ export default function SolicitationsCommunArea() {
       selector: (row) => row.id,
       cell: (row) => (
         <div className="flex">
-          <StatusTag status={row.status}>{row.status}</StatusTag>
+          {row.justificativa && (
+            <Tooltip message={row.justificativa}>
+              <StatusTag status={row.status}>{row.status}</StatusTag>
+            </Tooltip>
+          )}
+          {!row.justificativa && (
+            <StatusTag status={row.status}>{row.status}</StatusTag>
+          )}
         </div>
       ),
     },
@@ -163,6 +201,17 @@ export default function SolicitationsCommunArea() {
     },
   ];
 
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+    },
+  };
+
   return (
     <div>
       <Navbar />
@@ -185,6 +234,40 @@ export default function SolicitationsCommunArea() {
           }
         />
       </div>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="Modal para recusar reserva">
+        <div className="flex justify-between">
+          <h2 className="text-lg font-medium  ">Recusar reserva</h2>
+          <button onClick={closeModal}>
+            <CloseIcon />
+          </button>
+        </div>
+        {modalData && (
+          <div className="text-base ">
+            Informe a justificativa para recusar a solicitação de{' '}
+            {modalData.solicitante.nome} que deseja utilizar o espaço{' '}
+            {modalData.areaComum.titulo} no dia{' '}
+            {moment(modalData.dataSolicitacao).format('DD/MM/YYYY')}
+          </div>
+        )}
+
+        <textarea
+          value={justificativa}
+          onChange={handleJustificativaChange}
+          className="input w-full"></textarea>
+        <div className="flex flex-row-reverse">
+          <button
+            className="btn-outline"
+            onClick={() => {
+              handleClickRecusarModal(modalData);
+            }}>
+            Recusar
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 }

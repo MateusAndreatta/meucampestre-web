@@ -6,6 +6,9 @@ import { Provider } from 'react-redux';
 import store from './store';
 import App from './App';
 import { performance } from './firebase';
+import Modal from 'react-modal';
+
+Modal.setAppElement('#root');
 
 ReactDOM.render(
   <Provider store={store}>
