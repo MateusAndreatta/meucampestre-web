@@ -19,6 +19,19 @@ export default {
     });
   },
 
+  findAllByUser() {
+    return new Promise((resolve, reject) => {
+      api
+        .get(`/condominios/${api.condo().id}/solicitacaoReserva/minhasReservas`)
+        .then((response) => {
+          const data = response.data;
+          if (data) resolve(data);
+          else reject(response);
+        })
+        .catch(reject);
+    });
+  },
+
   create(data) {
     return new Promise((resolve, reject) => {
       api
@@ -63,7 +76,7 @@ export default {
   remove(id) {
     return new Promise((resolve, reject) => {
       api
-        .remove(`/condominios/${api.condo().id}/areasComuns/${id}`)
+        .remove(`/condominios/${api.condo().id}/solicitacaoReserva/${id}`)
         .then((response) => {
           resolve(response);
         })
