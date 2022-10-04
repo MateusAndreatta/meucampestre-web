@@ -18,6 +18,8 @@ export default function Profile() {
   const [txtEmail, setTxtEmail] = useState(user.email);
   const [txtPhone, setTxtPhone] = useState(maskPhone(user.telefone));
   const [txtDocument, setTxtDocument] = useState(maskCpfCnpj(user.documento));
+  const [txtPassword, setTxtPassword] = useState('');
+  const [txtConfirmPassword, setTxtConfirmPassword] = useState('');
 
   const inputFile = useRef(null);
   const [img, setImg] = useState();
@@ -43,7 +45,28 @@ export default function Profile() {
     setTxtDocument(value);
   }
 
+  function handlePasswordChange(event) {
+    const value = event.target.value;
+    setTxtPassword(value);
+  }
+
+  function handlePasswordConfirmChange(event) {
+    const value = event.target.value;
+    setTxtConfirmPassword(value);
+  }
+
   const onButtonClick = () => {
+    if (txtPassword !== '') {
+      if (txtPassword !== txtConfirmPassword) {
+        Toaster.showError('As senhas não conferem');
+        return;
+      }
+      if (txtPassword.length < 6) {
+        Toaster.showError('A senha deve ter no mínimo 6 caracteres');
+        return;
+      }
+    }
+
     setLoadingButton(true);
     if (img) {
       sendFileFirebase(img);
@@ -57,12 +80,18 @@ export default function Profile() {
   }
 
   function sendDataToDatabase(imageLink) {
-    MyAccountRepository.update({
+    const data = {
       nome: txtName,
       email: txtEmail,
       telefone: txtPhone,
       imagemUrl: imageLink,
-    })
+    };
+
+    if (txtPassword !== '') {
+      data.senha = txtPassword;
+    }
+
+    MyAccountRepository.update(data)
       .then((response) => {
         console.log(user);
         let newUser = { ...user };
@@ -165,7 +194,7 @@ export default function Profile() {
                   : user.imagemUrl
                   ? user.imagemUrl
                   : `https://ui-avatars.com/api/?name=${user.nome}`
-              } //TODO ADD FALBACK INITIALS
+              }
               className="h-32 w-32 cursor-pointer rounded-full bg-gray-500 object-cover md:h-48 md:w-48 lg:h-64 lg:w-64"
             />
             <div
@@ -228,8 +257,32 @@ export default function Profile() {
               onChange={handleDocumentChange}
             />
           </div>
+
+          <div className="mb-2">
+            <InputField
+              name="txtPassword"
+              value={txtPassword}
+              label="Senha nova"
+              type="password"
+              required={false}
+              disabled={false}
+              onChange={handlePasswordChange}
+            />
+          </div>
+
+          <div className="mb-2">
+            <InputField
+              name="txtConfirmPassword"
+              value={txtConfirmPassword}
+              label="Confirmar senha nova"
+              type="password"
+              required={false}
+              disabled={txtPassword === ''}
+              onChange={handlePasswordConfirmChange}
+            />
+          </div>
         </form>
-        <div className=" flex flex-row-reverse">
+        <div className="flex flex-row-reverse">
           <Button loading={loadingButton} onClick={onButtonClick}>
             Salvar
           </Button>
