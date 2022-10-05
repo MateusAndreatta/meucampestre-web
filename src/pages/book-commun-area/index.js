@@ -10,6 +10,7 @@ import SessionData from '../../utils/sessionData';
 import { ROLES } from '../../utils/Constants';
 import Button from '../../components/buttons/button';
 import BookCommunAreaRepository from '../../repository/BookCommunAreaRepository';
+import Toaster from '../../utils/ui/toaster';
 
 export default function BookCommonArea() {
   const navigate = useNavigate();
@@ -28,16 +29,17 @@ export default function BookCommonArea() {
     BookCommunAreaRepository.getUnavailableDates(location.state.data.id).then(
       (response) => {
         setUnvaibleDates(response.data.datasReservadas);
-        console.log(unvaibleDates);
       }
     );
   }, []);
 
   function handleClick(item) {
-    console.log(value);
     BookCommunAreaRepository.create({
-      idAreaComum: 10,
+      idAreaComum: data.id,
       dataSolicitacao: value,
+    }).then((response) => {
+      Toaster.showSuccess('Solicitação de reserva realizada com sucesso!');
+      navigate('/solicitacoes-areas-comuns');
     });
   }
 
