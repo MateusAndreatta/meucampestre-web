@@ -25,6 +25,7 @@ import CommonAreas from './pages/common-areas';
 import NewCommunArea from './pages/new-commun-area';
 import BookCommonArea from './pages/book-commun-area';
 import SolicitationsCommunArea from './pages/solicitations-commun-area';
+import PasswordReset from './pages/password-reset';
 
 function loggedIn() {
   return SessionData.hasFullData();
@@ -38,6 +39,7 @@ const ApplicationRoutes = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/redefinir-senha" element={<PasswordReset />} />
         <Route path="/selecionar-condominio" element={<SelectCondo />} />
         <Route path="/home" element={<PrivateOutlet />}>
           <Route path="" element={<Home />} />
