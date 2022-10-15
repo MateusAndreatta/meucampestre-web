@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { ArrowSmUpIcon } from '@heroicons/react/outline';
-import { ArrowSmDownIcon } from '@heroicons/react/outline';
-import { ArrowSmRightIcon } from '@heroicons/react/outline';
-import { ArrowSmLeftIcon } from '@heroicons/react/outline';
+import { ArrowSmallUpIcon } from '@heroicons/react/24/outline';
+import { ArrowSmallDownIcon } from '@heroicons/react/24/outline';
+import { ArrowSmallRightIcon } from '@heroicons/react/24/outline';
+import { ArrowSmallLeftIcon } from '@heroicons/react/24/outline';
 
 class ArrowIcon extends React.Component {
   constructor(props) {
@@ -24,13 +24,13 @@ class ArrowIcon extends React.Component {
     let style = `${width} ${height} ${color} ${classes}`;
     switch (direction) {
       case directions.up:
-        return <ArrowSmUpIcon className={style} />;
+        return <ArrowSmallUpIcon className={style} />;
       case directions.left:
-        return <ArrowSmLeftIcon className={style} />;
+        return <ArrowSmallLeftIcon className={style} />;
       case directions.down:
-        return <ArrowSmDownIcon className={style} />;
+        return <ArrowSmallDownIcon className={style} />;
       default:
-        return <ArrowSmRightIcon className={style} />;
+        return <ArrowSmallRightIcon className={style} />;
     }
   }
 }

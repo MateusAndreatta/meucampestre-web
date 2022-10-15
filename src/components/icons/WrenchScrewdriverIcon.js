@@ -1,7 +1,7 @@
-import { RectangleStackIcon as IconSolid } from '@heroicons/react/20/solid';
-import { RectangleStackIcon as IconOutline } from '@heroicons/react/24/outline';
+import { WrenchScrewdriverIcon as IconSolid } from '@heroicons/react/20/solid';
+import { WrenchScrewdriverIcon as IconOutline } from '@heroicons/react/24/outline';
 
-export default function CollectionIcon(props) {
+export default function WrenchScrewdriverIcon(props) {
   let width = props.width || 'w-5';
   let height = props.height || 'h-5';
   let color = props.color || 'default-icon-color';

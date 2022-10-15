@@ -1,5 +1,5 @@
-import { ChartBarIcon as IconSolid } from '@heroicons/react/solid';
-import { ChartBarIcon as IconOutline } from '@heroicons/react/outline';
+import { ChartBarIcon as IconSolid } from '@heroicons/react/20/solid';
+import { ChartBarIcon as IconOutline } from '@heroicons/react/24/outline';
 
 export default function ChartBarIcon(props) {
   let width = props.width || 'w-5';

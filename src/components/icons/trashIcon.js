@@ -1,5 +1,5 @@
-import { TrashIcon as IconSolid } from '@heroicons/react/solid';
-import { TrashIcon as IconOutline } from '@heroicons/react/outline';
+import { TrashIcon as IconSolid } from '@heroicons/react/20/solid';
+import { TrashIcon as IconOutline } from '@heroicons/react/24/outline';
 
 export default function TrashIcon(props) {
   let width = props.width || 'w-5';

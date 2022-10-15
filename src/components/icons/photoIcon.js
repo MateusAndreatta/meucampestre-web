@@ -1,5 +1,5 @@
-import { PhotographIcon as IconSolid } from '@heroicons/react/solid';
-import { PhotographIcon as IconOutline } from '@heroicons/react/outline';
+import { PhotoIcon as IconSolid } from '@heroicons/react/20/solid';
+import { PhotoIcon as IconOutline } from '@heroicons/react/24/outline';
 
 export default function PhotoIcon(props) {
   let width = props.width || 'w-5';

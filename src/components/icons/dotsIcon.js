@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { DotsVerticalIcon } from '@heroicons/react/outline';
-import { DotsHorizontalIcon } from '@heroicons/react/outline';
+import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
+import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
 
 class DotsIcon extends React.Component {
   constructor(props) {
@@ -22,9 +22,9 @@ class DotsIcon extends React.Component {
     let style = `${width} ${height} ${color} ${classes}`;
     switch (direction) {
       case directions.horizontal:
-        return <DotsHorizontalIcon className={style} />;
+        return <EllipsisHorizontalIcon className={style} />;
       default:
-        return <DotsVerticalIcon className={style} />;
+        return <EllipsisVerticalIcon className={style} />;
     }
   }
 }

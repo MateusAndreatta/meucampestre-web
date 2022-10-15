@@ -1,5 +1,5 @@
-import { LightningBoltIcon as IconSolid } from '@heroicons/react/solid';
-import { LightningBoltIcon as IconOutline } from '@heroicons/react/outline';
+import { BoltIcon as IconSolid } from '@heroicons/react/20/solid';
+import { BoltIcon as IconOutline } from '@heroicons/react/24/outline';
 
 export default function LightningBoltIcon(props) {
   let width = props.width || 'w-5';

@@ -1,5 +1,5 @@
-import { CalendarIcon as IconSolid } from '@heroicons/react/solid';
-import { CalendarIcon as IconOutline } from '@heroicons/react/outline';
+import { CalendarIcon as IconSolid } from '@heroicons/react/20/solid';
+import { CalendarIcon as IconOutline } from '@heroicons/react/24/outline';
 
 export default function CalendarIcon(props) {
   let width = props.width || 'w-5';

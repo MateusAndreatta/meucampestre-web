@@ -1,5 +1,5 @@
-import { XIcon as IconSolid } from '@heroicons/react/solid';
-import { XIcon as IconOutline } from '@heroicons/react/outline';
+import { XMarkIcon as IconSolid } from '@heroicons/react/20/solid';
+import { XMarkIcon as IconOutline } from '@heroicons/react/24/outline';
 
 export default function CloseIcon(props) {
   let width = props.width || 'w-5';
