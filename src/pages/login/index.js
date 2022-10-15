@@ -36,11 +36,12 @@ export default function Login() {
   function handleSubmit(event) {
     event.preventDefault();
 
-    if (txtDocumento.length < 1 || txtPassword < 1) {
+    if (txtDocumento.length < 1 || txtPassword.length < 1) {
       Toaster.showInfo('Preencha todos os campos');
       return;
     }
     setLoding(true);
+    sessionStorage.clear();
     const documento = txtDocumento.replace(/[^\d]+/g, '');
     dispatch(login({ documento: documento, senha: txtPassword }));
   }
