@@ -4,6 +4,8 @@ import Toaster from '../../utils/ui/toaster';
 import { maskCpfCnpj } from '../../mask';
 import LoadingIcon from '../../components/icons/loadingIcon';
 import AccountRepository from '../../repository/AccountRepository';
+import ArrowIcon from '../../components/icons/arrowIcon';
+import { Link } from 'react-router-dom';
 
 export default function PasswordReset() {
   const [txtDocumento, setTxtDocumento] = useState('');
@@ -37,9 +39,22 @@ export default function PasswordReset() {
   return (
     <div className="grid h-screen place-items-center">
       <div className="card flex aspect-auto h-full w-full max-w-md flex-col px-4 py-8 sm:px-6 md:h-auto md:px-8 lg:px-10">
-        <div className="mb-3 self-center text-xl font-light text-gray-600 sm:text-2xl">
-          Recuperar acesso a conta
+        <div className="mb-3 flex justify-center">
+          <Link to="/">
+            <ArrowIcon
+              direction={ArrowIcon.direction.left}
+              width="w-6"
+              height="h-6"
+              color="text-gray-500"
+              className="mt-1"
+            />
+          </Link>
+
+          <div className="text-xl font-light text-gray-600 sm:text-2xl">
+            Recuperar acesso a conta
+          </div>
         </div>
+
         <div className="mb-3 self-center font-light text-gray-600">
           Para recuperar sua conta, informe seu CPF ou CNPJ.
         </div>
