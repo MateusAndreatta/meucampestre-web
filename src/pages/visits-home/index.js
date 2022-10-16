@@ -11,6 +11,9 @@ import ArrowDownTrayIcon from '../../components/icons/arrowDownTray';
 import ArrowUpTrayIcon from '../../components/icons/arrowUpTrayIcon';
 import Modal from 'react-modal';
 import CloseIcon from '../../components/icons/closeIcon';
+import CalendarIcon from '../../components/icons/calendarIcon';
+import CalendarBase from '../../components/calendar';
+import CalendarItem from '../../components/calendar-item';
 
 export default function VisitsHome() {
   const navigate = useNavigate();
@@ -19,6 +22,7 @@ export default function VisitsHome() {
   const [visitis, setVisits] = useState([]);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
+  const [calendarIsOpen, setCalendarIsOpen] = useState(false);
 
   useEffect(() => {
     setVisits([
@@ -54,6 +58,11 @@ export default function VisitsHome() {
   function closeModal() {
     setIsOpen(false);
     setModalData(null);
+  }
+
+  function onChangeCalendar(date) {
+    setDate(date);
+    setCalendarIsOpen(false);
   }
 
   const columns = [
@@ -188,18 +197,40 @@ export default function VisitsHome() {
     },
   };
 
+  const showCalendar = () => {
+    setCalendarIsOpen(!calendarIsOpen);
+  };
+
   return (
     <div>
       <Navbar />
       <div className="container mx-auto">
         <div className="my-8 flex justify-between">
-          <h1 className="text-2xl">
-            Visitas do dia {moment(date).format('DD/MM/YYYY')}
-          </h1>
+          <div className="flex">
+            <h1 className="text-2xl">
+              Visitas do dia {moment(date).format('DD/MM/YYYY')}
+            </h1>
+            <div
+              className="mt-1.5 ml-1.5 cursor-pointer"
+              onClick={() => {
+                showCalendar();
+              }}>
+              <CalendarIcon color={'text-black'} />
+            </div>
+          </div>
+
           <Link to="/nova-visita">
             <button className="btn-outline">Nova visita</button>
           </Link>
         </div>
+        <div className={`absolute ${!calendarIsOpen ? 'hidden' : ''}`}>
+          <CalendarBase
+            onChange={onChangeCalendar}
+            value={date}
+            className="relative -top-6 right-0 z-50"
+          />
+        </div>
+
         <DataTableBase
           columns={columns}
           data={visitis}
