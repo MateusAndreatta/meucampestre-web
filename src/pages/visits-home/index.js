@@ -14,15 +14,18 @@ import CloseIcon from '../../components/icons/closeIcon';
 import CalendarIcon from '../../components/icons/calendarIcon';
 import CalendarBase from '../../components/calendar';
 import CalendarItem from '../../components/calendar-item';
+import InputField from '../../components/fields/inputField';
 
 export default function VisitsHome() {
   const navigate = useNavigate();
 
   const [date, setDate] = useState(new Date());
   const [visitis, setVisits] = useState([]);
+  const [visitsFiltered, setVisitsFiltered] = useState([]);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
   const [calendarIsOpen, setCalendarIsOpen] = useState(false);
+  const [txtFiltro, setTxtFiltro] = useState('');
 
   useEffect(() => {
     setVisits([
@@ -35,7 +38,7 @@ export default function VisitsHome() {
       },
       {
         tipo: 'Prestador de serviço',
-        visitante: { nome: 'José da silva', documento: '123.343.543-32' },
+        visitante: { nome: 'Antonio augustro', documento: '453.666.777-99' },
         unidades: [
           { id: 103, nome: 'Chcara 33' },
           { id: 104, nome: 'Chcara 35' },
@@ -43,6 +46,7 @@ export default function VisitsHome() {
         observacao: 'Visita de 1 dia',
       },
     ]);
+    setVisitsFiltered(visitis);
   }, []);
 
   function openModalEntrada(row) {
@@ -62,7 +66,27 @@ export default function VisitsHome() {
 
   function onChangeCalendar(date) {
     setDate(date);
+    setTxtFiltro('');
     setCalendarIsOpen(false);
+  }
+
+  function handleFiltroChange(event) {
+    const value = event.target.value.toLowerCase();
+    setTxtFiltro(value);
+    let teste = visitis.filter((item) => {
+      let nome = item.visitante.nome.toLowerCase();
+      if (nome.includes(value)) return true;
+
+      let documento = item.visitante.documento.replace(/[^\d]+/g, '');
+      let termoDocumento = value.replace(/[^\d]+/g, '');
+
+      if (termoDocumento.length > 0) {
+        if (documento.includes(termoDocumento)) return true;
+      }
+      return false;
+    });
+    console.log(teste);
+    setVisitsFiltered(teste);
   }
 
   const columns = [
@@ -231,9 +255,19 @@ export default function VisitsHome() {
           />
         </div>
 
+        <div className="mb-2 -mt-5">
+          <InputField
+            name="txtFiltro"
+            value={txtFiltro}
+            label="buscar por nome ou documento"
+            type="text"
+            onChange={handleFiltroChange}
+          />
+        </div>
+
         <DataTableBase
           columns={columns}
-          data={visitis}
+          data={visitsFiltered}
           noTableHead={false}
           noDataComponent={
             <div>
