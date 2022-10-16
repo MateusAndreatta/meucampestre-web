@@ -27,6 +27,8 @@ import BookCommonArea from './pages/book-commun-area';
 import SolicitationsCommunArea from './pages/solicitations-commun-area';
 import PasswordReset from './pages/password-reset';
 import VisitsHome from './pages/visits-home';
+import BlockedCpf from './pages/blocked-cpf';
+import NewBlockedCpf from './pages/new-blocked-cpf';
 
 function loggedIn() {
   return SessionData.hasFullData();
@@ -95,6 +97,15 @@ const ApplicationRoutes = () => {
         </Route>
         <Route path="/portaria" element={<PrivateOutlet />}>
           <Route path="" element={<VisitsHome />} />
+        </Route>
+        <Route path="/cpf-bloqueado" element={<PrivateOutlet />}>
+          <Route path="" element={<BlockedCpf />} />
+        </Route>
+        <Route path="/novo-bloqueio-cpf" element={<PrivateOutlet />}>
+          <Route path="" element={<NewBlockedCpf />} />
+        </Route>
+        <Route path="/bloqueio-cpf/:id" element={<PrivateOutlet />}>
+          <Route path="" element={<NewBlockedCpf />} />
         </Route>
         <Route path="*" element={<Error404 />} />
       </Routes>

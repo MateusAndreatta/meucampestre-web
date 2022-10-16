@@ -11,10 +11,11 @@ import CalendarIcon from '../../components/icons/calendarIcon';
 import LockClosedIcon from '../../components/icons/lockClosedIcon';
 import SessionData from '../../utils/sessionData';
 import { ROLES } from '../../utils/Constants';
+import NoSymbolIcon from '../../components/icons/NoSymbolIcon';
 
 export default function Home() {
   const roles = SessionData.getRoles();
-  const [visitsHomeEnable, setVisitsHomeEnable] = useState(
+  const [sindicoOuPorteiro, setSindicoOuPorteiro] = useState(
     roles.includes(ROLES.PORTEIRO) || roles.includes(ROLES.SINDICO)
   );
 
@@ -43,9 +44,14 @@ export default function Home() {
           <Link to="/areas-comuns">
             <Card icon={CalendarIcon} title="Áreas comuns" />
           </Link>
-          {visitsHomeEnable && (
+          {sindicoOuPorteiro && (
             <Link to="/portaria">
               <Card icon={LockClosedIcon} title="Portaria" />
+            </Link>
+          )}
+          {sindicoOuPorteiro && (
+            <Link to="/cpf-bloqueado">
+              <Card icon={NoSymbolIcon} title="CPF Bloqueado" />
             </Link>
           )}
         </div>
