@@ -1,15 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Navbar from '../../components/navbar';
 import { Banner } from '../../components/banner';
 import Card from '../../components/card';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import UsersIcon from '../../components/icons/usersIcon';
 import CollectionIcon from '../../components/icons/collection';
 import HomeIcon from '../../components/icons/home';
 import ChartBarIcon from '../../components/icons/ChartBarIcon';
 import CalendarIcon from '../../components/icons/calendarIcon';
+import LockClosedIcon from '../../components/icons/lockClosedIcon';
+import SessionData from '../../utils/sessionData';
+import { ROLES } from '../../utils/Constants';
 
 export default function Home() {
+  const roles = SessionData.getRoles();
+  const [visitsHomeEnable, setVisitsHomeEnable] = useState(
+    roles.includes(ROLES.PORTEIRO) || roles.includes(ROLES.SINDICO)
+  );
+
+  if (roles.length === 1 && roles.includes(ROLES.PORTEIRO)) {
+    return <Navigate to="/portaria" replace />;
+  }
+
   return (
     <div>
       <Navbar />
@@ -31,6 +43,11 @@ export default function Home() {
           <Link to="/areas-comuns">
             <Card icon={CalendarIcon} title="Áreas comuns" />
           </Link>
+          {visitsHomeEnable && (
+            <Link to="/portaria">
+              <Card icon={LockClosedIcon} title="Portaria" />
+            </Link>
+          )}
         </div>
       </div>
     </div>

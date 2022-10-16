@@ -1,7 +1,7 @@
-import { HomeIcon as IconSolid } from '@heroicons/react/20/solid';
-import { HomeIcon as IconOutline } from '@heroicons/react/24/outline';
+import { ArrowUpTrayIcon as IconSolid } from '@heroicons/react/20/solid';
+import { ArrowUpTrayIcon as IconOutline } from '@heroicons/react/24/outline';
 
-export default function HomeIcon(props) {
+export default function ArrowUpTrayIcon(props) {
   let width = props.width || 'w-5';
   let height = props.height || 'h-5';
   let color = props.color || 'default-icon-color';
