@@ -29,6 +29,8 @@ import PasswordReset from './pages/password-reset';
 import VisitsHome from './pages/visits-home';
 import BlockedCpf from './pages/blocked-cpf';
 import NewBlockedCpf from './pages/new-blocked-cpf';
+import Visits from './pages/visits';
+import NewVisit from './pages/new-visit';
 
 function loggedIn() {
   return SessionData.hasFullData();
@@ -106,6 +108,15 @@ const ApplicationRoutes = () => {
         </Route>
         <Route path="/bloqueio-cpf/:id" element={<PrivateOutlet />}>
           <Route path="" element={<NewBlockedCpf />} />
+        </Route>
+        <Route path="/visitas" element={<PrivateOutlet />}>
+          <Route path="" element={<Visits />} />
+        </Route>
+        <Route path="/nova-visita" element={<PrivateOutlet />}>
+          <Route path="" element={<NewVisit />} />
+        </Route>
+        <Route path="/visita/:id" element={<PrivateOutlet />}>
+          <Route path="" element={<NewVisit />} />
         </Route>
         <Route path="*" element={<Error404 />} />
       </Routes>

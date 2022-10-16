@@ -196,7 +196,7 @@ export default function VisitsHome() {
           <h1 className="text-2xl">
             Visitas do dia {moment(date).format('DD/MM/YYYY')}
           </h1>
-          <Link to="/novo-acesso">
+          <Link to="/nova-visita">
             <button className="btn-outline">Nova visita</button>
           </Link>
         </div>

@@ -12,6 +12,7 @@ import LockClosedIcon from '../../components/icons/lockClosedIcon';
 import SessionData from '../../utils/sessionData';
 import { ROLES } from '../../utils/Constants';
 import NoSymbolIcon from '../../components/icons/NoSymbolIcon';
+import IdentificationIcon from '../../components/icons/identificationIcon';
 
 export default function Home() {
   const roles = SessionData.getRoles();
@@ -54,6 +55,9 @@ export default function Home() {
               <Card icon={NoSymbolIcon} title="CPF Bloqueado" />
             </Link>
           )}
+          <Link to="/visitas">
+            <Card icon={IdentificationIcon} title="Visitas e Prestadores" />
+          </Link>
         </div>
       </div>
     </div>
