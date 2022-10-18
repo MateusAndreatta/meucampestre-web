@@ -18,7 +18,7 @@ export default {
   findById(id) {
     return new Promise((resolve, reject) => {
       api
-        .get(`/condominios/${api.condo().id}/documentosBloqueados/${id}`)
+        .get(`/condominios/${api.condo().id}/visitantes/${id}`)
         .then((response) => {
           const data = response.data;
           if (data) resolve(data);
@@ -31,7 +31,7 @@ export default {
   create(data) {
     return new Promise((resolve, reject) => {
       api
-        .post(`/condominios/${api.condo().id}/documentosBloqueados`, {}, data)
+        .post(`/condominios/${api.condo().id}/visitantes`, {}, data)
         .then((response) => {
           resolve(response);
         })
@@ -39,14 +39,10 @@ export default {
     });
   },
 
-  update(data, document) {
+  update(data, id) {
     return new Promise((resolve, reject) => {
       api
-        .put(
-          `/condominios/${api.condo().id}/documentosBloqueados/${document}`,
-          {},
-          data
-        )
+        .put(`/condominios/${api.condo().id}/visitantes/${id}`, {}, data)
         .then((response) => {
           resolve(response);
         })

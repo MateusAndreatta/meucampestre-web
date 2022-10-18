@@ -10,6 +10,8 @@ import AutocompleteField from '../../components/fields/autocompleteField';
 import SessionData from '../../utils/sessionData';
 import { ROLES } from '../../utils/Constants';
 import { maskCpfCnpj } from '../../mask';
+import VisitsRepository from '../../repository/VisitsRepository';
+import moment from 'moment/moment';
 
 export default function NewVisit() {
   let { id } = useParams();
@@ -34,8 +36,48 @@ export default function NewVisit() {
 
   useEffect(() => {
     if (editMode) {
-      UnityRepository.findById(id).then((response) => {
+      VisitsRepository.findById(id).then((response) => {
         console.log(response);
+        setTxtNome(response.nomeCompleto);
+        setTxtDocumento(response.documento);
+        setTxtObservacao(response.observacao);
+        response.tipo === 'VISITANTE'
+          ? setIsVisitante(true)
+          : setIsPrestador(true);
+        if (response.permanente) {
+          setAcessoPermanente(response.permanente);
+        } else {
+          const inicio = new Date(response.periodoInicio)
+            .toISOString()
+            .split('T')[0];
+          const fim = new Date(response.periodoFim).toISOString().split('T')[0];
+          setTxtPeriodoInicial(inicio);
+          setTxtPeriodoFinal(fim);
+        }
+
+        if (sindicoOuPorteiro) {
+          UnityRepository.findAll()
+            .then((responseUnidades) => {
+              const unidadesRecebidas = responseUnidades.filter((unidade) =>
+                response.unidades.some(
+                  (unidadeResponse) => unidade.id === unidadeResponse
+                )
+              );
+
+              setUnidadesSelecionadas(unidadesRecebidas);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else {
+          const unidadesRecebidas = unidades.filter((unidade) =>
+            response.unidades.some(
+              (unidadeResponse) => unidade.id === unidadeResponse
+            )
+          );
+
+          setUnidadesSelecionadas(unidadesRecebidas);
+        }
       });
     }
   }, [editMode]);
@@ -106,6 +148,14 @@ export default function NewVisit() {
     );
   }
 
+  function getUnitsIds() {
+    let unitsId = [];
+    unidadesSelecionadas.forEach((unidade) => {
+      unitsId.push(unidade.id);
+    });
+    return unitsId;
+  }
+
   const navigate = useNavigate();
 
   function handleSubmit() {
@@ -113,45 +163,48 @@ export default function NewVisit() {
       Toaster.showInfo('É necessário informar o nome');
       return;
     }
+
+    if (unidadesSelecionadas.length < 1) {
+      Toaster.showInfo('É necessário selecionar pelo menos uma unidade');
+      return;
+    }
     setLoadingButton(true);
     if (editMode) {
-      UnityRepository.update(
+      VisitsRepository.update(
         {
-          // titulo: txtTitle,
-          // endereco: txtAddress,
-          // descricao: txtDescription,
-          // coordenadas: txtCoordinates,
+          nomeCompleto: txtNome,
+          documento: txtDocumento,
+          observacao: txtObservacao,
+          permanente: acessoPermanente,
+          tipo: isVisitante ? 0 : 1,
+          unidades: getUnitsIds(),
+          periodoInicio: txtPeriodoInicial,
+          periodoFim: txtPeriodoFinal,
         },
         id
       )
         .then((response) => {
-          console.log(response);
-          Toaster.showSuccess('Unidade editada!');
-          navigate('/unidades');
-        })
-        .catch((error) => {
-          if (error.response.data.message) {
-            Toaster.showError(error.response.data.message);
-          } else {
-            Toaster.showError(
-              'Ops, ocorreu um erro, tente novamente mais tarde'
-            );
-          }
+          Toaster.showSuccess('Dados atualizados');
+          navigate('/visitas');
         })
         .finally(() => {
           setLoadingButton(false);
         });
     } else {
-      UnityRepository.create({
-        // titulo: txtTitle,
-        // endereco: txtAddress,
-        // descricao: txtDescription,
-        // coordenadas: txtCoordinates,
+      VisitsRepository.create({
+        nomeCompleto: txtNome,
+        documento: txtDocumento,
+        observacao: txtObservacao,
+        permanente: acessoPermanente,
+        tipo: isVisitante ? 0 : 1,
+        unidades: getUnitsIds(),
+        periodoInicio: txtPeriodoInicial,
+        periodoFim: txtPeriodoFinal,
       })
         .then((response) => {
           console.log(response);
-          Toaster.showSuccess('Nova unidade criada!');
-          navigate('/unidades');
+          Toaster.showSuccess('Nova visita criada!');
+          navigate('/visitas');
         })
         .finally(() => {
           setLoadingButton(false);
