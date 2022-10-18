@@ -12,6 +12,8 @@ import { ROLES } from '../../utils/Constants';
 import WrenchScrewdriverIcon from '../../components/icons/WrenchScrewdriverIcon';
 import ArrowDownTrayIcon from '../../components/icons/arrowDownTray';
 import ArrowUpTrayIcon from '../../components/icons/arrowUpTrayIcon';
+import VisitsRepository from '../../repository/VisitsRepository';
+import moment from 'moment/moment';
 
 function ActionItem(props) {
   return (
@@ -79,27 +81,10 @@ export default function Visits() {
   }
 
   useEffect(() => {
-    // UnityRepository.findAll().then((response) => {
-    //   setData(response);
-    // });
-    setData([
-      {
-        tipo: 'Visita',
-        visitante: { nome: 'José da silva', documento: '123.343.543-32' },
-        unidades: [{ id: 101, nome: 'Chcara A' }],
-        observacao:
-          'O empenho em analisar o início da atividade geral de formação de atitudes pode nos levar a considera',
-      },
-      {
-        tipo: 'Prestador de serviço',
-        visitante: { nome: 'José da silva', documento: '123.343.543-32' },
-        unidades: [
-          { id: 103, nome: 'Chcara 33' },
-          { id: 104, nome: 'Chcara 35' },
-        ],
-        observacao: 'Visita de 1 dia',
-      },
-    ]);
+    VisitsRepository.findAllForLoggedUser().then((response) => {
+      console.log(response);
+      setData(response);
+    });
   }, []);
 
   const columns = [
@@ -114,10 +99,10 @@ export default function Visits() {
         return (
           <span className="flex flex-col">
             <span>
-              {row.tipo === 'Visita' ? (
-                <ProfileIcon />
-              ) : (
+              {row.tipo === 'PRESTADOR_DE_SERVICO' ? (
                 <WrenchScrewdriverIcon />
+              ) : (
+                <ProfileIcon />
               )}
             </span>
           </span>
@@ -135,10 +120,8 @@ export default function Visits() {
       cell: (row) => (
         <div className="flex">
           <div>
-            <p className="text-base">{row.visitante.nome}</p>
-            <small className="text-sm text-gray-400">
-              {row.visitante.documento}
-            </small>
+            <p className="text-base">{row.nomeCompleto}</p>
+            <small className="text-sm text-gray-400">{row.documento}</small>
           </div>
         </div>
       ),
@@ -153,7 +136,13 @@ export default function Visits() {
       cell: (row) => (
         <div className="flex">
           <div>
-            <p className="text-base">29/03/2010 - 23/03/2010</p>
+            <p className="text-base">
+              {row.permanente
+                ? 'Permanente'
+                : moment(row.periodoInicio).format('DD/MM/YYYY') +
+                  ' - ' +
+                  moment(row.periodoFim).format('DD/MM/YYYY')}
+            </p>
           </div>
         </div>
       ),
