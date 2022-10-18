@@ -6,6 +6,7 @@ import Toaster from '../../utils/ui/toaster';
 import UnityRepository from '../../repository/UnityRepository';
 import Button from '../../components/buttons/button';
 import { maskCpfCnpj } from '../../mask';
+import BlockedCpfRepository from '../../repository/BlockedCpfRepository';
 
 export default function NewBlockedCpf() {
   let { id } = useParams();
@@ -18,9 +19,9 @@ export default function NewBlockedCpf() {
 
   useEffect(() => {
     if (editMode) {
-      UnityRepository.findById(id).then((response) => {
+      BlockedCpfRepository.findById(id).then((response) => {
         console.log(response);
-        setTxtNome(response.nome);
+        setTxtNome(response.nomeCompleto);
         setTxtDocumento(response.documento);
         setTxtMotivo(response.motivo);
       });
@@ -51,32 +52,30 @@ export default function NewBlockedCpf() {
     }
     setLoadingButton(true);
     if (editMode) {
-      UnityRepository.update(
+      BlockedCpfRepository.update(
         {
-          nome: txtNome,
+          nomeCompleto: txtNome,
           documento: txtDocumento,
           motivo: txtMotivo,
         },
         id
       )
         .then((response) => {
-          console.log(response);
-          Toaster.showSuccess('Unidade editada!');
-          navigate('/unidades');
+          Toaster.showSuccess('Dados salvos com sucesso!');
+          navigate('/cpf-bloqueado');
         })
         .finally(() => {
           setLoadingButton(false);
         });
     } else {
-      UnityRepository.create({
-        nome: txtNome,
+      BlockedCpfRepository.create({
+        nomeCompleto: txtNome,
         documento: txtDocumento,
         motivo: txtMotivo,
       })
         .then((response) => {
-          console.log(response);
-          Toaster.showSuccess('Nova unidade criada!');
-          navigate('/unidades');
+          Toaster.showSuccess('Bloqueio realizado!');
+          navigate('/cpf-bloqueado');
         })
         .finally(() => {
           setLoadingButton(false);
