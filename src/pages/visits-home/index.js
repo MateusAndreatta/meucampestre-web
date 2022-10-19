@@ -3,8 +3,6 @@ import Navbar from '../../components/navbar';
 import { Link, useNavigate } from 'react-router-dom';
 import moment from 'moment/moment';
 import DataTableBase from '../../components/data-table';
-import Tooltip from '../../components/tooltip';
-import StatusTag from '../../components/status-tag';
 import ProfileIcon from '../../components/icons/profileIcon';
 import WrenchScrewdriverIcon from '../../components/icons/WrenchScrewdriverIcon';
 import ArrowDownTrayIcon from '../../components/icons/arrowDownTray';
@@ -13,8 +11,8 @@ import Modal from 'react-modal';
 import CloseIcon from '../../components/icons/closeIcon';
 import CalendarIcon from '../../components/icons/calendarIcon';
 import CalendarBase from '../../components/calendar';
-import CalendarItem from '../../components/calendar-item';
 import InputField from '../../components/fields/inputField';
+import VisitsRepository from '../../repository/VisitsRepository';
 
 export default function VisitsHome() {
   const navigate = useNavigate();
@@ -28,26 +26,13 @@ export default function VisitsHome() {
   const [txtFiltro, setTxtFiltro] = useState('');
 
   useEffect(() => {
-    setVisits([
-      {
-        tipo: 'Visita',
-        visitante: { nome: 'José da silva', documento: '123.343.543-32' },
-        unidades: [{ id: 101, nome: 'Chcara A' }],
-        observacao:
-          'O empenho em analisar o início da atividade geral de formação de atitudes pode nos levar a considera',
-      },
-      {
-        tipo: 'Prestador de serviço',
-        visitante: { nome: 'Antonio augustro', documento: '453.666.777-99' },
-        unidades: [
-          { id: 103, nome: 'Chcara 33' },
-          { id: 104, nome: 'Chcara 35' },
-        ],
-        observacao: 'Visita de 1 dia',
-      },
-    ]);
-    setVisitsFiltered(visitis);
-  }, []);
+    console.log(date);
+    VisitsRepository.findAllByDate(date).then((response) => {
+      setVisits(response);
+      setVisitsFiltered(response);
+      setTxtFiltro('');
+    });
+  }, [date]);
 
   function openModalEntrada(row) {
     setIsOpen(true);
@@ -74,10 +59,10 @@ export default function VisitsHome() {
     const value = event.target.value.toLowerCase();
     setTxtFiltro(value);
     let teste = visitis.filter((item) => {
-      let nome = item.visitante.nome.toLowerCase();
+      let nome = item.nomeCompleto.toLowerCase();
       if (nome.includes(value)) return true;
 
-      let documento = item.visitante.documento.replace(/[^\d]+/g, '');
+      let documento = item.documento.replace(/[^\d]+/g, '');
       let termoDocumento = value.replace(/[^\d]+/g, '');
 
       if (termoDocumento.length > 0) {
@@ -101,10 +86,10 @@ export default function VisitsHome() {
         return (
           <span className="flex flex-col">
             <span>
-              {row.tipo === 'Visita' ? (
-                <ProfileIcon />
-              ) : (
+              {row.tipo === 'PRESTADOR_DE_SERVICO' ? (
                 <WrenchScrewdriverIcon />
+              ) : (
+                <ProfileIcon />
               )}
             </span>
           </span>
@@ -122,10 +107,8 @@ export default function VisitsHome() {
       cell: (row) => (
         <div className="flex">
           <div>
-            <p className="text-base">{row.visitante.nome}</p>
-            <small className="text-sm text-gray-400">
-              {row.visitante.documento}
-            </small>
+            <p className="text-base">{row.nomeCompleto}</p>
+            <small className="text-sm text-gray-400">{row.documento}</small>
           </div>
         </div>
       ),
@@ -143,7 +126,7 @@ export default function VisitsHome() {
             return (
               <div key={unidade.id}>
                 <div className="rounded bg-gray-400 p-2 text-white">
-                  {unidade.nome}
+                  {unidade.titulo}
                 </div>
               </div>
             );
@@ -296,7 +279,7 @@ export default function VisitsHome() {
           {modalData && (
             <div className="mb-3 text-base ">
               Deseja registrar a {modalData.tipo} de{' '}
-              <b>{modalData.data.visitante.nome}</b> dia{' '}
+              <b>{modalData.data.nomeCompleto}</b> dia{' '}
               {moment(modalData.date).format('DD/MM/YYYY') +
                 ' às ' +
                 moment(modalData.date).format('HH:mm')}{' '}

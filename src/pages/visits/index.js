@@ -26,10 +26,8 @@ function ActionItem(props) {
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="options-menu">
-          <a
-            href="#"
+          <div
             className="text-md block px-4 py-2 text-gray-700 md:hover:bg-gray-100 md:hover:text-gray-900"
-            role="menuitem"
             onClick={props.onClickEditar}>
             <span className="flex flex-col">
               <span>
@@ -37,11 +35,9 @@ function ActionItem(props) {
                 Editar
               </span>
             </span>
-          </a>
-          <a
-            href="#"
+          </div>
+          <div
             className="text-md block block px-4 py-2 text-gray-700 md:hover:bg-gray-100 md:hover:text-gray-900"
-            role="menuitem"
             onClick={props.onClickDeletar}>
             <span className="flex flex-col">
               <span>
@@ -49,7 +45,7 @@ function ActionItem(props) {
                 Deletar
               </span>
             </span>
-          </a>
+          </div>
         </div>
       </div>
     </div>
@@ -65,24 +61,19 @@ export default function Visits() {
   const [data, setData] = useState([]);
 
   function handleClickEditar(row) {
-    navigate(`/editar-unidade/${row.id}`);
+    navigate(`/visita/${row.id}`);
   }
   function handleClickDeletar(row) {
-    UnityRepository.remove(row.id)
-      .then((response) => {
-        UnityRepository.findAll().then((response) => {
-          setData(response);
-          Toaster.showInfo('Unidade removida!');
-        });
-      })
-      .catch((error) => {
-        Toaster.showError('Ocorreu um erro, tente novamente mais tarde!');
+    VisitsRepository.remove(row.id).then((response) => {
+      VisitsRepository.findAllForLoggedUser().then((response) => {
+        setData(response);
+        Toaster.showInfo('Visita removida!');
       });
+    });
   }
 
   useEffect(() => {
     VisitsRepository.findAllForLoggedUser().then((response) => {
-      console.log(response);
       setData(response);
     });
   }, []);

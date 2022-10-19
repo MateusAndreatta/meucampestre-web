@@ -15,6 +15,23 @@ export default {
     });
   },
 
+  findAllByDate(date) {
+    return new Promise((resolve, reject) => {
+      api
+        .post(
+          `/condominios/${api.condo().id}/visitantes/periodo`,
+          {},
+          { data: date }
+        )
+        .then((response) => {
+          const data = response.data;
+          if (data) resolve(data);
+          else reject(response);
+        })
+        .catch(reject);
+    });
+  },
+
   findById(id) {
     return new Promise((resolve, reject) => {
       api
@@ -53,7 +70,7 @@ export default {
   remove(id) {
     return new Promise((resolve, reject) => {
       api
-        .remove(`/condominios/${api.condo().id}/documentosBloqueados/${id}`)
+        .remove(`/condominios/${api.condo().id}/visitantes/${id}`)
         .then((response) => {
           resolve(response);
         })

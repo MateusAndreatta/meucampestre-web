@@ -169,6 +169,10 @@ export default function NewVisit() {
       return;
     }
     setLoadingButton(true);
+
+    const dateInicio = moment(txtPeriodoInicial, 'YYYY-MM-DD').toDate();
+    const dateFim = moment(txtPeriodoFinal, 'YYYY-MM-DD').toDate();
+
     if (editMode) {
       VisitsRepository.update(
         {
@@ -178,8 +182,8 @@ export default function NewVisit() {
           permanente: acessoPermanente,
           tipo: isVisitante ? 0 : 1,
           unidades: getUnitsIds(),
-          periodoInicio: txtPeriodoInicial,
-          periodoFim: txtPeriodoFinal,
+          periodoInicio: dateInicio,
+          periodoFim: dateFim,
         },
         id
       )
@@ -198,8 +202,8 @@ export default function NewVisit() {
         permanente: acessoPermanente,
         tipo: isVisitante ? 0 : 1,
         unidades: getUnitsIds(),
-        periodoInicio: txtPeriodoInicial,
-        periodoFim: txtPeriodoFinal,
+        periodoInicio: dateInicio,
+        periodoFim: dateFim,
       })
         .then((response) => {
           console.log(response);
