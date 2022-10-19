@@ -168,10 +168,42 @@ export default function NewVisit() {
       Toaster.showInfo('É necessário selecionar pelo menos uma unidade');
       return;
     }
-    setLoadingButton(true);
 
-    const dateInicio = moment(txtPeriodoInicial, 'YYYY-MM-DD').toDate();
-    const dateFim = moment(txtPeriodoFinal, 'YYYY-MM-DD').toDate();
+    if (!acessoPermanente) {
+      if (txtPeriodoInicial.length < 1) {
+        Toaster.showInfo(
+          'Para acessos não permanentes, é preciso informar o período'
+        );
+        return;
+      }
+
+      if (txtPeriodoFinal.length < 1) {
+        Toaster.showInfo(
+          'Para acessos não permanentes, é preciso informar o período'
+        );
+        return;
+      }
+    }
+
+    const momentInicio = moment(txtPeriodoInicial, 'YYYY-MM-DD');
+    const momentFim = moment(txtPeriodoFinal, 'YYYY-MM-DD');
+
+    if (!acessoPermanente) {
+      if (momentInicio.isAfter(momentFim)) {
+        Toaster.showInfo('A data final deve ser maior que a data inicial');
+        return;
+      }
+
+      if (momentInicio.isBefore(moment())) {
+        Toaster.showInfo('Data inicial não pode ser menor que o dia de hoje');
+        return;
+      }
+    }
+
+    const dateInicio = momentInicio.toDate();
+    const dateFim = momentFim.toDate();
+
+    setLoadingButton(true);
 
     if (editMode) {
       VisitsRepository.update(

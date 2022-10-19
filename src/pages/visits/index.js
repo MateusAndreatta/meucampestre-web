@@ -181,13 +181,11 @@ export default function Visits() {
       <div className="container mx-auto">
         <div className="my-8 flex justify-between">
           <h1 className="text-2xl">Visitas e Prestadores de serviço</h1>
-          {adminEnable && (
-            <Link to="/nova-visita">
-              <button className="btn-outline">
-                Nova visita/prestador de serviço
-              </button>
-            </Link>
-          )}
+          <Link to="/nova-visita">
+            <button className="btn-outline">
+              Nova visita/prestador de serviço
+            </button>
+          </Link>
         </div>
 
         <DataTableBase
