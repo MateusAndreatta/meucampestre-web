@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import InputField from '../../components/fields/inputField';
 import Toaster from '../../utils/ui/toaster';
 import { login } from '../../actions/session';
-import { Navigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { maskCpfCnpj } from '../../mask';
 import SessionData from '../../utils/sessionData';
 import MyAccountRepository from '../../repository/MyAccountRepository';
@@ -36,11 +36,12 @@ export default function Login() {
   function handleSubmit(event) {
     event.preventDefault();
 
-    if (txtDocumento.length < 1 || txtPassword < 1) {
+    if (txtDocumento.length < 1 || txtPassword.length < 1) {
       Toaster.showInfo('Preencha todos os campos');
       return;
     }
     setLoding(true);
+    sessionStorage.clear();
     const documento = txtDocumento.replace(/[^\d]+/g, '');
     dispatch(login({ documento: documento, senha: txtPassword }));
   }
@@ -117,11 +118,11 @@ export default function Login() {
             </div>
             <div className="mb-6 -mt-4 flex items-center">
               <div className="ml-auto flex">
-                <a
+                <Link
                   className="inline-flex text-xs font-thin text-gray-500 hover:text-gray-700 sm:text-sm"
-                  href="/">
+                  to="/redefinir-senha">
                   Esqueceu sua senha?
-                </a>
+                </Link>
               </div>
             </div>
             <div className="flex w-full">

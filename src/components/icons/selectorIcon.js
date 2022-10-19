@@ -1,5 +1,5 @@
-import { SelectorIcon as IconSolid } from '@heroicons/react/solid';
-import { SelectorIcon as IconOutline } from '@heroicons/react/outline';
+import { ChevronUpDownIcon as IconSolid } from '@heroicons/react/20/solid';
+import { ChevronUpDownIcon as IconOutline } from '@heroicons/react/24/outline';
 
 export default function SelectorIcon(props) {
   let width = props.width || 'w-5';

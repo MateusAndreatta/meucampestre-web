@@ -1,5 +1,5 @@
-import { PencilIcon as IconSolid } from '@heroicons/react/solid';
-import { PencilIcon as IconOutline } from '@heroicons/react/outline';
+import { PencilIcon as IconSolid } from '@heroicons/react/20/solid';
+import { PencilIcon as IconOutline } from '@heroicons/react/24/outline';
 
 export default function EditIcon(props) {
   let width = props.width || 'w-5';

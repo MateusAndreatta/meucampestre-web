@@ -1,5 +1,5 @@
-import { ExclamationCircleIcon as IconSolid } from '@heroicons/react/solid';
-import { ExclamationCircleIcon as IconOutline } from '@heroicons/react/outline';
+import { ExclamationCircleIcon as IconSolid } from '@heroicons/react/20/solid';
+import { ExclamationCircleIcon as IconOutline } from '@heroicons/react/24/outline';
 
 export default function ExclamationIcon(props) {
   let width = props.width || 'w-5';

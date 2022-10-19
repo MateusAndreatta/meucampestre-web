@@ -1,5 +1,5 @@
-import { LogoutIcon as IconSolid } from '@heroicons/react/solid';
-import { LogoutIcon as IconOutline } from '@heroicons/react/outline';
+import { ArrowLeftOnRectangleIcon as IconSolid } from '@heroicons/react/20/solid';
+import { ArrowLeftOnRectangleIcon as IconOutline } from '@heroicons/react/24/outline';
 
 export default function LogoutIcon(props) {
   let width = props.width || 'w-5';

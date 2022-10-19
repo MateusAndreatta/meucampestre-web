@@ -1,4 +1,4 @@
-import { CogIcon } from '@heroicons/react/outline';
+import { CogIcon } from '@heroicons/react/24/outline';
 
 export default function ConfigIcon(props) {
   let width = props.width || 'w-5';

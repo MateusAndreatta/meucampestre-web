@@ -1,5 +1,5 @@
-import { UserIcon as IconSolid } from '@heroicons/react/solid';
-import { UserIcon as IconOutline } from '@heroicons/react/outline';
+import { UserIcon as IconSolid } from '@heroicons/react/20/solid';
+import { UserIcon as IconOutline } from '@heroicons/react/24/outline';
 
 export default function ProfileIcon(props) {
   let width = props.width || 'w-5';

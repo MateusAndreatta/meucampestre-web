@@ -21,6 +21,16 @@ import NewUnit from './pages/new-unit';
 import NewWaterConsumption from './pages/new-water-consumption';
 import WaterConsumptionDashboard from './pages/water-consumption-dashboard';
 import EditWaterConsumption from './pages/edit-water-consumption';
+import CommonAreas from './pages/common-areas';
+import NewCommunArea from './pages/new-commun-area';
+import BookCommonArea from './pages/book-commun-area';
+import SolicitationsCommunArea from './pages/solicitations-commun-area';
+import PasswordReset from './pages/password-reset';
+import VisitsHome from './pages/visits-home';
+import BlockedCpf from './pages/blocked-cpf';
+import NewBlockedCpf from './pages/new-blocked-cpf';
+import Visits from './pages/visits';
+import NewVisit from './pages/new-visit';
 
 function loggedIn() {
   return SessionData.hasFullData();
@@ -34,6 +44,7 @@ const ApplicationRoutes = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/redefinir-senha" element={<PasswordReset />} />
         <Route path="/selecionar-condominio" element={<SelectCondo />} />
         <Route path="/home" element={<PrivateOutlet />}>
           <Route path="" element={<Home />} />
@@ -70,6 +81,42 @@ const ApplicationRoutes = () => {
         </Route>
         <Route path="/editar-leitura" element={<PrivateOutlet />}>
           <Route path="" element={<EditWaterConsumption />} />
+        </Route>
+        <Route path="/areas-comuns" element={<PrivateOutlet />}>
+          <Route path="" element={<CommonAreas />} />
+        </Route>
+        <Route path="/nova-area-comum" element={<PrivateOutlet />}>
+          <Route path="" element={<NewCommunArea />} />
+        </Route>
+        <Route path="/editar-area-comum" element={<PrivateOutlet />}>
+          <Route path="" element={<NewCommunArea />} />
+        </Route>
+        <Route path="/reservar-area-comum" element={<PrivateOutlet />}>
+          <Route path="" element={<BookCommonArea />} />
+        </Route>
+        <Route path="/solicitacoes-areas-comuns" element={<PrivateOutlet />}>
+          <Route path="" element={<SolicitationsCommunArea />} />
+        </Route>
+        <Route path="/portaria" element={<PrivateOutlet />}>
+          <Route path="" element={<VisitsHome />} />
+        </Route>
+        <Route path="/cpf-bloqueado" element={<PrivateOutlet />}>
+          <Route path="" element={<BlockedCpf />} />
+        </Route>
+        <Route path="/novo-bloqueio-cpf" element={<PrivateOutlet />}>
+          <Route path="" element={<NewBlockedCpf />} />
+        </Route>
+        <Route path="/bloqueio-cpf/:id" element={<PrivateOutlet />}>
+          <Route path="" element={<NewBlockedCpf />} />
+        </Route>
+        <Route path="/visitas" element={<PrivateOutlet />}>
+          <Route path="" element={<Visits />} />
+        </Route>
+        <Route path="/nova-visita" element={<PrivateOutlet />}>
+          <Route path="" element={<NewVisit />} />
+        </Route>
+        <Route path="/visita/:id" element={<PrivateOutlet />}>
+          <Route path="" element={<NewVisit />} />
         </Route>
         <Route path="*" element={<Error404 />} />
       </Routes>

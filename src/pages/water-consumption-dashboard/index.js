@@ -24,15 +24,14 @@ import { ROLES } from '../../utils/Constants';
 export default function WaterConsumptionDashboard() {
   const [userDashboard, setUserDashboard] = useState({});
   const roles = SessionData.getRoles();
+  const [loading, setLoading] = useState(true);
   const [condoDashboardEnable, setCondoDashboardEnable] = useState(
     roles.includes(ROLES.SINDICO)
   );
   useEffect(() => {
-    WaterConsumptionRepository.getUserDashboard(
-      SessionData.getUser().documento
-    ).then((response) => {
-      console.log(response);
+    WaterConsumptionRepository.getUserDashboard().then((response) => {
       setUserDashboard(response);
+      setLoading(false);
     });
   }, []);
 
@@ -112,24 +111,28 @@ export default function WaterConsumptionDashboard() {
             bgColor={'bg-sky-300'}
             label={'Consumo mês'}
             value={`${userDashboard.consumo}m³`}
+            loading={loading}
           />
           <DashboardCard
             icon={DolarIcon}
             bgColor={'bg-yellow-100'}
             label={'Valor mês'}
             value={`${formatarValorMonetario(userDashboard.valor)}`}
+            loading={loading}
           />
           <DashboardCard
             icon={WaterDropIcon}
             bgColor={'bg-sky-300'}
             label={'Consumo médio'}
             value={`${userDashboard.consumoMedio}m³`}
+            loading={loading}
           />
           <DashboardCard
             icon={DolarIcon}
             bgColor={'bg-yellow-100'}
             label={'Valor médio'}
             value={`${formatarValorMonetario(userDashboard.valorMedio)}`}
+            loading={loading}
           />
         </div>
         {condoDashboardEnable && <CondoDashboard />}

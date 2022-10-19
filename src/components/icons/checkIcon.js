@@ -1,5 +1,5 @@
-import { CheckCircleIcon as IconSolid } from '@heroicons/react/solid';
-import { CheckCircleIcon as IconOutline } from '@heroicons/react/outline';
+import { CheckCircleIcon as IconSolid } from '@heroicons/react/20/solid';
+import { CheckCircleIcon as IconOutline } from '@heroicons/react/24/outline';
 
 export default function CheckIcon(props) {
   let width = props.width || 'w-5';

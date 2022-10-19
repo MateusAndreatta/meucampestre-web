@@ -1,5 +1,5 @@
-import { CollectionIcon as IconSolid } from '@heroicons/react/solid';
-import { CollectionIcon as IconOutline } from '@heroicons/react/outline';
+import { RectangleStackIcon as IconSolid } from '@heroicons/react/20/solid';
+import { RectangleStackIcon as IconOutline } from '@heroicons/react/24/outline';
 
 export default function CollectionIcon(props) {
   let width = props.width || 'w-5';

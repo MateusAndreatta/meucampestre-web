@@ -7,6 +7,9 @@ export default function DashboardCardProgress(props) {
   const label = props.label;
   const percentage = props.percentage;
   const description = props.description;
+  const loading = props.loading || false;
+
+  if (loading) return <SkeletonComponent />;
 
   return (
     <div className="dashboard-card flex flex-col p-6">
@@ -40,6 +43,20 @@ export default function DashboardCardProgress(props) {
         <div className="grid grid-cols-1 place-items-center">
           <span className="text-sm text-neutral-500	">{description}</span>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function SkeletonComponent() {
+  return (
+    <div className="mx-auto h-24 w-full rounded-md border-2">
+      <div className="flex h-full animate-pulse flex-row justify-between space-x-5 p-5">
+        <div className="flex flex-col space-y-3">
+          <div className="h-6 w-36 rounded-md bg-gray-300"></div>
+          <div className="h-6 w-24 rounded-md bg-gray-300"></div>
+        </div>
+        <div className="h-7 w-7 rounded bg-gray-300"></div>
       </div>
     </div>
   );

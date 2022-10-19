@@ -9,6 +9,7 @@ import UnityRepository from '../../repository/UnityRepository';
 import UserRepository from '../../repository/UserRepository';
 import CheckboxField from '../../components/fields/checkboxField';
 import Button from '../../components/buttons/button';
+import AutocompleteField from '../../components/fields/autocompleteField';
 
 function UserForm() {
   const [txtName, setTxtName] = useState('');
@@ -32,12 +33,14 @@ function UserForm() {
   useEffect(() => {
     if (editMode) {
       UserRepository.findByDocument(documento).then((data) => {
-        setTxtName(data.nome);
-        setTxtEmail(data.email);
-        setTxtPhone(maskPhone(data.telefone));
-        setTxtDocument(maskCpfCnpj(data.documento));
+        console.log(data);
+        setTxtName(data.usuario.nome);
+        setTxtEmail(data.usuario.email);
+        setTxtPhone(maskPhone(data.usuario.telefone));
+        setTxtDocument(maskCpfCnpj(data.usuario.documento));
+        setUnidadesSelecionadas(data.unidades);
 
-        data.papeis.forEach((x) => {
+        data.usuario.papeis.forEach((x) => {
           let role = x.nome;
 
           if (role === ROLES.MORADOR) {
@@ -123,7 +126,6 @@ function UserForm() {
   }
 
   function getUnitsIds() {
-    return [];
     let unitsId = [];
     unidadesSelecionadas.forEach((unidade) => {
       unitsId.push(unidade.id);
@@ -150,11 +152,11 @@ function UserForm() {
       UserRepository.update(
         {
           nome: txtName,
-          senha: documento, // TODO: No atualizar dados nao pode forcar que a senha seja o documento novamente..
           email: txtEmail,
           documento: documento,
           telefone: telefone,
           papeis: getRoles(),
+          unidades: getUnitsIds(),
         },
         documento
       )
@@ -174,6 +176,7 @@ function UserForm() {
         documento: documento,
         telefone: telefone,
         papeis: roles,
+        unidades: getUnitsIds(),
       })
         .then(() => {
           Toaster.showSuccess('Novo acesso criado!');
@@ -277,37 +280,37 @@ function UserForm() {
           </div>
         </div>
 
-        {/*<AutocompleteField*/}
-        {/*  items={unidades}*/}
-        {/*  onChangeAutocomplete={onChangeAutocomplete}*/}
-        {/*  disabled={unidades.length <= 0}*/}
-        {/*  label="Chácara"*/}
-        {/*  optionName="titulo"*/}
-        {/*  optionKey="id"*/}
-        {/*/>*/}
+        <AutocompleteField
+          items={unidades}
+          onChangeAutocomplete={onChangeAutocomplete}
+          disabled={unidades.length <= 0}
+          label="Chácara"
+          optionName="titulo"
+          optionKey="id"
+        />
 
-        {/*<div className="flex flex-wrap">*/}
-        {/*  {unidadesSelecionadas.map((unidade) => (*/}
-        {/*    <span*/}
-        {/*      className="ml-1 mb-1 w-auto rounded-full bg-gray-400 px-4 py-2 text-base text-white"*/}
-        {/*      key={unidade.id}>*/}
-        {/*      {unidade.titulo}*/}
-        {/*      <button*/}
-        {/*        className="hover bg-transparent"*/}
-        {/*        onClick={() => removerUnidade(unidade)}>*/}
-        {/*        <svg*/}
-        {/*          xmlns="http://www.w3.org/2000/svg"*/}
-        {/*          width="12"*/}
-        {/*          height="12"*/}
-        {/*          fill="currentColor"*/}
-        {/*          className="ml-4"*/}
-        {/*          viewBox="0 0 1792 1792">*/}
-        {/*          <path d="M1490 1322q0 40-28 68l-136 136q-28 28-68 28t-68-28l-294-294-294 294q-28 28-68 28t-68-28l-136-136q-28-28-28-68t28-68l294-294-294-294q-28-28-28-68t28-68l136-136q28-28 68-28t68 28l294 294 294-294q28-28 68-28t68 28l136 136q28 28 28 68t-28 68l-294 294 294 294q28 28 28 68z" />*/}
-        {/*        </svg>*/}
-        {/*      </button>*/}
-        {/*    </span>*/}
-        {/*  ))}*/}
-        {/*</div>*/}
+        <div className="flex flex-wrap">
+          {unidadesSelecionadas.map((unidade) => (
+            <span
+              className="ml-1 mb-1 w-auto rounded-full bg-gray-400 px-4 py-2 text-base text-white"
+              key={unidade.id}>
+              {unidade.titulo}
+              <button
+                className="hover bg-transparent"
+                onClick={() => removerUnidade(unidade)}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  fill="currentColor"
+                  className="ml-4"
+                  viewBox="0 0 1792 1792">
+                  <path d="M1490 1322q0 40-28 68l-136 136q-28 28-68 28t-68-28l-294-294-294 294q-28 28-68 28t-68-28l-136-136q-28-28-28-68t28-68l294-294-294-294q-28-28-28-68t28-68l136-136q28-28 68-28t68 28l294 294 294-294q28-28 68-28t68 28l136 136q28 28 28 68t-28 68l-294 294 294 294q28 28 28 68z" />
+                </svg>
+              </button>
+            </span>
+          ))}
+        </div>
       </div>
       <div className="flex flex-row-reverse">
         <Button onClick={handleSubmit} loading={loadingButton}>

@@ -1,5 +1,5 @@
-import { HomeIcon as IconSolid } from '@heroicons/react/solid';
-import { HomeIcon as IconOutline } from '@heroicons/react/outline';
+import { HomeIcon as IconSolid } from '@heroicons/react/20/solid';
+import { HomeIcon as IconOutline } from '@heroicons/react/24/outline';
 
 export default function HomeIcon(props) {
   let width = props.width || 'w-5';

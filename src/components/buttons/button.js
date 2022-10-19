@@ -8,7 +8,7 @@ export default class Button extends React.Component {
     return (
       <span>
         <button className="btn-outline" disabled={disabled} onClick={onClick}>
-          <div className="inline-flex items-center ">
+          <div className="inline-flex items-center">
             {children}
             {loading ? <LoadingIcon /> : ''}
           </div>
