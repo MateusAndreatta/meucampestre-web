@@ -13,6 +13,7 @@ import CalendarIcon from '../../components/icons/calendarIcon';
 import CalendarBase from '../../components/calendar';
 import InputField from '../../components/fields/inputField';
 import VisitsRepository from '../../repository/VisitsRepository';
+import Toaster from '../../utils/ui/toaster';
 
 export default function VisitsHome() {
   const navigate = useNavigate();
@@ -72,6 +73,20 @@ export default function VisitsHome() {
     });
     console.log(teste);
     setVisitsFiltered(teste);
+  }
+
+  function salvarLogVisita() {
+    VisitsRepository.sendVisitLog({
+      idVisita: modalData.data.id,
+      data: modalData.date,
+      tipo: modalData.tipo === 'entrada' ? 0 : 1,
+    })
+      .then((response) => {
+        Toaster.showSuccess('Registro salvo');
+      })
+      .finally(() => {
+        closeModal();
+      });
   }
 
   const columns = [
@@ -288,7 +303,9 @@ export default function VisitsHome() {
           )}
 
           <div className="flex flex-row-reverse">
-            <button className="btn-outline">Registrar</button>
+            <button className="btn-outline" onClick={() => salvarLogVisita()}>
+              Registrar
+            </button>
           </div>
         </Modal>
       </div>

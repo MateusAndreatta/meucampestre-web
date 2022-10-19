@@ -77,4 +77,15 @@ export default {
         .catch(reject);
     });
   },
+
+  sendVisitLog(data) {
+    return new Promise((resolve, reject) => {
+      api
+        .post(`/condominios/${api.condo().id}/visitantes/log`, {}, data)
+        .then((response) => {
+          resolve(response);
+        })
+        .catch(reject);
+    });
+  },
 };
