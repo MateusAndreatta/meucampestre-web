@@ -241,9 +241,14 @@ export default function VisitsHome() {
             </div>
           </div>
 
-          <Link to="/nova-visita">
-            <button className="btn-outline">Nova visita</button>
-          </Link>
+          <div>
+            <Link to="/cpf-bloqueado">
+              <button className="btn-outline mr-2">CPF Bloqueado</button>
+            </Link>
+            <Link to="/nova-visita">
+              <button className="btn-outline">Nova visita</button>
+            </Link>
+          </div>
         </div>
         <div className={`absolute ${!calendarIsOpen ? 'hidden' : ''}`}>
           <CalendarBase
