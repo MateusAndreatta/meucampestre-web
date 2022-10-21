@@ -7,13 +7,14 @@ import Toaster from './utils/ui/toaster';
 axios.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response.data.message) {
-      if (error.response.data.message !== 'Unauthorized') {
+    if (error.response.data.path !== '/api/v2/autenticacao') {
+      if (error.response.data.message) {
         Toaster.showError(error.response.data.message);
+      } else {
+        Toaster.showError('Ops, ocorreu um erro, tente novamente mais tarde');
       }
-    } else {
-      Toaster.showError('Ops, ocorreu um erro, tente novamente mais tarde');
     }
+
     return Promise.reject(error);
   }
 );
