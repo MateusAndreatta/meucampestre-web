@@ -2,34 +2,26 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import InputField from '../../components/fields/inputField';
 import Toaster from '../../utils/ui/toaster';
-import { login } from '../../actions/session';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { maskCpfCnpj } from '../../mask';
 import SessionData from '../../utils/sessionData';
 import MyAccountRepository from '../../repository/MyAccountRepository';
 import LoadingIcon from '../../components/icons/loadingIcon';
+import AccountRepository from '../../repository/AccountRepository';
 
 export default function Login() {
-  const session = useSelector((state) => state);
-  const auth = useSelector((state) => state.session.auth);
-  const user = useSelector((state) => state.session.user);
-  console.log(session);
   const [txtDocumento, setTxtDocumento] = useState('');
   const [txtPassword, setTxtPassword] = useState('');
-
+  const navigate = useNavigate();
   const [loading, setLoding] = useState(false);
-
-  const dispatch = useDispatch();
 
   function handleDocumentoChange(event) {
     const value = event.target.value;
-
     setTxtDocumento(maskCpfCnpj(value));
   }
 
   function handlePasswordChange(event) {
     const value = event.target.value;
-
     setTxtPassword(value);
   }
 
@@ -43,16 +35,46 @@ export default function Login() {
     setLoding(true);
     sessionStorage.clear();
     const documento = txtDocumento.replace(/[^\d]+/g, '');
-    dispatch(login({ documento: documento, senha: txtPassword }));
+    requestLogin({ documento: documento, senha: txtPassword });
   }
 
-  if (auth.authenticated) {
-    console.log(user.data);
+  function requestLogin(data) {
+    AccountRepository.login(data)
+      .then((response) => {
+        if (response.data) {
+          const token = response.data.access_token;
 
-    if (user.data) {
-      if (user.data.condominios.length === 1) {
-        let condo = user.data.condominios[0];
-        // TODO: Refatorar o processo de login
+          if (token) {
+            SessionData.setToken(token);
+
+            MyAccountRepository.find().then((userDataResponse) => {
+              SessionData.setUser(userDataResponse);
+              handleUserRoute(userDataResponse);
+            });
+          }
+        } else {
+          Toaster.showError(
+            'Não foi possível realizar o login, tente novamente mais tarde'
+          );
+          setLoding(true);
+        }
+      })
+      .catch((error) => {
+        Toaster.showError('Documento ou senha inválidos');
+        setLoding(false);
+      });
+  }
+
+  function handleUserRoute(userData) {
+    if (userData.condominios) {
+      const condosList = userData.condominios;
+      if (condosList.length > 0) {
+        if (condosList.length > 1) {
+          navigate('/selecionar-condominio');
+          return;
+        }
+
+        let condo = condosList[0];
         MyAccountRepository.findRolesByCondoId(condo.id)
           .then((response) => {
             let roles = [];
@@ -61,6 +83,7 @@ export default function Login() {
             });
             SessionData.setRoles(roles);
             SessionData.setCondo(condo);
+            navigate('/home');
           })
           .catch((error) => {
             Toaster.showError(
@@ -70,21 +93,11 @@ export default function Login() {
           .finally(() => {
             setLoding(false);
           });
-        return <Navigate to="/home" replace={true} />;
-      } else if (user.data.condominios.length > 1) {
-        return <Navigate to="/selecionar-condominio" replace={true} />;
       } else {
         Toaster.showError('Ops! Não foi possível encontrar seu condomínio.');
-        user.data = null;
         setLoding(false);
       }
     }
-  }
-
-  if (auth.error) {
-    Toaster.showError(auth.error);
-    auth.error = null;
-    setLoding(false);
   }
 
   return (

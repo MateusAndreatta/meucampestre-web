@@ -8,7 +8,9 @@ axios.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response.data.message) {
-      Toaster.showError(error.response.data.message);
+      if (error.response.data.message !== 'Unauthorized') {
+        Toaster.showError(error.response.data.message);
+      }
     } else {
       Toaster.showError('Ops, ocorreu um erro, tente novamente mais tarde');
     }
