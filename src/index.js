@@ -5,6 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import App from './App';
 import { performance } from './firebase';
 import Modal from 'react-modal';
+import './i18n';
 
 Modal.setAppElement('#root');
 

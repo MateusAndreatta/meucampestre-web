@@ -4,6 +4,9 @@ import ProfileIcon from '../icons/profileIcon';
 import LogoutIcon from '../icons/logoutIcon';
 import { useNavigate } from 'react-router-dom';
 import SessionData from '../../utils/sessionData';
+import I18n from '../i18n/I18n';
+import { Trans } from 'react-i18next';
+import Translator from '../i18n/Translator';
 
 export default function Navbar() {
   const user = SessionData.getUser();
@@ -29,8 +32,10 @@ export default function Navbar() {
         className="max-h-full w-14 max-w-fit grow cursor-pointer object-cover md:mr-1"
         onClick={navigateToHome}
       />
+
       <div className="h-16 flex-none">
         <div className="flex h-full w-full flex-row flex-nowrap items-center gap-8 px-8">
+          <I18n />
           <NotificationIcon
             height="h-8"
             width="w-8"
@@ -58,7 +63,7 @@ export default function Navbar() {
                   <span className="flex flex-col">
                     <span>
                       <ProfileIcon className="float-left mr-3" />
-                      Meu perfil
+                      <Translator path="navbar.profile" />
                     </span>
                   </span>
                 </div>
@@ -69,7 +74,7 @@ export default function Navbar() {
                   <span className="flex flex-col">
                     <span>
                       <LogoutIcon className="float-left mr-3" />
-                      Sair
+                      <Translator path="navbar.logout" />
                     </span>
                   </span>
                 </div>

@@ -7,6 +7,7 @@ import SessionData from '../../utils/sessionData';
 import { ROLES } from '../../utils/Constants';
 import Toaster from '../../utils/ui/toaster';
 import CommunAreaRepository from '../../repository/CommunAreaRepository';
+import Translator from '../../components/i18n/Translator';
 
 export default function CommonAreas() {
   const navigate = useNavigate();
@@ -31,9 +32,7 @@ export default function CommonAreas() {
   function handleClick(item) {
     if (!item.ativo) {
       if (!adminEnable) {
-        Toaster.showInfo(
-          'Esse espaço está indiponivel, por favor contacte o síndico para mais informações'
-        );
+        Toaster.showInfo(<Translator path="commumAreas.unvaibleArea" />);
       } else {
         navigate(`/editar-area-comum`, { state: { data: item } });
       }
@@ -47,13 +46,17 @@ export default function CommonAreas() {
       <Navbar />
       <div className="container mx-auto">
         <div className="my-8 flex justify-between">
-          <h1 className="text-2xl">Áreas comuns</h1>
+          <h1 className="text-2xl">
+            <Translator path="commumAreas.title" />
+          </h1>
           <Link to="/solicitacoes-areas-comuns">
-            <button className="btn-outline">Solicitações</button>
+            <button className="btn-outline">
+              <Translator path="commumAreas.actionButton" />
+            </button>
           </Link>
         </div>
         <p className="mb-7">
-          Confira as áreas comuns disponiveis para os moradores do condomínio.
+          <Translator path="commumAreas.description" />
         </p>
         <div className="mb-4 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {loading ? (
@@ -88,7 +91,7 @@ export default function CommonAreas() {
                 aria-hidden="true">
                 <path d="M10 5a1 1 0 0 1 1 1v3h3a1 1 0 1 1 0 2h-3v3a1 1 0 1 1-2 0v-3H6a1 1 0 1 1 0-2h3V6a1 1 0 0 1 1-1Z" />
               </svg>
-              Nova área
+              <Translator path="commumAreas.newArea" />
             </Link>
           )}
         </div>
