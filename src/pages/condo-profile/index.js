@@ -11,6 +11,7 @@ import Toaster from '../../utils/ui/toaster';
 import { maskCpfCnpj } from '../../mask';
 import { ROLES } from '../../utils/Constants';
 import Button from '../../components/buttons/button';
+import Translator from '../../components/i18n/Translator';
 
 export default function CondoProfile() {
   const [txtName, setTxtName] = useState('');
@@ -185,7 +186,9 @@ export default function CondoProfile() {
     <div>
       <Navbar />
       <div className="container mx-auto">
-        <h1 className=" my-8 text-2xl">Perfil condomínio</h1>
+        <h1 className=" my-8 text-2xl">
+          <Translator path="condoProfile.title" />
+        </h1>
 
         <div className="mb-4 flex justify-center">
           <div className="relative">
@@ -224,7 +227,7 @@ export default function CondoProfile() {
             <InputField
               name="txtName"
               value={txtName}
-              label="Nome"
+              label={<Translator path="condoProfile.form.name" />}
               type="text"
               required={true}
               disabled={!editEnabled}
@@ -235,7 +238,7 @@ export default function CondoProfile() {
             <InputField
               name="txtDescription"
               value={txtDescription}
-              label="Descrição"
+              label={<Translator path="condoProfile.form.description" />}
               type="text"
               required={true}
               disabled={!editEnabled}
@@ -246,9 +249,9 @@ export default function CondoProfile() {
             <InputField
               name="txtEmail"
               value={txtEmail}
-              label="E-mail"
+              label={<Translator path="condoProfile.form.email" />}
               type="email"
-              errorLabel="O e-mail informado não é válido"
+              errorLabel={<Translator path="condoProfile.form.emailError" />}
               required={true}
               disabled={!editEnabled}
               onChange={handleEmailChange}
@@ -258,7 +261,7 @@ export default function CondoProfile() {
             <InputField
               name="txtAddress"
               value={txtAddress}
-              label="Endereço"
+              label={<Translator path="condoProfile.form.address" />}
               type="text"
               required={true}
               disabled={!editEnabled}
@@ -269,7 +272,7 @@ export default function CondoProfile() {
             <InputField
               name="txtDocument"
               value={txtDocument}
-              label="Documento"
+              label={<Translator path="condoProfile.form.document" />}
               type="text"
               required={true}
               disabled={true}
@@ -282,7 +285,7 @@ export default function CondoProfile() {
             !editEnabled ? 'hidden' : ''
           }`}>
           <Button onClick={onButtonClick} loading={loadingButton}>
-            Salvar
+            <Translator path="condoProfile.form.button" />
           </Button>
         </div>
       </div>

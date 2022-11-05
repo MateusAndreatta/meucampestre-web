@@ -39,5 +39,17 @@ export default {
       unvaibleArea:
         'This space is unavailable, please contact the landlord for more information.',
     },
+    condoProfile: {
+      title: 'Condo profile',
+      form: {
+        name: 'Name',
+        description: 'Description',
+        email: 'Email',
+        emailError: 'The email provided is not valid',
+        address: 'Address',
+        document: 'Document',
+        button: 'Save',
+      },
+    },
   },
 };

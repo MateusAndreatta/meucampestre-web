@@ -39,5 +39,17 @@ export default {
       unvaibleArea:
         'Esse espaço está indisponível, por favor contacte o síndico para mais informações',
     },
+    condoProfile: {
+      title: 'Perfil do condomínio',
+      form: {
+        name: 'Nome',
+        description: 'Descrição',
+        email: 'E-mail',
+        emailError: 'O e-mail informado não é válido',
+        address: 'Endereço',
+        document: 'Documento',
+        button: 'Salvar',
+      },
+    },
   },
 };
