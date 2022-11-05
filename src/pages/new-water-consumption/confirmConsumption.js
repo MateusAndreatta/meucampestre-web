@@ -1,7 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import Button from '../../components/buttons/button';
 import { storage } from '../../firebase';
-import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import SessionData from '../../utils/sessionData';
 import WaterConsumptionRepository from '../../repository/WaterConsumptionRepository';
 import Toaster from '../../utils/ui/toaster';

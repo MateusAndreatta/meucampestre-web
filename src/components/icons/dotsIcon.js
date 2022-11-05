@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
-import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
+import {
+  EllipsisHorizontalIcon,
+  EllipsisVerticalIcon,
+} from '@heroicons/react/24/outline';
 
 class DotsIcon extends React.Component {
   constructor(props) {

@@ -1,5 +1,3 @@
-import Button from '../buttons/button';
-
 export default function CommonAreaItem(props) {
   const photo = props.photo;
   const title = props.title;

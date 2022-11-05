@@ -3,7 +3,7 @@ import Navbar from '../../components/navbar';
 import InputField from '../../components/fields/inputField';
 import EditIcon from '../../components/icons/editIcon';
 import { storage } from '../../firebase';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import SessionData from '../../utils/sessionData';
 import { maskCpfCnpj, maskPhone } from '../../mask';
 import MyAccountRepository from '../../repository/MyAccountRepository';

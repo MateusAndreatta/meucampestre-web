@@ -5,7 +5,6 @@ import LogoutIcon from '../icons/logoutIcon';
 import { useNavigate } from 'react-router-dom';
 import SessionData from '../../utils/sessionData';
 import I18n from '../i18n/I18n';
-import { Trans } from 'react-i18next';
 import Translator from '../i18n/Translator';
 
 export default function Navbar() {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../../components/navbar';
 import InputField from '../../components/fields/inputField';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Toaster from '../../utils/ui/toaster';
 import Button from '../../components/buttons/button';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';

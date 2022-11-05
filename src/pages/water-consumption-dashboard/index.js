@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../../components/navbar';
-import moment from 'moment';
 import 'moment/locale/pt-br';
 import SessionData from '../../utils/sessionData';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Bar } from 'react-chartjs-2';
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
   BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
   Title,
   Tooltip,
-  Legend,
 } from 'chart.js';
 import DashboardCard from '../../components/dashboard-card';
 import DolarIcon from '../../components/icons/dolarIcon';

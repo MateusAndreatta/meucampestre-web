@@ -2,7 +2,6 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 // useTranslation é um hook
 // que devolve uma função de tradução (t) e a instância do i18n
-
 // Importa as bandeiras (imagens e componente)
 import EuaFlag from '../../resources/eua.svg';
 import BrazilFlag from '../../resources/brazil.svg';

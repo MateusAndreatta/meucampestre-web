@@ -1,10 +1,10 @@
 import React from 'react';
 import {
-  Route,
   BrowserRouter,
-  Routes,
   Navigate,
   Outlet,
+  Route,
+  Routes,
 } from 'react-router-dom';
 
 import Login from './pages/login';

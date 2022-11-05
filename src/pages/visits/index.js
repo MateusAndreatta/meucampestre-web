@@ -5,13 +5,10 @@ import ProfileIcon from '../../components/icons/profileIcon';
 import TrashIcon from '../../components/icons/trashIcon';
 import { Link, useNavigate } from 'react-router-dom';
 import Toaster from '../../utils/ui/toaster';
-import UnityRepository from '../../repository/UnityRepository';
 import DataTableBase from '../../components/data-table';
 import SessionData from '../../utils/sessionData';
 import { ROLES } from '../../utils/Constants';
 import WrenchScrewdriverIcon from '../../components/icons/WrenchScrewdriverIcon';
-import ArrowDownTrayIcon from '../../components/icons/arrowDownTray';
-import ArrowUpTrayIcon from '../../components/icons/arrowUpTrayIcon';
 import VisitsRepository from '../../repository/VisitsRepository';
 import moment from 'moment/moment';
 

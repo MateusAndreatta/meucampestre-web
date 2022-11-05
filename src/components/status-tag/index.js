@@ -1,5 +1,3 @@
-import Button from '../buttons/button';
-
 export default function StatusTag(props) {
   const status = props.status;
 
