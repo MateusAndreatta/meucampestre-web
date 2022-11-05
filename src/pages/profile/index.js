@@ -3,12 +3,13 @@ import Navbar from '../../components/navbar';
 import InputField from '../../components/fields/inputField';
 import EditIcon from '../../components/icons/editIcon';
 import { storage } from '../../firebase';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import SessionData from '../../utils/sessionData';
 import { maskCpfCnpj, maskPhone } from '../../mask';
 import MyAccountRepository from '../../repository/MyAccountRepository';
 import Toaster from '../../utils/ui/toaster';
 import Button from '../../components/buttons/button';
+import Translator from '../../components/i18n/Translator';
 
 export default function Profile() {
   const user = SessionData.getUser();
@@ -58,11 +59,11 @@ export default function Profile() {
   const onButtonClick = () => {
     if (txtPassword !== '') {
       if (txtPassword !== txtConfirmPassword) {
-        Toaster.showError('As senhas não conferem');
+        Toaster.showError(<Translator path="profile.passwordDontMatch" />);
         return;
       }
       if (txtPassword.length < 6) {
-        Toaster.showError('A senha deve ter no mínimo 6 caracteres');
+        Toaster.showError(<Translator path="profile.passwordLength" />);
         return;
       }
     }
@@ -93,22 +94,13 @@ export default function Profile() {
 
     MyAccountRepository.update(data)
       .then((response) => {
-        console.log(user);
         let newUser = { ...user };
-        Toaster.showInfo('Conta atualizada');
+        Toaster.showInfo(<Translator path="profile.profileUpdated" />);
         newUser.nome = txtName;
         newUser.email = txtEmail;
         newUser.telefone = txtPhone;
         newUser.imagemUrl = imageLink;
-        console.log(newUser);
         SessionData.setUser(newUser);
-      })
-      .catch((error) => {
-        if (error.response.data.message) {
-          Toaster.showError(error.response.data.message);
-        } else {
-          Toaster.showError('Ops, ocorreu um erro, tente novamente mais tarde');
-        }
       })
       .finally(() => {
         setLoadingButton(false);
@@ -125,7 +117,7 @@ export default function Profile() {
   function sendFileFirebase(file) {
     const storageRef = ref(
       storage,
-      `images/profile/${btoa(`profile_${user.id}_MeuCampestre`)}.jpg` //TODO: Concatenar o id do usuário
+      `images/profile/${btoa(`profile_${user.id}_MeuCampestre`)}.jpg`
     );
 
     const metadata = {
@@ -182,7 +174,9 @@ export default function Profile() {
     <div>
       <Navbar />
       <div className="container mx-auto">
-        <h1 className=" my-8 text-2xl">Meu perfil</h1>
+        <h1 className=" my-8 text-2xl">
+          <Translator path="profile.title" />
+        </h1>
 
         <div className="mb-4 flex justify-center">
           <div className="relative">
@@ -219,7 +213,7 @@ export default function Profile() {
             <InputField
               name="txtName"
               value={txtName}
-              label="Nome completo"
+              label={<Translator path="profile.form.name" />}
               type="text"
               required={true}
               onChange={handleNameChange}
@@ -229,9 +223,9 @@ export default function Profile() {
             <InputField
               name="txtEmail"
               value={txtEmail}
-              label="E-mail"
+              label={<Translator path="profile.form.email" />}
               type="email"
-              errorLabel="O e-mail informado não é válido"
+              errorLabel={<Translator path="profile.form.emailError" />}
               required={true}
               onChange={handleEmailChange}
             />
@@ -240,7 +234,7 @@ export default function Profile() {
             <InputField
               name="txtPhone"
               value={txtPhone}
-              label="Telefone"
+              label={<Translator path="profile.form.phone" />}
               type="tel"
               required={true}
               onChange={handlePhoneChange}
@@ -250,7 +244,7 @@ export default function Profile() {
             <InputField
               name="txtDocument"
               value={txtDocument}
-              label="Documento"
+              label={<Translator path="profile.form.document" />}
               type="text"
               required={true}
               disabled={true}
@@ -262,7 +256,7 @@ export default function Profile() {
             <InputField
               name="txtPassword"
               value={txtPassword}
-              label="Senha nova"
+              label={<Translator path="profile.form.password" />}
               type="password"
               required={false}
               disabled={false}
@@ -274,7 +268,7 @@ export default function Profile() {
             <InputField
               name="txtConfirmPassword"
               value={txtConfirmPassword}
-              label="Confirmar senha nova"
+              label={<Translator path="profile.form.confirmPassword" />}
               type="password"
               required={false}
               disabled={txtPassword === ''}
@@ -284,7 +278,7 @@ export default function Profile() {
         </form>
         <div className="flex flex-row-reverse">
           <Button loading={loadingButton} onClick={onButtonClick}>
-            Salvar
+            <Translator path="profile.form.button" />
           </Button>
         </div>
       </div>

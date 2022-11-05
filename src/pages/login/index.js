@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import InputField from '../../components/fields/inputField';
 import Toaster from '../../utils/ui/toaster';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { maskCpfCnpj } from '../../mask';
 import SessionData from '../../utils/sessionData';
 import MyAccountRepository from '../../repository/MyAccountRepository';
