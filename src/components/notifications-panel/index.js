@@ -1,8 +1,9 @@
 import React from 'react';
 import moment from 'moment';
 import 'moment/locale/pt-br';
+import CloseIcon from '../icons/closeIcon';
 
-export default function NotificationsPanel() {
+export default function NotificationsPanel(props) {
   const notifications = [
     {
       id: 1,
@@ -92,8 +93,14 @@ export default function NotificationsPanel() {
 
   return (
     <div className="w-full p-4 shadow-md">
-      <h1 className="mb-3 text-2xl">Notificações</h1>
-      <div className="divide-y divide-slate-200">
+      <div className="flex w-full justify-between">
+        <h1 className="mb-3 text-2xl">Notificações</h1>
+        <div onClick={() => props.onClose()}>
+          <CloseIcon className="mt-1 cursor-pointer" width="w-7" height="h-7" />
+        </div>
+      </div>
+
+      <div className="max-h-full divide-y divide-slate-200 overflow-y-scroll md:max-h-96">
         {notifications.map((notification) => (
           <div
             key={notification.id}

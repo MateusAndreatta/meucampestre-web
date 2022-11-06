@@ -7,11 +7,14 @@ import SessionData from '../../utils/sessionData';
 import NotificationsPanel from '../notifications-panel';
 import I18n from '../i18n/I18n';
 import Translator from '../i18n/Translator';
+import { useState } from 'react';
 
 export default function Navbar() {
   const user = SessionData.getUser();
   const condo = SessionData.getCondo();
   const navigate = useNavigate();
+  const [showNotifications, setShowNotifications] = useState(false);
+
   function navigateToHome() {
     navigate('/home');
   }
@@ -35,15 +38,24 @@ export default function Navbar() {
 
       <div className="h-16 flex-none">
         <div className="flex h-full w-full flex-row flex-nowrap items-center gap-8 px-8">
-          <div className="group">
-            <I18n />
-            <NotificationIcon
-              height="h-8"
-              width="w-8"
-              className="cursor-pointer"
-            />
-            <div className="w-70 absolute right-0 z-10 rounded-md bg-white shadow-lg group-hover:block">
-              <NotificationsPanel />
+          <I18n />
+          <div>
+            <div
+              onClick={() => {
+                setShowNotifications(!showNotifications);
+              }}>
+              <NotificationIcon
+                height="h-8"
+                width="w-8"
+                className="cursor-pointer"
+              />
+            </div>
+
+            <div
+              className={`w-70 absolute right-0 z-10 rounded-md bg-white shadow-lg ${
+                showNotifications ? 'block' : 'hidden'
+              }`}>
+              <NotificationsPanel onClose={() => setShowNotifications(false)} />
             </div>
           </div>
 
