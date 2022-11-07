@@ -1,72 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 import CloseIcon from '../icons/closeIcon';
+import NotificationsRepository from '../../repository/NotificationsRepository';
+import { useNavigate } from 'react-router-dom';
 
 export default function NotificationsPanel(props) {
-  const notifications = [
-    {
-      id: 1,
-      titulo: 'Fulano suas ovelhas estão doidas!',
-      descricao: 'FAVOR CONTER SUAS OVELHAS',
-      criadoEm: new Date(),
-      link: null,
-      lido: false,
-    },
-    {
-      id: 2,
-      titulo: 'Ronaldo Cardozo (P) acaba de ser liberado(a) na portaria',
-      descricao: 'Ronaldo Cardozo (P) acabou de chegar!',
-      criadoEm: new Date(2022, 9, 30, 23, 50, 0),
-      link: null,
-      lido: true,
-    },
-    {
-      id: 3,
-      titulo: 'Sua solicitação de reserva foi aprovada! 🎉',
-      descricao:
-        'Clique aqui para ver mais informações sobre suas solicitações',
-      criadoEm: new Date(2022, 2, 12, 5, 0, 0),
-      link: '/solicitacoes-areas-comuns',
-      lido: false,
-    },
-    {
-      id: 4,
-      titulo: 'Sua solicitação de reserva foi aprovada! 🎉',
-      descricao:
-        'Clique aqui para ver mais informações sobre suas solicitações',
-      criadoEm: new Date(2022, 2, 12, 5, 0, 0),
-      link: '/solicitacoes-areas-comuns',
-      lido: false,
-    },
-    {
-      id: 5,
-      titulo: 'Sua solicitação de reserva foi aprovada! 🎉',
-      descricao:
-        'Clique aqui para ver mais informações sobre suas solicitações',
-      criadoEm: new Date(2022, 2, 12, 5, 0, 0),
-      link: '/solicitacoes-areas-comuns',
-      lido: false,
-    },
-    {
-      id: 6,
-      titulo: 'Sua solicitação de reserva foi aprovada! 🎉',
-      descricao:
-        'Clique aqui para ver mais informações sobre suas solicitações',
-      criadoEm: new Date(2022, 2, 12, 5, 0, 0),
-      link: '/solicitacoes-areas-comuns',
-      lido: false,
-    },
-    {
-      id: 7,
-      titulo: 'Sua solicitação de reserva foi aprovada! 🎉',
-      descricao:
-        'Clique aqui para ver mais informações sobre suas solicitações',
-      criadoEm: new Date(2022, 2, 12, 5, 0, 0),
-      link: '/solicitacoes-areas-comuns',
-      lido: false,
-    },
-  ];
+  const [notifications, setNotifications] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    NotificationsRepository.findAll().then((response) => {
+      setNotifications(response);
+      props.setReadNotifications(response);
+      response.forEach((notification) => {
+        if (!notification.lido) {
+          props.updateIcon();
+          return false;
+        }
+      });
+    });
+  }, []);
 
   const formatarData = (dataParametro) => {
     var data = moment(dataParametro);
@@ -91,6 +45,17 @@ export default function NotificationsPanel(props) {
     return 'Agora mesmo';
   };
 
+  const handleClickNotification = (notification) => {
+    if (notification.link) {
+      console.log(notification.link.startsWith('/'));
+      if (notification.link.startsWith('/')) {
+        navigate(notification.link);
+      } else {
+        window.open(notification.link, '_blank');
+      }
+    }
+  };
+
   return (
     <div className="w-full p-4 shadow-md">
       <div className="flex w-full justify-between">
@@ -100,13 +65,14 @@ export default function NotificationsPanel(props) {
         </div>
       </div>
 
-      <div className="max-h-full divide-y divide-slate-200 overflow-y-scroll md:max-h-96">
+      <div className="max-h-full divide-y divide-slate-200 overflow-y-auto md:max-h-96">
         {notifications.map((notification) => (
           <div
             key={notification.id}
-            className={`my-2 flex ${
-              notification.link ? 'cursor-pointer' : ''
-            }`}>
+            className={`my-2 flex ${notification.link ? 'cursor-pointer' : ''}`}
+            onClick={() => {
+              handleClickNotification(notification);
+            }}>
             <div
               className={`mt-2 h-3 w-3 rounded-full bg-gray-300 ${
                 notification.lido ? 'invisible' : ''

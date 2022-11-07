@@ -8,12 +8,15 @@ import NotificationsPanel from '../notifications-panel';
 import I18n from '../i18n/I18n';
 import Translator from '../i18n/Translator';
 import { useState } from 'react';
+import NotificationsRepository from '../../repository/NotificationsRepository';
 
 export default function Navbar() {
   const user = SessionData.getUser();
   const condo = SessionData.getCondo();
   const navigate = useNavigate();
   const [showNotifications, setShowNotifications] = useState(false);
+  const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
+  const [notifications, setNotifications] = useState([]);
 
   function navigateToHome() {
     navigate('/home');
@@ -25,6 +28,19 @@ export default function Navbar() {
 
   function navigateToProfile() {
     navigate('/perfil');
+  }
+
+  function handleClickNotificationBell(value) {
+    setShowNotifications(value);
+    if (!value) {
+      setHasUnreadNotifications(false);
+      notifications.forEach((notification) => {
+        if (!notification.lido) {
+          NotificationsRepository.setListAsRead(notifications);
+          return false;
+        }
+      });
+    }
   }
 
   return (
@@ -40,22 +56,27 @@ export default function Navbar() {
         <div className="flex h-full w-full flex-row flex-nowrap items-center gap-8 px-8">
           <I18n />
           <div>
-            <div
+            <button
               onClick={() => {
-                setShowNotifications(!showNotifications);
+                handleClickNotificationBell(!showNotifications);
               }}>
               <NotificationIcon
                 height="h-8"
                 width="w-8"
+                alertMode={hasUnreadNotifications}
                 className="cursor-pointer"
               />
-            </div>
+            </button>
 
             <div
-              className={`w-70 absolute right-0 z-10 rounded-md bg-white shadow-lg ${
+              className={`absolute right-0 z-10 w-full rounded-md bg-white shadow-lg lg:w-5/12 ${
                 showNotifications ? 'block' : 'hidden'
               }`}>
-              <NotificationsPanel onClose={() => setShowNotifications(false)} />
+              <NotificationsPanel
+                onClose={() => handleClickNotificationBell(false)}
+                updateIcon={() => setHasUnreadNotifications(true)}
+                setReadNotifications={(a) => setNotifications(a)}
+              />
             </div>
           </div>
 
