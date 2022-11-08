@@ -32,7 +32,7 @@ export default function Sos() {
 
   useEffect(() => {
     if (unidades.length === 1) {
-      unidadeSelecionada(unidades[0]);
+      setUnidadeSelecionada(unidades[0]);
     }
   }, []);
 

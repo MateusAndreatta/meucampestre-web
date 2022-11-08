@@ -18,9 +18,12 @@ import ExclamationTriangleIcon from '../../components/icons/exclamationTriangle'
 
 export default function Home() {
   const roles = SessionData.getRoles();
+  const units = SessionData.getUnits();
   const [sindicoOuPorteiro, setSindicoOuPorteiro] = useState(
     roles.includes(ROLES.PORTEIRO) || roles.includes(ROLES.SINDICO)
   );
+
+  const [sosEnabled, setSosEnabled] = useState(units.length > 0);
 
   if (roles.length === 1 && roles.includes(ROLES.PORTEIRO)) {
     return <Navigate to="/portaria" replace />;
@@ -78,12 +81,14 @@ export default function Home() {
               title={<Translator path="home.visists" />}
             />
           </Link>
-          <Link to="/chamado-sos">
-            <Card
-              icon={ExclamationTriangleIcon}
-              title={<Translator path="home.sos" />}
-            />
-          </Link>
+          {sosEnabled && (
+            <Link to="/chamado-sos">
+              <Card
+                icon={ExclamationTriangleIcon}
+                title={<Translator path="home.sos" />}
+              />
+            </Link>
+          )}
         </div>
       </div>
     </div>
