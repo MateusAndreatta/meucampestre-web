@@ -1,40 +1,57 @@
 import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
-import reuniaoCondominio from '../../resources/reuniao-de-condo.jpg';
+import { useEffect, useState } from 'react';
+import BannerRepository from '../../repository/BannerRepository';
+import { useNavigate } from 'react-router-dom';
 
-const slideImages = [
-  {
-    url: reuniaoCondominio,
-    link: 'https://www.pucpr.br/',
-  },
-  {
-    url: 'https://uninta.edu.br/site/conteudo/arquivos/2016/07/banner-aviso-manutencao.jpg',
-    link: '',
-  },
-];
+export default function Banner() {
+  const [data, setData] = useState([]);
+  const navigate = useNavigate();
 
-const properties = {
-  duration: 5000,
-  transitionDuration: 500,
-  infinite: true,
-  indicators: true,
-  arrows: false,
-};
+  useEffect(() => {
+    BannerRepository.findAll().then((response) => {
+      setData(response);
+    });
+  }, []);
 
-export const Banner = () => {
+  const properties = {
+    duration: 5000,
+    transitionDuration: 500,
+    infinite: true,
+    indicators: true,
+    arrows: false,
+  };
+
+  const handleClick = (banner) => {
+    if (banner.link) {
+      console.log(banner.link.startsWith('/'));
+      if (banner.link.startsWith('/')) {
+        navigate(banner.link);
+      } else {
+        window.open(banner.link, '_blank');
+      }
+    }
+  };
+
+  if (data.length === 0) {
+    return null;
+  }
+
   return (
     <div className="slide-container">
       <Slide {...properties}>
-        {slideImages.map((slideImage, index) => (
+        {data.map((slideImage, index) => (
           <div className="each-slide" key={index}>
-            <div className="banner">
-              <a href={slideImage.link}>
-                <div style={{ backgroundImage: `url(${slideImage.url})` }} />
-              </a>
+            <div
+              className={`banner ${slideImage.link ? 'cursor-pointer' : ''}`}
+              onClick={() => handleClick(slideImage)}>
+              <div
+                style={{ backgroundImage: `url(${slideImage.urlBanner})` }}
+              />
             </div>
           </div>
         ))}
       </Slide>
     </div>
   );
-};
+}

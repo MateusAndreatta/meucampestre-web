@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { ChevronUpIcon } from '@heroicons/react/24/outline';
-import { ChevronRightIcon } from '@heroicons/react/24/outline';
-import { ChevronDownIcon } from '@heroicons/react/24/outline';
-import { ChevronLeftIcon } from '@heroicons/react/24/outline';
+import {
+  ChevronDownIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ChevronUpIcon,
+} from '@heroicons/react/24/outline';
 
 class ChevronIcon extends React.Component {
   constructor(props) {

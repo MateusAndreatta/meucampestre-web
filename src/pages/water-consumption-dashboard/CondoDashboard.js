@@ -1,10 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import Button from '../../components/buttons/button';
-import { storage } from '../../firebase';
-import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
-import SessionData from '../../utils/sessionData';
+import React, { useEffect, useState } from 'react';
 import WaterConsumptionRepository from '../../repository/WaterConsumptionRepository';
-import Toaster from '../../utils/ui/toaster';
 import DashboardCard from '../../components/dashboard-card';
 import DolarIcon from '../../components/icons/dolarIcon';
 import WaterDropIcon from '../../components/icons/waterDropIcon';

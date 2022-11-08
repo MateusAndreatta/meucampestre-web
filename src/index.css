@@ -61,6 +61,23 @@
   .btn-outline {
     @apply border border-gray-300 py-2 px-5 rounded text-zinc-500 bg-transparent hover:bg-gray-300 hover:text-zinc-600;
   }
+
+  .flag {
+    @apply h-8 w-8 cursor-pointer;
+    filter: grayscale(1);
+  }
+
+  .flag:hover {
+    filter: grayscale(0.5);
+  }
+
+  .selected {
+    filter: grayscale(0);
+  }
+
+  .selected:hover {
+    filter: grayscale(0);
+  }
 }
 
 @layer utilities {

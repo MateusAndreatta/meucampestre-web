@@ -3,7 +3,6 @@ import Navbar from '../../components/navbar';
 import InputField from '../../components/fields/inputField';
 import { useNavigate, useParams } from 'react-router-dom';
 import Toaster from '../../utils/ui/toaster';
-import UnityRepository from '../../repository/UnityRepository';
 import Button from '../../components/buttons/button';
 import { maskCpfCnpj } from '../../mask';
 import BlockedCpfRepository from '../../repository/BlockedCpfRepository';

@@ -3,7 +3,7 @@ import Card from '../../components/card';
 
 import MeuCampestreLogo from '../../resources/MeuCampestreLogo.svg';
 import SessionData from '../../utils/sessionData';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import MyAccountRepository from '../../repository/MyAccountRepository';
 import Toaster from '../../utils/ui/toaster';
 

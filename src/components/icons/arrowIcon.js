@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { ArrowSmallUpIcon } from '@heroicons/react/24/outline';
-import { ArrowSmallDownIcon } from '@heroicons/react/24/outline';
-import { ArrowSmallRightIcon } from '@heroicons/react/24/outline';
-import { ArrowSmallLeftIcon } from '@heroicons/react/24/outline';
+import {
+  ArrowSmallDownIcon,
+  ArrowSmallLeftIcon,
+  ArrowSmallRightIcon,
+  ArrowSmallUpIcon,
+} from '@heroicons/react/24/outline';
 
 class ArrowIcon extends React.Component {
   constructor(props) {

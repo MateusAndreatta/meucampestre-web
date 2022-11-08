@@ -9,7 +9,6 @@ import Tooltip from '../../components/tooltip';
 import StatusTag from '../../components/status-tag';
 import DataTableBase from '../../components/data-table';
 import TrashIcon from '../../components/icons/trashIcon';
-import UnityRepository from '../../repository/UnityRepository';
 import Toaster from '../../utils/ui/toaster';
 
 export default function SolicitationsCommunArea() {

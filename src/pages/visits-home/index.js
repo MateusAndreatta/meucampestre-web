@@ -14,6 +14,9 @@ import CalendarBase from '../../components/calendar';
 import InputField from '../../components/fields/inputField';
 import VisitsRepository from '../../repository/VisitsRepository';
 import Toaster from '../../utils/ui/toaster';
+import { collection, onSnapshot } from 'firebase/firestore';
+import { db } from '../../firebase';
+import SosAlert from '../../components/sos-alert';
 
 export default function VisitsHome() {
   const navigate = useNavigate();
@@ -25,6 +28,7 @@ export default function VisitsHome() {
   const [modalData, setModalData] = useState(null);
   const [calendarIsOpen, setCalendarIsOpen] = useState(false);
   const [txtFiltro, setTxtFiltro] = useState('');
+  const [unidadesSos, setUnidadesSos] = useState([]);
 
   useEffect(() => {
     console.log(date);
@@ -32,6 +36,14 @@ export default function VisitsHome() {
       setVisits(response);
       setVisitsFiltered(response);
       setTxtFiltro('');
+    });
+
+    onSnapshot(collection(db, 'sos'), (dataSnapshot) => {
+      const unidades = [];
+      dataSnapshot.docs.map((doc) => {
+        unidades.push(doc.data());
+      });
+      setUnidadesSos(unidades);
     });
   }, [date]);
 
@@ -71,7 +83,6 @@ export default function VisitsHome() {
       }
       return false;
     });
-    console.log(teste);
     setVisitsFiltered(teste);
   }
 
@@ -225,6 +236,7 @@ export default function VisitsHome() {
 
   return (
     <div>
+      {unidadesSos && <SosAlert unidades={unidadesSos} />}
       <Navbar />
       <div className="container mx-auto">
         <div className="my-8 flex justify-between">

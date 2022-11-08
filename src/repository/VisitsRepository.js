@@ -1,5 +1,4 @@
 import api from '../api';
-import { API_ENDPOINT } from '../globals';
 
 export default {
   findAllForLoggedUser() {

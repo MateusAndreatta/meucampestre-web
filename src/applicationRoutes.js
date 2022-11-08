@@ -1,10 +1,10 @@
 import React from 'react';
 import {
-  Route,
   BrowserRouter,
-  Routes,
   Navigate,
   Outlet,
+  Route,
+  Routes,
 } from 'react-router-dom';
 
 import Login from './pages/login';
@@ -31,6 +31,11 @@ import BlockedCpf from './pages/blocked-cpf';
 import NewBlockedCpf from './pages/new-blocked-cpf';
 import Visits from './pages/visits';
 import NewVisit from './pages/new-visit';
+import Sos from './pages/sos';
+import Banners from './pages/banners';
+import NewBanner from './pages/new-banner';
+import NewMap from './pages/new-map';
+import Map from './pages/map';
 
 function loggedIn() {
   return SessionData.hasFullData();
@@ -117,6 +122,24 @@ const ApplicationRoutes = () => {
         </Route>
         <Route path="/visita/:id" element={<PrivateOutlet />}>
           <Route path="" element={<NewVisit />} />
+        </Route>
+        <Route path="/chamado-sos" element={<PrivateOutlet />}>
+          <Route path="" element={<Sos />} />
+        </Route>
+        <Route path="/banners" element={<PrivateOutlet />}>
+          <Route path="" element={<Banners />} />
+        </Route>
+        <Route path="/novo-banner" element={<PrivateOutlet />}>
+          <Route path="" element={<NewBanner />} />
+        </Route>
+        <Route path="/editar-banner" element={<PrivateOutlet />}>
+          <Route path="" element={<NewBanner />} />
+        </Route>
+        <Route path="/novo-mapa" element={<PrivateOutlet />}>
+          <Route path="" element={<NewMap />} />
+        </Route>
+        <Route path="/mapa" element={<PrivateOutlet />}>
+          <Route path="" element={<Map />} />
         </Route>
         <Route path="*" element={<Error404 />} />
       </Routes>
