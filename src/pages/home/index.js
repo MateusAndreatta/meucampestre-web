@@ -14,6 +14,7 @@ import { ROLES } from '../../utils/Constants';
 import NoSymbolIcon from '../../components/icons/NoSymbolIcon';
 import IdentificationIcon from '../../components/icons/identificationIcon';
 import Translator from '../../components/i18n/Translator';
+import ExclamationTriangleIcon from '../../components/icons/exclamationTriangle';
 
 export default function Home() {
   const roles = SessionData.getRoles();
@@ -75,6 +76,12 @@ export default function Home() {
             <Card
               icon={IdentificationIcon}
               title={<Translator path="home.visists" />}
+            />
+          </Link>
+          <Link to="/chamado-sos">
+            <Card
+              icon={ExclamationTriangleIcon}
+              title={<Translator path="home.sos" />}
             />
           </Link>
         </div>

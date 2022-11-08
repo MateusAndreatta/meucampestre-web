@@ -9,6 +9,7 @@ export default {
       visitsPanel: 'Portaria',
       cpfBlocked: 'CPF Bloqueado',
       visists: 'Visitas e Prestadores',
+      sos: 'Chamado SOS',
     },
     navbar: {
       profile: 'Meu perfil',

@@ -31,6 +31,7 @@ import BlockedCpf from './pages/blocked-cpf';
 import NewBlockedCpf from './pages/new-blocked-cpf';
 import Visits from './pages/visits';
 import NewVisit from './pages/new-visit';
+import Sos from './pages/sos';
 
 function loggedIn() {
   return SessionData.hasFullData();
@@ -117,6 +118,9 @@ const ApplicationRoutes = () => {
         </Route>
         <Route path="/visita/:id" element={<PrivateOutlet />}>
           <Route path="" element={<NewVisit />} />
+        </Route>
+        <Route path="/chamado-sos" element={<PrivateOutlet />}>
+          <Route path="" element={<Sos />} />
         </Route>
         <Route path="*" element={<Error404 />} />
       </Routes>

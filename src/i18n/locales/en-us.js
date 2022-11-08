@@ -9,6 +9,7 @@ export default {
       visitsPanel: 'Concierge',
       cpfBlocked: 'CPF Blocked',
       visists: 'Visits and Service Providers',
+      sos: 'Call SOS',
     },
     navbar: {
       profile: 'My profile',

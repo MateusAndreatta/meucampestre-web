@@ -1,7 +1,9 @@
 import { BellIcon as IconSolid } from '@heroicons/react/20/solid';
-import { BellIcon as IconOutline } from '@heroicons/react/24/outline';
+import {
+  BellAlertIcon as IconAlertOutline,
+  BellIcon as IconOutline,
+} from '@heroicons/react/24/outline';
 import { BellAlertIcon as IconAlertSolid } from '@heroicons/react/24/solid';
-import { BellAlertIcon as IconAlertOutline } from '@heroicons/react/24/outline';
 
 export default function NotificationIcon(props) {
   let width = props.width || 'w-5';

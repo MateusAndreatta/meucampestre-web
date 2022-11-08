@@ -3,6 +3,7 @@ import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
 import { getStorage } from 'firebase/storage';
 import { getPerformance } from 'firebase/performance';
+import { getFirestore } from 'firebase/firestore';
 
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -23,4 +24,5 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const storage = getStorage(app);
 const performance = getPerformance(app);
-export { analytics, storage, performance };
+const db = getFirestore(app);
+export { analytics, storage, performance, db };
