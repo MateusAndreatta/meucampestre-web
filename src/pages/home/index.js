@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Navbar from '../../components/navbar';
-import { Banner } from '../../components/banner';
+import Banner from '../../components/banner';
 import Card from '../../components/card';
 import { Link, Navigate } from 'react-router-dom';
 import UsersIcon from '../../components/icons/usersIcon';
@@ -15,6 +15,7 @@ import NoSymbolIcon from '../../components/icons/NoSymbolIcon';
 import IdentificationIcon from '../../components/icons/identificationIcon';
 import Translator from '../../components/i18n/Translator';
 import ExclamationTriangleIcon from '../../components/icons/exclamationTriangle';
+import PhotoIcon from '../../components/icons/photoIcon';
 
 export default function Home() {
   const roles = SessionData.getRoles();
@@ -22,6 +23,8 @@ export default function Home() {
   const [sindicoOuPorteiro, setSindicoOuPorteiro] = useState(
     roles.includes(ROLES.PORTEIRO) || roles.includes(ROLES.SINDICO)
   );
+
+  const [sindico, setSindico] = useState(roles.includes(ROLES.SINDICO));
 
   const [sosEnabled, setSosEnabled] = useState(units.length > 0);
 
@@ -86,6 +89,14 @@ export default function Home() {
               <Card
                 icon={ExclamationTriangleIcon}
                 title={<Translator path="home.sos" />}
+              />
+            </Link>
+          )}
+          {sindico && (
+            <Link to="/banners">
+              <Card
+                icon={PhotoIcon}
+                title={<Translator path="home.banners" />}
               />
             </Link>
           )}

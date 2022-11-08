@@ -10,6 +10,7 @@ export default {
       cpfBlocked: 'CPF Blocked',
       visists: 'Visits and Service Providers',
       sos: 'Call SOS',
+      banners: 'Banners',
     },
     navbar: {
       profile: 'My profile',
