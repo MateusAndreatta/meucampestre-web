@@ -7,7 +7,10 @@ import Toaster from './utils/ui/toaster';
 axios.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response.data.path !== '/api/v2/autenticacao') {
+    if (
+      error.response.data.path !== '/api/v2/autenticacao' &&
+      !error.response.config.url.includes('mapas')
+    ) {
       if (error.response.data.message) {
         Toaster.showError(error.response.data.message);
       } else {

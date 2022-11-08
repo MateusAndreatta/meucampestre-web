@@ -16,6 +16,7 @@ import IdentificationIcon from '../../components/icons/identificationIcon';
 import Translator from '../../components/i18n/Translator';
 import ExclamationTriangleIcon from '../../components/icons/exclamationTriangle';
 import PhotoIcon from '../../components/icons/photoIcon';
+import MapIcon from '../../components/icons/mapIcon';
 
 export default function Home() {
   const roles = SessionData.getRoles();
@@ -100,6 +101,9 @@ export default function Home() {
               />
             </Link>
           )}
+          <Link to="/mapa">
+            <Card icon={MapIcon} title={<Translator path="home.map" />} />
+          </Link>
         </div>
       </div>
     </div>

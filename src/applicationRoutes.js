@@ -34,6 +34,8 @@ import NewVisit from './pages/new-visit';
 import Sos from './pages/sos';
 import Banners from './pages/banners';
 import NewBanner from './pages/new-banner';
+import NewMap from './pages/new-map';
+import Map from './pages/map';
 
 function loggedIn() {
   return SessionData.hasFullData();
@@ -132,6 +134,12 @@ const ApplicationRoutes = () => {
         </Route>
         <Route path="/editar-banner" element={<PrivateOutlet />}>
           <Route path="" element={<NewBanner />} />
+        </Route>
+        <Route path="/novo-mapa" element={<PrivateOutlet />}>
+          <Route path="" element={<NewMap />} />
+        </Route>
+        <Route path="/mapa" element={<PrivateOutlet />}>
+          <Route path="" element={<Map />} />
         </Route>
         <Route path="*" element={<Error404 />} />
       </Routes>

@@ -11,6 +11,7 @@ export default {
       visists: 'Visitas e Prestadores',
       sos: 'Chamado SOS',
       banners: 'Banners',
+      map: 'Mapa',
     },
     navbar: {
       profile: 'Meu perfil',
