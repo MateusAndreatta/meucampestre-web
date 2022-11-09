@@ -194,7 +194,7 @@ export default function NewVisit() {
         return;
       }
 
-      if (momentInicio.isBefore(moment())) {
+      if (momentInicio.isBefore(moment(), 'day')) {
         Toaster.showInfo('Data inicial não pode ser menor que o dia de hoje');
         return;
       }
