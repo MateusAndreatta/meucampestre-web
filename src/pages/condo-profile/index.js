@@ -18,7 +18,10 @@ export default function CondoProfile() {
   const [txtEmail, setTxtEmail] = useState('');
   const [txtDescription, setTxtDescription] = useState('');
   const [txtDocument, setTxtDocument] = useState('');
-  const [txtAddress, setTxtAddress] = useState('');
+
+  const [txtLogradouro, setTxtLogradouro] = useState('');
+  const [txtNumero, setTxtNumero] = useState('');
+  const [txtBairro, setTxtBairro] = useState('');
 
   const [loadingButton, setLoadingButton] = useState(false);
 
@@ -38,7 +41,11 @@ export default function CondoProfile() {
       setTxtEmail(response.email);
       setTxtDocument(maskCpfCnpj(response.documento));
       setTxtDescription(response.descricao);
-      setTxtAddress(response.endereco);
+
+      setTxtLogradouro(response.logradouro);
+      setTxtNumero(response.numero);
+      setTxtBairro(response.bairro);
+
       setImgLink(response.imagemUrl);
     });
   }, []);
@@ -63,9 +70,19 @@ export default function CondoProfile() {
     setTxtDocument(value);
   }
 
-  function handleAddressChange(event) {
+  function handleLogradouroChange(event) {
     const value = event.target.value;
-    setTxtAddress(value);
+    setTxtLogradouro(value);
+  }
+
+  function handleNumeroChange(event) {
+    const value = event.target.value;
+    setTxtNumero(value);
+  }
+
+  function handleBairroChange(event) {
+    const value = event.target.value;
+    setTxtBairro(value);
   }
 
   const onButtonClick = () => {
@@ -79,7 +96,9 @@ export default function CondoProfile() {
           nome: txtName,
           descricao: txtDescription,
           email: txtEmail,
-          endereco: txtAddress,
+          logradouro: txtLogradouro,
+          bairro: txtBairro,
+          numero: txtNumero,
           documento: documento,
           imagemUrl: imgLink,
         });
@@ -154,7 +173,9 @@ export default function CondoProfile() {
             nome: txtName,
             descricao: txtDescription,
             email: txtEmail,
-            endereco: txtAddress,
+            logradouro: txtLogradouro,
+            bairro: txtBairro,
+            numero: txtNumero,
             documento: documento,
             imagemUrl: downloadURL,
           });
@@ -259,15 +280,40 @@ export default function CondoProfile() {
           </div>
           <div className="mb-2">
             <InputField
-              name="txtAddress"
-              value={txtAddress}
-              label={<Translator path="condoProfile.form.address" />}
+              name="txtLogradouro"
+              value={txtLogradouro}
+              label={<Translator path="condoProfile.form.street" />}
               type="text"
               required={true}
               disabled={!editEnabled}
-              onChange={handleAddressChange}
+              onChange={handleLogradouroChange}
             />
           </div>
+
+          <div className="mb-2">
+            <InputField
+              name="txtNumero"
+              value={txtNumero}
+              label={<Translator path="condoProfile.form.number" />}
+              type="text"
+              required={true}
+              disabled={!editEnabled}
+              onChange={handleNumeroChange}
+            />
+          </div>
+
+          <div className="mb-2">
+            <InputField
+              name="txtBairro"
+              value={txtBairro}
+              label={<Translator path="condoProfile.form.district" />}
+              type="text"
+              required={true}
+              disabled={!editEnabled}
+              onChange={handleBairroChange}
+            />
+          </div>
+
           <div className="mb-2">
             <InputField
               name="txtDocument"
